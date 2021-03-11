@@ -127,8 +127,12 @@ func (m *ProcessMonitor) initBPF() error {
 	}
 
 	// Load module to kernel.
+
 	m.module = bpf.NewModuleFromReader(bytes.NewReader(data))
-	if err := m.module.Load(nil); err != nil {
+
+	err = m.module.Load(nil)
+
+	if err != nil {
 		return errors.Wrap(err, "failed to load ebpf module to kernel")
 	}
 
