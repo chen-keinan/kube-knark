@@ -123,10 +123,7 @@ func (p *Program) startPerfEvents(events <-chan []byte) {
 					desc += " " + strings.Join(args[2:], " ")
 				}
 				// display process execution event
-				ts := goebpf.KtimeToTime(ev.KtimeNs)
-				ev.StartTime = ts.Format("15:04:05.000")
-				ev.Cmd = goebpf.NullTerminatedStringToString(ev.Comm[:])
-				buff := new(bytes.Buffer)
+  				buff := new(bytes.Buffer)
 				json.NewEncoder(buff).Encode(&ev)
 				fmt.Println(buff.String())
 			} else {
