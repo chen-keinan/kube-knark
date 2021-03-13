@@ -1,12 +1,10 @@
 package trace
 
 import (
-	"bytes"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	bpf "github.com/iovisor/gobpf/elf"
 	"github.com/pkg/errors"
 	"github.com/prometheus/procfs"
-	"github.com/rs/zerolog/log"
 	"os"
 	"strconv"
 	"sync"
