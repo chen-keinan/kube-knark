@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go.uber.org/zap/buffer"
 	"log"
 	"os"
 	"os/signal"
@@ -22,15 +21,12 @@ var (
 )
 
 type Event_t struct {
-	KtimeNs   uint64   `json:"-"`
-	StartTime string   `json:"start_time,omitempty"`
-	Pid       uint32   `json:"pid,omitempty"`
-	Uid       uint32   `json:"uid,omitempty"`
-	Gid       uint32   `json:"gid,omitempty"`
-	Type      int32    `json:"type,omitempty"`
-	Comm      [32]byte `json:"-"`
-	Desc      string   `json:"desc,omitempty"`
-	Cmd       string   `json:"cmd,omitempty"`
+	KtimeNs uint64   `json:"start_time,omitempty""`
+	Pid     uint32   `json:"pid,omitempty"`
+	Uid     uint32   `json:"uid,omitempty"`
+	Gid     uint32   `json:"gid,omitempty"`
+	Type    int32    `json:"type,omitempty"`
+	Comm    [32]byte `json:"comm,omitempty"`
 }
 
 type Program struct {
@@ -130,9 +126,9 @@ func (p *Program) startPerfEvents(events <-chan []byte) {
 				ts := goebpf.KtimeToTime(ev.KtimeNs)
 				ev.StartTime = ts.Format("15:04:05.000")
 				ev.Cmd = goebpf.NullTerminatedStringToString(ev.Comm[:])
-				writer := new(buffer.Buffer)
-				json.NewEncoder(writer).Encode(&ev)
-				fmt.Println(writer.String())
+				buff := new(bytes.Buffer)
+				json.NewEncoder(buff).Encode(&ev)
+				fmt.Println(buff.String())
 			} else {
 				break
 			}
