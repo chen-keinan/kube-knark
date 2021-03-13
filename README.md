@@ -4,4 +4,5 @@
 [![Build Status](https://travis-ci.com/chen-keinan/kube-beacon.svg?branch=main)](https://travis-ci.com/chen-keinan/kube-beacon)
 [![Coverage Status](https://coveralls.io/repos/github/chen-keinan/kube-beacon/badge.svg?branch=main)](https://coveralls.io/github/chen-keinan/kube-beacon?branch=main)
 [![Gitter](https://badges.gitter.im/kube-beacon/community.svg)](https://gitter.im/kube-beacon/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+<br>
 <img src="./pkg/images/gopher_krank_size.png" width="200" alt="gopher_krank logo">
