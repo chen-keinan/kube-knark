@@ -5,4 +5,3 @@
 [![Coverage Status](https://coveralls.io/repos/github/chen-keinan/kube-beacon/badge.svg?branch=main)](https://coveralls.io/github/chen-keinan/kube-beacon?branch=main)
 [![Gitter](https://badges.gitter.im/kube-beacon/community.svg)](https://gitter.im/kube-beacon/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <img src="./pkg/images/kube_krank.png width="200" alt="gopher_krank logo">
-
