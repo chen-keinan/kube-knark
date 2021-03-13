@@ -1,2 +1,4 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/chen-keinan/beacon/blob/main/LICENSE)
+[![Gitter](https://badges.gitter.im/kube-knark/community.svg)](https://gitter.im/kube-knark/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><BR>
 # Kube-Knark Project
