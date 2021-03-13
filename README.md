@@ -6,4 +6,3 @@
 [![Gitter](https://badges.gitter.im/kube-beacon/community.svg)](https://gitter.im/kube-beacon/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <br>
 <img src="./pkg/images/kube_krank.png width="200" alt="gopher_krank logo">
-
