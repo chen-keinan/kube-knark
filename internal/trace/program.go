@@ -22,7 +22,6 @@ type Event_t struct {
 	Gid     uint32
 	Type    int32
 	Comm    [32]byte
-	Desc    string
 }
 
 type Program struct {
