@@ -6,6 +6,8 @@ import (
 	bpf "github.com/iovisor/gobpf/elf"
 	"github.com/pkg/errors"
 	"github.com/prometheus/procfs"
+	"github.com/rs/zerolog/log"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -121,14 +123,14 @@ func (m *ProcessMonitor) Start(done <-chan struct{}) (<-chan interface{}, error)
 }
 
 func (m *ProcessMonitor) initBPF() error {
-	data, err := asset("exec.o")
+	f, err := os.Open("exec.o")
 	if err != nil {
-		return errors.Wrap(err, "failed to load embedded ebpf code")
+		return errors.Wrap(err, "failed to open elf file")
 	}
-
+	defer f.Close()
 	// Load module to kernel.
 
-	m.module = bpf.NewModuleFromReader(bytes.NewReader(data))
+	m.module = bpf.NewModuleFromReader(f)
 
 	err = m.module.Load(nil)
 
