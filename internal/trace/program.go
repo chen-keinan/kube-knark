@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/dropbox/goebpf"
-	"strings"
 	"sync"
 )
 
@@ -88,7 +87,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte) {
 				break
 			}
 		}
-	}(events)
+	}(kevents)
 }
 
 func (p *Program) stopPerfEvents() {
