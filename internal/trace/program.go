@@ -3,8 +3,10 @@ package trace
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/dropbox/goebpf"
 	"strings"
 	"sync"
@@ -14,15 +16,6 @@ var (
 	ErrProgramNotFound = errors.New("program not found")
 	ErrMapNotFound     = errors.New("map not found")
 )
-
-type Event_t struct {
-	KtimeNs uint64
-	Pid     uint32
-	Uid     uint32
-	Gid     uint32
-	Type    int32
-	Comm    [32]byte
-}
 
 type Program struct {
 	bpf goebpf.System
@@ -46,9 +39,10 @@ func LoadProgram(filename string) (*Program, error) {
 	return &Program{bpf: bpf}, nil
 }
 
-func (p *Program) startPerfEvents(events <-chan []byte) {
+//startPerfEvents pull ebpf events
+func (p *Program) startPerfEvents(kevents <-chan []byte) {
 	p.wg.Add(1)
-	go func(events <-chan []byte) {
+	go func(kevents <-chan []byte) {
 		defer p.wg.Done()
 
 		// print header
@@ -56,7 +50,7 @@ func (p *Program) startPerfEvents(events <-chan []byte) {
 		for {
 
 			// receive exec events
-			if b, ok := <-events; ok {
+			if b, ok := <-kevents; ok {
 
 				// parse proc info
 				var ev Event_t
@@ -76,21 +70,20 @@ func (p *Program) startPerfEvents(events <-chan []byte) {
 				}
 
 				// build display strings
-				var desc string
-				if len(args) > 0 {
-					desc = args[0]
-				}
-				if len(args) > 2 {
-					desc += " " + strings.Join(args[2:], " ")
-				}
-
-				// display process execution event
 				ts := goebpf.KtimeToTime(ev.KtimeNs)
-				fmt.Printf("%s  %-16s  %-6d %-6d %-6d %s\n",
-					ts.Format("15:04:05.000"),
-					goebpf.NullTerminatedStringToString(ev.Comm[:]),
-					ev.Pid, ev.Uid, ev.Gid, desc)
-
+				comm := goebpf.NullTerminatedStringToString(ev.Comm[:])
+				ke := &events.KprobeEvent{
+					StartTime: ts.Format("15:04:05.000"),
+					Comm:      comm,
+					Pid:       ev.Pid,
+					Uid:       ev.Uid,
+					Gid:       ev.Gid,
+					Args:      args,
+				}
+				// display process execution event
+				kwriter := new(bytes.Buffer)
+				json.NewEncoder(kwriter).Encode(&ke)
+				fmt.Println(kwriter.String())
 			} else {
 				break
 			}
@@ -103,8 +96,8 @@ func (p *Program) stopPerfEvents() {
 	p.wg.Wait()
 }
 
+//AttachProbes attach ebpf program to kernel
 func (p *Program) AttachProbes() error {
-
 	// attach all probe programs
 	for _, prog := range p.bpf.GetPrograms() {
 		if err := prog.Attach(nil); err != nil {
@@ -136,6 +129,7 @@ func (p *Program) AttachProbes() error {
 	return nil
 }
 
+//DetachProbes detach ebpf program from kernel
 func (p *Program) DetachProbes() error {
 	p.stopPerfEvents()
 	for _, prog := range p.bpf.GetPrograms() {
@@ -145,6 +139,7 @@ func (p *Program) DetachProbes() error {
 	return nil
 }
 
+//ShowInfo how kprobe program info
 func (p *Program) ShowInfo() {
 	fmt.Println()
 	fmt.Println("Maps:")
@@ -160,12 +155,12 @@ func (p *Program) ShowInfo() {
 	}
 }
 
-//EventsLost return num of kprobe event lost
+//EventsLost return num of ebpf event lost
 func (p *Program) EventsLost() int {
 	return p.pe.EventsLost
 }
 
-//EventsReceived return num of kprobe events received
+//EventsReceived return num of ebpf events received
 func (p *Program) EventsReceived() int {
 	return p.pe.EventsReceived
 }
