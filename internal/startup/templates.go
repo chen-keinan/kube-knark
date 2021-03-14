@@ -69,7 +69,7 @@ func CompileEbpfSources(filesData []utils.FilesInfo) error {
 		}
 		sourcefilePath := filepath.Join(ebpfSourceFolder, fileData.Name)
 		compiledFilePath := filepath.Join(ebpfCompiledFolder, strings.Replace(fileData.Name, ".c", ".elf", -1))
-		cmdResult, err := shell.NewClangCompiler().CompileSourceToElf(sourcefilePath, compiledFilePath)
+		cmdResult, err := shell.NewClangCompiler().CompileSourceToElf(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath)
 		if cmdResult.Stderr != "" || err != nil {
 			return fmt.Errorf(cmdResult.Stderr)
 		}
