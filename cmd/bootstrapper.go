@@ -38,9 +38,11 @@ func StartKnark() {
 	}
 	for _, ebpfFile := range files {
 		go func() {
-			p, err := trace.LoadProgram(path.Join(ebpfCompiledFolder, ebpfFile.Name))
+			join := path.Join(ebpfCompiledFolder, ebpfFile.Name)
+			fmt.Print(join)
+			p, err := trace.LoadProgram(join)
 			if err != nil {
-				panic("failed to load ebpf program")
+				panic(fmt.Sprintf("failed to load ebpf program %s",err.Error()))
 			}
 			p.ShowInfo()
 
