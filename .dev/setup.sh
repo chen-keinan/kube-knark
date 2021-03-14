@@ -14,6 +14,6 @@ cd $GOPATH/src/github.com/go-delve/delve
 make install
 
 ### export dlv bin path
-export PATH=$PATH:/home/vagrant/go/bin
-export PATH=$PATH:/root/go/bin
+echo export PATH=$PATH:/home/vagrant/go/bin >> ~/.bashrc
+echo export PATH=$PATH:/root/go/bin >> ~/.bashrc
 echo "Finished provisioning."
