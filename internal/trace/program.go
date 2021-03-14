@@ -79,7 +79,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte) {
 					StartTime: ts.Format("15:04:05.000"),
 					Comm:      comm,
 					Pid:       ev.Pid,
-					Uid:       ev.UID,
+					UID:       ev.UID,
 					Gid:       ev.Gid,
 					Args:      args,
 				}

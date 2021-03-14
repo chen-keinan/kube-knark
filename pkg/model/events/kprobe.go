@@ -4,7 +4,7 @@ package events
 type KprobeEvent struct {
 	StartTime string
 	Pid       uint32
-	Uid       uint32
+	UID       uint32
 	Gid       uint32
 	Comm      string
 	Args      []string
