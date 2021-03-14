@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/common"
 	"github.com/chen-keinan/kube-knark/internal/trace"
 	"log"
 	"os"
@@ -36,7 +35,7 @@ func StartKnark() {
 
 	filePath := path.Join(ebpfCompiledFolder, files[0].Name)
 	fmt.Print(filePath)*/
-	p, err := trace.LoadProgram(common.KprobeCompiledFile)
+	p, err := trace.LoadProgram("/root/.kube-knark/ebpf/compiled/kprob.elf")
 	if err != nil {
 		panic(fmt.Sprintf("failed to load ebpf program %s", err.Error()))
 	}
