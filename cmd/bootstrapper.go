@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path"
 )
 
 func StartKnark() {
@@ -30,13 +31,14 @@ func StartKnark() {
 	}
 
 	// load ebpf program
-	files, err := utils.GetEbpfFiles(utils.GetEbpfCompiledFolder())
+	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
+	files, err := utils.GetEbpfFiles(ebpfCompiledFolder)
 	if err := goebpf.CleanupProbes(); err != nil {
 		log.Println(err)
 	}
 	for _, ebpfFile := range files {
 		go func() {
-			p, err := trace.LoadProgram(ebpfFile.Name)
+			p, err := trace.LoadProgram(path.Join(ebpfCompiledFolder, ebpfFile.Name))
 			if err != nil {
 				panic("failed to load ebpf program")
 			}
