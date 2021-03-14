@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+go generate ./...
+$GOPATH/bin/golangci-lint run -v  > lint.xml

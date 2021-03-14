@@ -14,8 +14,13 @@ all:lint build
 
 fmt:
 	$(GOCMD) fmt ./...
-
+lint:
+	$(GOMOCKS)
+	./scripts/lint.sh
+tidy:
+	$(GOMOD) tidy -v
 build:
+	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -v
 	$(MOVESANDBOX)
 .PHONY: all build install test
