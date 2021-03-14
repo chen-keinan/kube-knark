@@ -3,13 +3,9 @@
 echo "Provisioning virtual machine..."
 
 ### install clang llvm make
-echo "install clang llvm make"
+echo "install clang llvm make golang"
 sudo apt-get update -y
-sudo apt-get -y install clang llvm make
-
-### install golang pkg
-echo "install golang pkg"
-sudo yum install -y golang
+sudo apt-get -y install clang llvm make golang
 
 ### Install dlv pkg
 echo "Install dlv pkg"
