@@ -3,9 +3,12 @@ package cmd
 import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/trace"
+	"github.com/chen-keinan/kube-knark/pkg/utils"
+	"github.com/dropbox/goebpf"
 	"log"
 	"os"
 	"os/signal"
+	"path"
 )
 
 func StartKnark() {
@@ -26,16 +29,16 @@ func StartKnark() {
 		log.Println(err)
 	}*/
 
-	/*// load ebpf program
-	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
-	files, err := utils.GetEbpfFiles(ebpfCompiledFolder)
+	// load ebpf program
+
 	if err := goebpf.CleanupProbes(); err != nil {
 		log.Println(err)
 	}
-
+	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
+	files, err := utils.GetEbpfFiles(ebpfCompiledFolder)
 	filePath := path.Join(ebpfCompiledFolder, files[0].Name)
-	fmt.Print(filePath)*/
-	p, err := trace.LoadProgram("/root/.kube-knark/ebpf/compiled/kprobe.elf")
+	fmt.Print(filePath)
+	p, err := trace.LoadProgram(filePath)
 	if err != nil {
 		panic(fmt.Sprintf("failed to load ebpf program %s", err.Error()))
 	}
