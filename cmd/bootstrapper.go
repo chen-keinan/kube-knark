@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
+	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/trace"
 	"github.com/dropbox/goebpf"
 	"log"
@@ -11,6 +12,18 @@ import (
 )
 
 func StartKnark() {
+	fileInfo, err := startup.GenerateEbpfFiles()
+	if err != nil {
+		panic(err)
+	}
+	err = startup.SaveEbpfFilesIfNotExist(fileInfo)
+	if err != nil {
+		panic(err)
+	}
+	err = startup.CompileEbpfSources(fileInfo)
+	if err != nil {
+		panic(err)
+	}
 	// cleanup old probes
 	if err := goebpf.CleanupProbes(); err != nil {
 		log.Println(err)

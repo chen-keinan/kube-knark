@@ -10,9 +10,30 @@ import (
 	"path/filepath"
 )
 
-//GetBenchmarkFolder return benchmark folder
-func GetEbpfFolder() string {
-	return filepath.Join(GetHomeFolder(), fmt.Sprintf("ebpf/source"))
+//GetEbpfSourceFolder return ebpf source folder path
+func GetEbpfSourceFolder() string {
+	err := CreateHomeFolderIfNotExist()
+	if err != nil {
+		panic("Failed to fetch user home folder")
+	}
+	ebpfFolder, err := CreateEbpfSourceFolderIfNotExist()
+	if err != nil {
+		panic("Failed to fetch user home folder")
+	}
+	return ebpfFolder
+}
+
+//GetEbpfCompiledFolder return ebpf compiled folder path
+func GetEbpfCompiledFolder() string {
+	err := CreateHomeFolderIfNotExist()
+	if err != nil {
+		panic("Failed to fetch user home folder")
+	}
+	ebpfFolder, err := CreateEbpfCompiledFolderIfNotExist()
+	if err != nil {
+		panic("Failed to fetch user home folder")
+	}
+	return ebpfFolder
 }
 
 //GetHomeFolder return beacon home folder
@@ -41,20 +62,56 @@ type FilesInfo struct {
 }
 
 //GetEbpfFiles return ebpf source files
-func GetEbpfFiles(spec, version string) ([]FilesInfo, error) {
+func GetEbpfFiles(folder string) ([]FilesInfo, error) {
 	filesData := make([]FilesInfo, 0)
-	folder := GetEbpfFolder()
 	filesInfo, err := ioutil.ReadDir(filepath.Join(folder))
 	if err != nil {
 		return nil, err
 	}
 	for _, fileInfo := range filesInfo {
-		filePath := filepath.Join(GetEbpfFolder(), filepath.Clean(fileInfo.Name()))
-		fData, err := ioutil.ReadFile(filepath.Clean(filePath))
 		if err != nil {
 			return nil, err
 		}
-		filesData = append(filesData, FilesInfo{fileInfo.Name(), string(fData)})
+		filesData = append(filesData, FilesInfo{Name: fileInfo.Name()})
 	}
 	return filesData, nil
+}
+
+//CreateHomeFolderIfNotExist create ebpf home folder if not exist
+func CreateHomeFolderIfNotExist() error {
+	beaconFolder := GetHomeFolder()
+	_, err := os.Stat(beaconFolder)
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(beaconFolder, 0750)
+		if errDir != nil {
+			return fmt.Errorf("failed to create beacon home folder at %s", beaconFolder)
+		}
+	}
+	return nil
+}
+
+//CreateEbpfSourceFolderIfNotExist create ebpf source folder if not exist
+func CreateEbpfSourceFolderIfNotExist() (string, error) {
+	ebpfFolder := filepath.Join(GetHomeFolder(), fmt.Sprintf("ebpf/source"))
+	_, err := os.Stat(ebpfFolder)
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(ebpfFolder, 0750)
+		if errDir != nil {
+			return "", fmt.Errorf("failed to create ebpf folder folder at %s", ebpfFolder)
+		}
+	}
+	return ebpfFolder, nil
+}
+
+//CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
+func CreateEbpfCompiledFolderIfNotExist() (string, error) {
+	ebpfFolder := filepath.Join(GetHomeFolder(), fmt.Sprintf("ebpf/compiled"))
+	_, err := os.Stat(ebpfFolder)
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(ebpfFolder, 0750)
+		if errDir != nil {
+			return "", fmt.Errorf("failed to create ebpf folder folder at %s", ebpfFolder)
+		}
+	}
+	return ebpfFolder, nil
 }

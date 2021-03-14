@@ -7,4 +7,6 @@ const (
 	KubeKnarkHome = "KUBE_KNARK_HOME"
 	//KprobeSourceFile kprobe program source file
 	KprobeSourceFile = "kprobe.c"
+	//KprobeCompiledFile kprobe program compiled file
+	KprobeCompiledFile = "kprobe.elf"
 )
