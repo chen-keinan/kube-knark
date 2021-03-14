@@ -12,16 +12,18 @@ import (
 )
 
 var (
+	//ErrProgramNotFound program not found error
 	ErrProgramNotFound = errors.New("program not found")
-	ErrMapNotFound     = errors.New("map not found")
+	//ErrMapNotFound map not found error
+	ErrMapNotFound = errors.New("map not found")
 )
-
+//Program object
 type Program struct {
 	bpf goebpf.System
 	pe  *goebpf.PerfEvents
 	wg  sync.WaitGroup
 }
-
+//LoadProgram load ebpf program
 func LoadProgram(filename string) (*Program, error) {
 	// create system
 	bpf := goebpf.NewDefaultEbpfSystem()
@@ -52,7 +54,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte) {
 			if b, ok := <-kevents; ok {
 
 				// parse proc info
-				var ev Event_t
+				var ev EventKprobe
 				buf := bytes.NewBuffer(b)
 				if err := binary.Read(buf, binary.LittleEndian, &ev); err != nil {
 					fmt.Printf("error: %v\n", err)
@@ -75,13 +77,16 @@ func (p *Program) startPerfEvents(kevents <-chan []byte) {
 					StartTime: ts.Format("15:04:05.000"),
 					Comm:      comm,
 					Pid:       ev.Pid,
-					Uid:       ev.Uid,
+					Uid:       ev.UID,
 					Gid:       ev.Gid,
 					Args:      args,
 				}
 				// display process execution event
 				kwriter := new(bytes.Buffer)
-				json.NewEncoder(kwriter).Encode(&ke)
+				err := json.NewEncoder(kwriter).Encode(&ke)
+				if err != nil {
+					continue
+				}
 				fmt.Println(kwriter.String())
 			} else {
 				break

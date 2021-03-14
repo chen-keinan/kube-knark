@@ -92,7 +92,7 @@ func CreateHomeFolderIfNotExist() error {
 
 //CreateEbpfSourceFolderIfNotExist create ebpf source folder if not exist
 func CreateEbpfSourceFolderIfNotExist() (string, error) {
-	ebpfFolder := filepath.Join(GetHomeFolder(), fmt.Sprintf("ebpf/source"))
+	ebpfFolder := filepath.Join(GetHomeFolder(), "ebpf/source")
 	_, err := os.Stat(ebpfFolder)
 	if os.IsNotExist(err) {
 		errDir := os.MkdirAll(ebpfFolder, 0750)
@@ -105,7 +105,7 @@ func CreateEbpfSourceFolderIfNotExist() (string, error) {
 
 //CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
 func CreateEbpfCompiledFolderIfNotExist() (string, error) {
-	ebpfFolder := filepath.Join(GetHomeFolder(), fmt.Sprintf("ebpf/compiled"))
+	ebpfFolder := filepath.Join(GetHomeFolder(), "ebpf/compiled")
 	_, err := os.Stat(ebpfFolder)
 	if os.IsNotExist(err) {
 		errDir := os.MkdirAll(ebpfFolder, 0750)

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-//GenerateK8sBenchmarkFiles use packr to load benchmark audit test yaml
+//GenerateEbpfFiles ebpf file from template
 func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
 	fileInfo := make([]utils.FilesInfo, 0)
 	box := packr.NewBox("./../../ebpf/")

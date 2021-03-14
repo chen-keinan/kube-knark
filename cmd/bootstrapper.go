@@ -44,7 +44,13 @@ func StartKnark() {
 	if err := p.AttachProbes(); err != nil {
 		log.Fatalf("AttachProbes() failed: %v", err)
 	}
-	defer p.DetachProbes()
+	defer func() {
+		err:=p.DetachProbes()
+		if err != nil{
+			fmt.Println("failed to detach prob")
+		}
+	}()
+
 	// wait until Ctrl+C pressed
 	ctrlC := make(chan os.Signal, 1)
 	signal.Notify(ctrlC, os.Interrupt)
