@@ -48,11 +48,6 @@ func StartKnark() {
 			}
 			defer p.DetachProbes()
 
-			// wait until Ctrl+C pressed
-			ctrlC := make(chan os.Signal, 1)
-			signal.Notify(ctrlC, os.Interrupt)
-			<-ctrlC
-
 			// display some stats
 			fmt.Println()
 			fmt.Printf("%d Event(s) Received\n", p)
@@ -60,4 +55,8 @@ func StartKnark() {
 			fmt.Printf("%d Event(s) lost (e.g. small buffer, delays in processing)\n", p.EventsLost())
 		}()
 	}
+	// wait until Ctrl+C pressed
+	ctrlC := make(chan os.Signal, 1)
+	signal.Notify(ctrlC, os.Interrupt)
+	<-ctrlC
 }
