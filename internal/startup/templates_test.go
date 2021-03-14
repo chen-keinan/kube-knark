@@ -19,6 +19,8 @@ func Test_CreateEbfFilesIfNotExist(t *testing.T) {
 	}
 	// generate test with packr
 	assert.Equal(t, bFiles[0].Name, common.KprobeSourceFile)
+	assert.Equal(t, bFiles[1].Name, common.BpfHeaderFile)
+	assert.Equal(t, bFiles[2].Name, common.BpfHelperHeaderFile)
 }
 
 //Test_CompileEbpfSources test

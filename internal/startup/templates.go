@@ -15,12 +15,24 @@ import (
 func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
 	fileInfo := make([]utils.FilesInfo, 0)
 	box := packr.NewBox("./../../ebpf/")
-	// Add Master Node Configuration tests
+	// Add ebpf kprobe program
 	ksf, err := box.FindString(common.KprobeSourceFile)
 	if err != nil {
 		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
 	}
 	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.KprobeSourceFile, Data: ksf})
+	// Add bpf header file
+	bh, err := box.FindString(common.BpfHeaderFile)
+	if err != nil {
+		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+	}
+	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHeaderFile, Data: bh})
+	// Add bph_helper header file
+	bhh, err := box.FindString(common.BpfHelperHeaderFile)
+	if err != nil {
+		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+	}
+	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHelperHeaderFile, Data: bhh})
 	return fileInfo, nil
 }
 
@@ -46,18 +58,19 @@ func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
 	}
 	return nil
 }
+
 //CompileEbpfSources compile ebpf program to elf file
 func CompileEbpfSources(filesData []utils.FilesInfo) error {
 	ebpfSourceFolder := utils.GetEbpfSourceFolder()
 	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
 	for _, fileData := range filesData {
-		sourcefilePath := filepath.Join(ebpfSourceFolder, fileData.Name)
-		compiledFilePath:= filepath.Join(ebpfCompiledFolder, strings.Replace(fileData.Name,".c",".elf",-1))
-		cmdResult,err:=shell.NewClangCompiler().CompileSourceToElf(sourcefilePath,compiledFilePath)
-		if err != nil{
-			return err
+		if !strings.HasSuffix(fileData.Name, ".c") {
+			continue
 		}
-		if cmdResult.Stderr != ""{
+		sourcefilePath := filepath.Join(ebpfSourceFolder, fileData.Name)
+		compiledFilePath := filepath.Join(ebpfCompiledFolder, strings.Replace(fileData.Name, ".c", ".elf", -1))
+		cmdResult, err := shell.NewClangCompiler().CompileSourceToElf(sourcefilePath, compiledFilePath)
+		if cmdResult.Stderr != "" || err != nil {
 			return fmt.Errorf(cmdResult.Stderr)
 		}
 	}
