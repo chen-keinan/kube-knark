@@ -1,14 +1,14 @@
 SHELL := /bin/bash
 
 GOCMD=go
-MOVESANDBOX=mv kube-beacon ~/vagrant_file/.
+MOVESANDBOX=mv kube-knark ~/vagrant_file/.
 GOPACKR=$(GOCMD) get -u github.com/gobuffalo/packr/packr && packr
 GOMOD=$(GOCMD) mod
 GOMOCKS=$(GOCMD) generate ./...
 GOBUILD=$(GOCMD) build
 GOTEST=$(GOCMD) test
-BINARY_NAME=kube-beacon
-GOCOPY=cp kube-beacon ~/vagrant_file/.
+BINARY_NAME=kube-knark
+GOCOPY=cp kube-knark ~/vagrant_file/.
 
 all:lint build
 
