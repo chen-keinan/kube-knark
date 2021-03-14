@@ -35,7 +35,7 @@ func StartKnark() {
 
 	filePath := path.Join(ebpfCompiledFolder, files[0].Name)
 	fmt.Print(filePath)*/
-	p, err := trace.LoadProgram("/root/.kube-knark/ebpf/compiled/kprob.elf")
+	p, err := trace.LoadProgram("/root/.kube-knark/ebpf/compiled/kprobe.elf")
 	if err != nil {
 		panic(fmt.Sprintf("failed to load ebpf program %s", err.Error()))
 	}
