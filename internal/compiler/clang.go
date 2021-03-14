@@ -40,6 +40,7 @@ func (ce ClangCompiler) CompileSourceToElf(source, destination string) (*Command
 	var stderr bytes.Buffer
 	fullCmd := fmt.Sprintf(command, source, destination)
 	cmd := exec.Command(ShellToUse, "-c", fullCmd)
+	fmt.Println(cmd.String())
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	err := cmd.Run()
