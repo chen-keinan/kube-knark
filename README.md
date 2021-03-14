@@ -9,5 +9,5 @@ Kube-Knark is an open source audit tracer who perform run time on a deployed kub
 ### Requirements
 - Go 1.10+
 - Linux Kernel 4.15+
-- clang < 10
-- llvm
+- Clang < 10
+- LLVM
