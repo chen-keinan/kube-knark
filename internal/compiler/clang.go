@@ -9,7 +9,7 @@ import (
 const command = "clang -I -O2 -target bpf -c %s -o %s"
 
 //ShellToUse bash shell
-const ShellToUse = "bash"
+const ShellToUse = "sh"
 
 //Executor defines the interface for clang compiler
 //exec.go
