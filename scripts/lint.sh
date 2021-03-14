@@ -4,5 +4,6 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 go get github.com/golang/mock/mockgen@latest
 go install -v github.com/golang/mock/mockgen
 export PATH=$GOPATH/bin:$PATH
+export PATH=$PATH:/root/go/bin
 go generate ./...
-$GOPATH/bin/golangci-lint run -v  > lint.xml
+golangci-lint run -v  > lint.xml
