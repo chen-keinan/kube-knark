@@ -1,5 +1,5 @@
 package trace
-
+//EventKprobe Object
 type EventKprobe struct {
 	KtimeNs uint64
 	Pid     uint32

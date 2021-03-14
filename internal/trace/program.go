@@ -17,12 +17,14 @@ var (
 	//ErrMapNotFound map not found error
 	ErrMapNotFound = errors.New("map not found")
 )
+
 //Program object
 type Program struct {
 	bpf goebpf.System
 	pe  *goebpf.PerfEvents
 	wg  sync.WaitGroup
 }
+
 //LoadProgram load ebpf program
 func LoadProgram(filename string) (*Program, error) {
 	// create system

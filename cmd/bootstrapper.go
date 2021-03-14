@@ -12,6 +12,7 @@ import (
 	"path"
 )
 
+// StartKnark start kube-knark event tracer
 func StartKnark() {
 	// cleanup old probes
 	if err := goebpf.CleanupProbes(); err != nil {
@@ -32,8 +33,10 @@ func StartKnark() {
 	// load ebpf program
 	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
 	files, err := utils.GetEbpfFiles(ebpfCompiledFolder)
+	if err != nil {
+		panic(fmt.Sprintf("failed to load ebpf program %s", err.Error()))
+	}
 	filePath := path.Join(ebpfCompiledFolder, files[0].Name)
-	fmt.Print(filePath)
 	p, err := trace.LoadProgram(filePath)
 	if err != nil {
 		panic(fmt.Sprintf("failed to load ebpf program %s", err.Error()))
@@ -45,8 +48,8 @@ func StartKnark() {
 		log.Fatalf("AttachProbes() failed: %v", err)
 	}
 	defer func() {
-		err:=p.DetachProbes()
-		if err != nil{
+		err := p.DetachProbes()
+		if err != nil {
 			fmt.Println("failed to detach prob")
 		}
 	}()
@@ -57,7 +60,7 @@ func StartKnark() {
 	<-ctrlC
 	// display some stats
 	fmt.Println()
-	fmt.Printf("%d Event(s) Received\n", p)
+	fmt.Printf("%d Event(s) Received\n", p.EventsReceived())
 	fmt.Printf("%d Event(s) lost (e.g. small buffer, delays in processing)\n", p.EventsLost())
 	fmt.Printf("%d Event(s) lost (e.g. small buffer, delays in processing)\n", p.EventsLost())
 
