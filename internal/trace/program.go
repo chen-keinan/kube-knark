@@ -132,19 +132,25 @@ func (p *Program) AttachProbes() error {
 func (p *Program) DetachProbes() error {
 	p.stopPerfEvents()
 	for _, prog := range p.bpf.GetPrograms() {
-		prog.Detach()
-		prog.Close()
+		err := prog.Detach()
+		if err != nil {
+			return err
+		}
+		err = prog.Close()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
 //ShowInfo how kprobe program info
 func (p *Program) ShowInfo() {
-	fmt.Println()
-	fmt.Println("Maps:")
 	for _, item := range p.bpf.GetMaps() {
-		m := item.(*goebpf.EbpfMap)
-		fmt.Printf("\t%s: %v, Fd %v\n", m.Name, m.Type, m.GetFd())
+		m, ok := item.(*goebpf.EbpfMap)
+		if ok {
+			fmt.Printf("\t%s: %v, Fd %v\n", m.Name, m.Type, m.GetFd())
+		}
 	}
 	fmt.Println("\nPrograms:")
 	for _, prog := range p.bpf.GetPrograms() {

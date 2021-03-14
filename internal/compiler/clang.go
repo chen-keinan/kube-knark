@@ -15,7 +15,7 @@ const ShellToUse = "bash"
 //exec.go
 //go:generate mockgen -destination=../mocks/mock_Executor.go -package=mocks . Executor
 type Executor interface {
-	CompileSourceToElf(headerPath,source,destination string) (*CommandResult, error)
+	CompileSourceToElf(headerPath, source, destination string) (*CommandResult, error)
 }
 
 //ClangCompiler object
@@ -38,7 +38,7 @@ type CommandResult struct {
 func (ce ClangCompiler) CompileSourceToElf(headerPath, source, destination string) (*CommandResult, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	fullCmd := fmt.Sprintf(command,headerPath,source, destination)
+	fullCmd := fmt.Sprintf(command, headerPath, source, destination)
 	cmd := exec.Command(ShellToUse, "-c", fullCmd)
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
