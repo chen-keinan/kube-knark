@@ -38,7 +38,10 @@ func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
 
 //SaveEbpfFilesIfNotExist create ebpf source files if not exist
 func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
-	ebpfFolder := utils.GetEbpfSourceFolder()
+	ebpfFolder, err := utils.GetEbpfSourceFolder()
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
 	for _, fileData := range filesData {
 		filePath := filepath.Join(ebpfFolder, fileData.Name)
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
@@ -61,8 +64,14 @@ func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
 
 //CompileEbpfSources compile ebpf program to elf file
 func CompileEbpfSources(filesData []utils.FilesInfo, cc *shell.ClangCompiler) error {
-	ebpfSourceFolder := utils.GetEbpfSourceFolder()
-	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
+	ebpfSourceFolder, err := utils.GetEbpfSourceFolder()
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
 	for _, fileData := range filesData {
 		if !strings.HasSuffix(fileData.Name, ".c") {
 			continue

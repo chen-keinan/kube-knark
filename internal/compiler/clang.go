@@ -55,6 +55,9 @@ func (ce ClangCompiler) CompileSourceToElf(cmd Executor) (*CommandResult, error)
 
 // return cmd args
 func cmdArgs(executor Executor) []string {
-	c := executor.(*exec.Cmd)
+	c, ok := executor.(*exec.Cmd)
+	if !ok {
+		return []string{}
+	}
 	return c.Args
 }

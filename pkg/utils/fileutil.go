@@ -11,40 +11,42 @@ import (
 )
 
 //GetEbpfSourceFolder return ebpf source folder path
-func GetEbpfSourceFolder() string {
+func GetEbpfSourceFolder() (string, error) {
 	err := CreateHomeFolderIfNotExist()
 	if err != nil {
-		panic("Failed to fetch user home folder")
+		return "", err
 	}
 	ebpfFolder, err := CreateEbpfSourceFolderIfNotExist()
 	if err != nil {
-		panic("Failed to fetch user home folder")
+		return "", err
 	}
-	return ebpfFolder
+	return ebpfFolder, nil
 }
 
 //GetEbpfCompiledFolder return ebpf compiled folder path
-func GetEbpfCompiledFolder() string {
+func GetEbpfCompiledFolder() (string, error) {
 	err := CreateHomeFolderIfNotExist()
 	if err != nil {
-		panic("Failed to fetch user home folder")
+		return "", err
 	}
 	ebpfFolder, err := CreateEbpfCompiledFolderIfNotExist()
 	if err != nil {
-		panic("Failed to fetch user home folder")
+		if err != nil {
+			return "", err
+		}
 	}
-	return ebpfFolder
+	return ebpfFolder, nil
 }
 
 //GetHomeFolder return beacon home folder
-func GetHomeFolder() string {
+func GetHomeFolder() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
-		panic("Failed to fetch user home folder")
+		return "", err
 	}
 	// User can set a custom KUBE_KNARK_HOME from environment variable
 	usrHome := GetEnv(common.KubeKnarkHome, usr.HomeDir)
-	return path.Join(usrHome, ".kube-knark")
+	return path.Join(usrHome, ".kube-knark"), nil
 }
 
 //GetEnv Get Environment Variable value or return default
@@ -79,8 +81,11 @@ func GetEbpfFiles(folder string) ([]FilesInfo, error) {
 
 //CreateHomeFolderIfNotExist create ebpf home folder if not exist
 func CreateHomeFolderIfNotExist() error {
-	knarkFolder := GetHomeFolder()
-	_, err := os.Stat(knarkFolder)
+	knarkFolder, err := GetHomeFolder()
+	if err != nil {
+		return err
+	}
+	_, err = os.Stat(knarkFolder)
 	if os.IsNotExist(err) {
 		errDir := os.MkdirAll(knarkFolder, 0750)
 		if errDir != nil {
@@ -92,12 +97,16 @@ func CreateHomeFolderIfNotExist() error {
 
 //CreateEbpfSourceFolderIfNotExist create ebpf source folder if not exist
 func CreateEbpfSourceFolderIfNotExist() (string, error) {
-	ebpfFolder := filepath.Join(GetHomeFolder(), "ebpf/source")
-	_, err := os.Stat(ebpfFolder)
+	homeFolder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	ebpfFolder := filepath.Join(homeFolder, "ebpf/source")
+	_, err = os.Stat(ebpfFolder)
 	if os.IsNotExist(err) {
 		errDir := os.MkdirAll(ebpfFolder, 0750)
 		if errDir != nil {
-			return "", fmt.Errorf("failed to create ebpf folder folder at %s", ebpfFolder)
+			return "", fmt.Errorf("failed to create ebpf homeFolder homeFolder at %s", ebpfFolder)
 		}
 	}
 	return ebpfFolder, nil
@@ -105,8 +114,12 @@ func CreateEbpfSourceFolderIfNotExist() (string, error) {
 
 //CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
 func CreateEbpfCompiledFolderIfNotExist() (string, error) {
-	ebpfFolder := filepath.Join(GetHomeFolder(), "ebpf/compiled")
-	_, err := os.Stat(ebpfFolder)
+	homeFolder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	ebpfFolder := filepath.Join(homeFolder, "ebpf/compiled")
+	_, err = os.Stat(ebpfFolder)
 	if os.IsNotExist(err) {
 		errDir := os.MkdirAll(ebpfFolder, 0750)
 		if errDir != nil {

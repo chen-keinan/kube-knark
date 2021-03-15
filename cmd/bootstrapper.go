@@ -58,7 +58,10 @@ func runKnarkService(lifecycle fx.Lifecycle, zlog *zap.Logger, files []utils.Fil
 		if err := goebpf.CleanupProbes(); err != nil {
 			return fmt.Errorf("failed to clean probs %s", err.Error())
 		}
-		ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
+		ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+		if err != nil {
+			return err
+		}
 
 		filePath := path.Join(ebpfCompiledFolder, files[0].Name)
 		p, err := trace.LoadProgram(filePath)

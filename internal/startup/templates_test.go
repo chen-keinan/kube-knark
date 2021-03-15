@@ -35,7 +35,11 @@ func Test_CompileEbpfSources(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cfiles, err := utils.GetEbpfFiles(utils.GetEbpfCompiledFolder())
+	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+	if err != nil {
+		t.Fatal(err)
+	}
+	cfiles, err := utils.GetEbpfFiles(ebpfCompiledFolder)
 	if err != nil {
 		t.Fatal(err)
 	}
