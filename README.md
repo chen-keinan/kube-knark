@@ -4,7 +4,7 @@
 <br><img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><br>
 # Kube-Knark Project
 ###  Trace your kubernetes runtime !!
-Kube-Knark is an open source audit tracer who perform run time on a deployed kubernetes cluster looking for malware code execution.
+Kube-Knark is an open source audit tracer (via ebpf technology) who perform run time on a deployed kubernetes cluster looking for malware code execution.
 
 ### Requirements
 - Go 1.10+
