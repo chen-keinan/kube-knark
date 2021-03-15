@@ -10,7 +10,7 @@ GOTEST=$(GOCMD) test
 BINARY_NAME=kube-knark
 GOCOPY=cp kube-knark ~/vagrant_file/.
 
-all:lint build
+all:test lint build
 
 fmt:
 	$(GOCMD) fmt ./...
@@ -18,6 +18,11 @@ lint:
 	./scripts/lint.sh
 tidy:
 	$(GOMOD) tidy -v
+test:
+	@go get github.com/golang/mock/mockgen@latest
+	@go install -v github.com/golang/mock/mockgen && export PATH=$GOPATH/bin:$PATH;
+	@go generate ./...
+	$(GOTEST) ./... -coverprofile cp.out
 build:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -v

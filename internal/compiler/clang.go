@@ -14,7 +14,7 @@ const (
 )
 
 //Executor defines the interface for clang compiler
-//exec.go
+//clang.go
 //go:generate mockgen -destination=../mocks/mock_Executor.go -package=mocks . Executor
 type Executor interface {
 	Run() error
@@ -37,8 +37,8 @@ type CommandResult struct {
 
 //NewExecCommand return new exec Command instance
 // #nosec
-func NewExecCommand(headerPath, source, destination string) Executor {
-	fullCmd := fmt.Sprintf(Command, headerPath, source, destination)
+func NewExecCommand(args ...string) Executor {
+	fullCmd := fmt.Sprintf(Command, args[0], args[1], args[2])
 	return exec.Command(ShellToUse, "-c", fullCmd)
 }
 
@@ -51,4 +51,10 @@ func (ce ClangCompiler) CompileSourceToElf(cmd Executor) (*CommandResult, error)
 		return nil, err
 	}
 	return &CommandResult{Stdout: stdout.String(), Stderr: stderr.String()}, err
+}
+
+// return cmd args
+func cmdArgs(executor Executor) []string {
+	c := executor.(*exec.Cmd)
+	return c.Args
 }
