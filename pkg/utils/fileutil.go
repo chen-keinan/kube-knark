@@ -79,12 +79,12 @@ func GetEbpfFiles(folder string) ([]FilesInfo, error) {
 
 //CreateHomeFolderIfNotExist create ebpf home folder if not exist
 func CreateHomeFolderIfNotExist() error {
-	beaconFolder := GetHomeFolder()
-	_, err := os.Stat(beaconFolder)
+	knarkFolder := GetHomeFolder()
+	_, err := os.Stat(knarkFolder)
 	if os.IsNotExist(err) {
-		errDir := os.MkdirAll(beaconFolder, 0750)
+		errDir := os.MkdirAll(knarkFolder, 0750)
 		if errDir != nil {
-			return fmt.Errorf("failed to create beacon home folder at %s", beaconFolder)
+			return fmt.Errorf("failed to create beacon home folder at %s", knarkFolder)
 		}
 	}
 	return nil
