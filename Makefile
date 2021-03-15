@@ -26,5 +26,11 @@ test:
 build:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -v
-	$(MOVESANDBOX)
+
+build_debug:
+	$(GOPACKR)
+	GOOS=linux GOARCH=amd64 go build -v -gcflags='-N -l'
+dlv:
+	dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./kube-knark
+
 .PHONY: all build install test
