@@ -2,6 +2,7 @@ package startup
 
 import (
 	"github.com/chen-keinan/kube-knark/internal/common"
+	shell "github.com/chen-keinan/kube-knark/internal/compiler"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -29,7 +30,7 @@ func Test_CompileEbpfSources(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = CompileEbpfSources(bFiles)
+	err = CompileEbpfSources(bFiles, shell.NewClangCompiler())
 	if err != nil {
 		t.Fatal(err)
 	}

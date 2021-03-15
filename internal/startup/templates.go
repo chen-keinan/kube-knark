@@ -60,7 +60,7 @@ func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
 }
 
 //CompileEbpfSources compile ebpf program to elf file
-func CompileEbpfSources(filesData []utils.FilesInfo) error {
+func CompileEbpfSources(filesData []utils.FilesInfo, cc *shell.ClangCompiler) error {
 	ebpfSourceFolder := utils.GetEbpfSourceFolder()
 	ebpfCompiledFolder := utils.GetEbpfCompiledFolder()
 	for _, fileData := range filesData {
@@ -69,7 +69,8 @@ func CompileEbpfSources(filesData []utils.FilesInfo) error {
 		}
 		sourcefilePath := filepath.Join(ebpfSourceFolder, fileData.Name)
 		compiledFilePath := filepath.Join(ebpfCompiledFolder, strings.Replace(fileData.Name, ".c", ".elf", -1))
-		cmdResult, err := shell.NewClangCompiler().CompileSourceToElf(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath)
+		cmd := shell.NewExecCommand(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath)
+		cmdResult, err := cc.CompileSourceToElf(cmd)
 		if cmdResult.Stderr != "" || err != nil {
 			return fmt.Errorf(cmdResult.Stderr)
 		}

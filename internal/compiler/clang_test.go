@@ -7,7 +7,7 @@ import (
 
 func Test_Exec(t *testing.T) {
 	se := NewClangCompiler()
-	execResult, _ := se.CompileSourceToElf("echo test", "", "")
-	assert.Equal(t, execResult.Stdout, "")
-	assert.True(t, len(execResult.Stderr) > 0)
+	cmd := NewExecCommand("", "", "")
+	_, err := se.CompileSourceToElf(cmd)
+	assert.Error(t, err)
 }
