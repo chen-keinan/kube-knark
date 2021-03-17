@@ -149,4 +149,23 @@ int execve_entry(struct pt_regs *ctx) {
   return 0;
 }
 
+SEC("kprobe/do_exit")
+int kprobe__do_exit(struct pt_regs *ctx)
+{
+  buf_t *buf = get_buf();
+  if (buf == NULL) {
+    return 0;
+  }
+   args_t args[NARGS] = {};
+    get_args(ctx, args);
+    event_t e = {0};
+    e.ktime_ns = bpf_ktime_get_ns();
+    e.pid = bpf_get_current_pid_tgid() >> 32;
+    buf_write(buf, (void *)&e, sizeof(e));
+    buf_strcat(buf, (void *)args[0]);
+    buf_perf_output(ctx);
+
+    return 0;
+}
+
 char _license[] SEC("license") = "GPL";

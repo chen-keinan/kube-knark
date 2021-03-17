@@ -1,4 +1,4 @@
-package trace
+package ebpf_mgr
 
 //EventKprobe Object
 type EventKprobe struct {

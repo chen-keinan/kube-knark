@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
+	"github.com/chen-keinan/kube-knark/internal/ebpf_mgr"
 	"github.com/chen-keinan/kube-knark/internal/logger"
 	"github.com/chen-keinan/kube-knark/internal/startup"
-	"github.com/chen-keinan/kube-knark/internal/trace"
-	"github.com/chen-keinan/kube-knark/pkg/utils"
+ 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/dropbox/goebpf"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -64,7 +64,7 @@ func runKnarkService(lifecycle fx.Lifecycle, zlog *zap.Logger, files []utils.Fil
 		}
 
 		filePath := path.Join(ebpfCompiledFolder, files[0].Name)
-		p, err := trace.LoadProgram(filePath)
+		p, err := ebpf_mgr.LoadProgram(filePath)
 		if err != nil {
 			return fmt.Errorf("failed to load ebpf program %s", err.Error())
 		}
