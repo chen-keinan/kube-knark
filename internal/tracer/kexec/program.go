@@ -3,7 +3,6 @@ package kexec
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
@@ -43,7 +42,7 @@ func LoadProgram(filename string) (*Program, error) {
 }
 
 //startPerfEvents pull ebpf events
-func (p *Program) startPerfEvents(kevents <-chan []byte) {
+func (p *Program) startPerfEvents(kevents <-chan []byte,matchChan chan *events.KprobeEvent) {
 	p.wg.Add(1)
 	go func(kevents <-chan []byte) {
 		defer p.wg.Done()
@@ -83,13 +82,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte) {
 					Gid:       ev.Gid,
 					Args:      args,
 				}
-				// display process execution event
-				kwriter := new(bytes.Buffer)
-				err := json.NewEncoder(kwriter).Encode(&ke)
-				if err != nil {
-					continue
-				}
-				fmt.Println(kwriter.String())
+				matchChan <- ke
 			} else {
 				break
 			}
@@ -103,7 +96,7 @@ func (p *Program) stopPerfEvents() {
 }
 
 //AttachProbes attach ebpf program to kernel
-func (p *Program) AttachProbes() error {
+func (p *Program) AttachProbes(matchChan chan *events.KprobeEvent) error {
 	// attach all probe programs
 	for _, prog := range p.bpf.GetPrograms() {
 		if err := prog.Attach(nil); err != nil {
@@ -130,7 +123,7 @@ func (p *Program) AttachProbes() error {
 
 	// start event listeners
 	p.wg = sync.WaitGroup{}
-	p.startPerfEvents(events)
+	p.startPerfEvents(events,matchChan)
 
 	return nil
 }

@@ -8,51 +8,42 @@ import (
 
 // Printer output parsed http messages
 type Printer struct {
-	outputQueue chan string
+	OutputQueue chan string
 	outputFile  io.WriteCloser
 }
 
 var maxOutputQueueLen = 4096
 
-func newPrinter(outputPath string) *Printer {
+func newPrinter(matchChan chan string) *Printer {
 	var outputFile io.WriteCloser
-	if outputPath == "" {
-		outputFile = os.Stdout
-	} else {
-		var err error
-		outputFile, err = os.OpenFile(outputPath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0666)
-		if err != nil {
-			panic(err)
-		}
-
-	}
-	printer := &Printer{outputQueue: make(chan string, maxOutputQueueLen), outputFile: outputFile}
-	printer.start()
+	outputFile = os.Stdout
+	printer := &Printer{OutputQueue: make(chan string, maxOutputQueueLen), outputFile: outputFile}
+	printer.start(matchChan)
 	return printer
 }
 
 func (p *Printer) send(msg string) {
-	if len(p.outputQueue) == maxOutputQueueLen {
+	if len(p.OutputQueue) == maxOutputQueueLen {
 		// skip this msg
 		fmt.Fprintln(os.Stderr, "too many messages to output, discard current!")
 		return
 	}
-	p.outputQueue <- msg
+	p.OutputQueue <- msg
 }
 
-func (p *Printer) start() {
+func (p *Printer) start(matchChan chan string) {
 	printerWaitGroup.Add(1)
-	go p.printBackground()
+	go p.printBackground(matchChan)
 }
 
-func (p *Printer) printBackground() {
+func (p *Printer) printBackground(matchChan chan string) {
 	defer printerWaitGroup.Done()
 	defer p.outputFile.Close()
-	for msg := range p.outputQueue {
-		_, _ = p.outputFile.Write([]byte(msg))
+	for msg := range p.OutputQueue {
+		matchChan <- msg
 	}
 }
 
 func (p *Printer) finish() {
-	close(p.outputQueue)
+	close(p.OutputQueue)
 }

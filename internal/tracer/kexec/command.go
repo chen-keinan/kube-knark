@@ -2,6 +2,7 @@ package kexec
 
 import (
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/dropbox/goebpf"
 	"go.uber.org/zap"
@@ -10,7 +11,7 @@ import (
 	"path"
 )
 
-func StartCmdListener(files []utils.FilesInfo, zlog *zap.Logger, errChan chan error) error {
+func StartCmdListener(files []utils.FilesInfo, zlog *zap.Logger, errChan chan error,matchChan chan *events.KprobeEvent) error {
 	go func(errChan chan error) {
 		// cleanup old probes
 		if err := goebpf.CleanupProbes(); err != nil {
@@ -31,7 +32,7 @@ func StartCmdListener(files []utils.FilesInfo, zlog *zap.Logger, errChan chan er
 		}
 		p.ShowInfo()
 		// attach ebpf kprobes
-		if err := p.AttachProbes(); err != nil {
+		if err := p.AttachProbes(matchChan); err != nil {
 			zlog.Error(fmt.Sprintf("Attach Probes failed: %s", err.Error()))
 		}
 		defer func() {
