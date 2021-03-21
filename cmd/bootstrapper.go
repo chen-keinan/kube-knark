@@ -2,18 +2,16 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
-	"github.com/chen-keinan/kube-knark/internal/ebpf_mgr"
 	"github.com/chen-keinan/kube-knark/internal/logger"
 	"github.com/chen-keinan/kube-knark/internal/startup"
- 	"github.com/chen-keinan/kube-knark/pkg/utils"
-	"github.com/dropbox/goebpf"
+	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
+	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
+	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
-	"path"
 )
 
 // StartKnark start kube-knark event tracer
@@ -54,43 +52,23 @@ func ProvideCompiledFiles(sc *shell.ClangCompiler, folder string) []utils.FilesI
 // load ebpf program and trace events
 func runKnarkService(lifecycle fx.Lifecycle, zlog *zap.Logger, files []utils.FilesInfo) {
 	lifecycle.Append(fx.Hook{OnStart: func(context.Context) error {
-		// cleanup old probes
-		if err := goebpf.CleanupProbes(); err != nil {
-			return fmt.Errorf("failed to clean probs %s", err.Error())
-		}
-		ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+		errChan := make(chan error)
+		// start Net Listener
+		err := khttp.StartNetListener(zlog)
 		if err != nil {
 			return err
 		}
-
-		filePath := path.Join(ebpfCompiledFolder, files[0].Name)
-		p, err := ebpf_mgr.LoadProgram(filePath)
+		// start exec Listener
+		err = kexec.StartCmdListener(files, zlog, errChan)
 		if err != nil {
-			return fmt.Errorf("failed to load ebpf program %s", err.Error())
+			zlog.Error(err.Error())
 		}
-		p.ShowInfo()
-
-		// attach ebpf kprobes
-		if err := p.AttachProbes(); err != nil {
-			zlog.Error(fmt.Sprintf("Attach Probes failed: %s", err.Error()))
-		}
-		defer func() {
-			err := p.DetachProbes()
-			if err != nil {
-				zlog.Error(fmt.Sprintf("Detach Probes failed: %s", err.Error()))
-			}
-		}()
-
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
 		signal.Notify(ctrlC, os.Interrupt)
 		<-ctrlC
-
-		// display some stats
-		zlog.Info(fmt.Sprintf("%d Event(s) Received\n", p.EventsReceived()))
-		zlog.Info(fmt.Sprintf("%d Event(s) lost (e.g. small buffer, delays in processing)\n", p.EventsLost()))
-		zlog.Info(fmt.Sprintf("%d Event(s) lost (e.g. small buffer, delays in processing)\n", p.EventsLost()))
 		return nil
 	},
 	})
+
 }

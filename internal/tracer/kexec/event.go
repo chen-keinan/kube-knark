@@ -1,4 +1,4 @@
-package ebpf_mgr
+package kexec
 
 //EventKprobe Object
 type EventKprobe struct {
