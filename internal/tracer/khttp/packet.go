@@ -75,7 +75,7 @@ func openSingleDevice(device string, filterIP string, filterPort uint16) (localP
 	return
 }
 
-func StartNetListener(log *zap.Logger, matchChan chan string) error {
+func StartNetListener(log *zap.Logger, matchChan chan *HTTPNetData) error {
 	var option = &Option{}
 	cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
 		return run(option, matchChan)
@@ -89,7 +89,7 @@ func StartNetListener(log *zap.Logger, matchChan chan string) error {
 	return nil
 }
 
-func run(option *Option, matchChan chan string) error {
+func run(option *Option, matchChan chan *HTTPNetData) error {
 	if option.Port > 65536 {
 		return fmt.Errorf("ignored invalid port %v", option.Port)
 	}

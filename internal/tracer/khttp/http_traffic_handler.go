@@ -85,9 +85,12 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 	defer discardAll(requestReader)
 	responseReader := bufio.NewReader(connection.downStream)
 	defer discardAll(responseReader)
-
+	var hReqdata *HTTPRequestData
+	var hResdata *HTTPResponseData
 	for {
 		h.buffer = new(bytes.Buffer)
+		hReqdata = &HTTPRequestData{}
+		hResdata = &HTTPResponseData{}
 		filtered := false
 		req, err := httpport.ReadRequest(requestReader)
 		h.startTime = connection.lastTimestamp
@@ -105,9 +108,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 		if h.option.Uri != "" && !wildcardMatch(req.RequestURI, h.option.Uri) {
 			filtered = true
 		}
-
-		// if is websocket request,  by header: Upgrade: websocket
-		websocket := req.Header.Get("Upgrade") == "websocket"
+		hReqdata.Host = req.Host
 		expectContinue := req.Header.Get("Expect") == "100-continue"
 
 		resp, err := httpport.ReadResponse(responseReader, nil)
@@ -119,9 +120,9 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 				fmt.Fprintln(os.Stderr, "Error parsing HTTP response:", err, connection.clientID)
 			}
 			if !filtered {
-				h.printRequest(req)
+				h.printRequest(req, hReqdata)
 				h.writeLine("")
-				h.printer.send(h.buffer.String())
+				h.printer.send(NewHTTPNetData(hReqdata, hResdata))
 			} else {
 				discardAll(req.Body)
 			}
@@ -133,23 +134,15 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 		}
 
 		if !filtered {
-			h.printRequest(req)
+			h.printRequest(req, hReqdata)
 			h.writeLine("")
 			h.endTime = connection.lastTimestamp
-			h.printResponse(req.RequestURI, resp)
-			h.printer.send(h.buffer.String())
+			h.printResponse(resp, hResdata)
+			h.printer.send(NewHTTPNetData(hReqdata, hResdata))
 		} else {
 			discardAll(req.Body)
 			discardAll(resp.Body)
 
-		}
-
-		if websocket {
-			if resp.StatusCode == 101 && resp.Header.Get("Upgrade") == "websocket" {
-				// change to handle websocket
-				h.handleWebsocket(requestReader, responseReader)
-				break
-			}
 		}
 
 		if expectContinue {
@@ -170,8 +163,8 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 					break
 				}
 				if !filtered {
-					h.printResponse(req.RequestURI, resp)
-					h.printer.send(h.buffer.String())
+					h.printResponse(resp, hResdata)
+					h.printer.send(NewHTTPNetData(hReqdata, hResdata))
 				} else {
 					discardAll(resp.Body)
 				}
@@ -181,7 +174,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 		}
 	}
 
-	h.printer.send(h.buffer.String())
+	h.printer.send(NewHTTPNetData(hReqdata, hResdata))
 }
 
 func (h *HTTPTrafficHandler) handleWebsocket(requestReader *bufio.Reader, responseReader *bufio.Reader) {
@@ -205,22 +198,19 @@ func (h *HTTPTrafficHandler) printRequestMark() {
 	h.writeLine()
 }
 
-func (h *HTTPTrafficHandler) printHeader(header httpport.Header) {
+func (h *HTTPTrafficHandler) printHeader(header httpport.Header, hrd *HTTPRequestData) {
+	hrd.Headers = make(map[string]string)
 	for name, values := range header {
 		for _, value := range values {
-			h.writeLine(name+":", value)
+			hrd.Headers[name] = value
 		}
 	}
 }
 
 // print http request
-func (h *HTTPTrafficHandler) printRequest(req *httpport.Request) {
+func (h *HTTPTrafficHandler) printRequest(req *httpport.Request, hrd *HTTPRequestData) {
 	defer discardAll(req.Body)
-	if h.option.Curl {
-		h.printCurlRequest(req)
-	} else {
-		h.printNormalRequest(req)
-	}
+	h.printNormalRequest(req, hrd)
 }
 
 var blockHeaders = map[string]bool{
@@ -312,92 +302,47 @@ func (h *HTTPTrafficHandler) printCurlRequest(req *httpport.Request) {
 }
 
 // print http request
-func (h *HTTPTrafficHandler) printNormalRequest(req *httpport.Request) {
-	//TODO: expect-100 continue handle
+func (h *HTTPTrafficHandler) printNormalRequest(req *httpport.Request, hrd *HTTPRequestData) {
 	if h.option.Level == "url" {
-		h.writeLine(req.Method, req.Host+req.RequestURI)
+		hrd.Method = req.Method
+		hrd.Host = req.Host
+		hrd.RequestURI = req.RequestURI
 		return
 	}
+	hrd.SourceIP = h.key.srcString()
+	hrd.DestinationIP = h.key.dstString()
+	hrd.StartTime = h.startTime.Format(time.RFC3339Nano)
 
-	h.writeLine()
-	h.writeLine(strings.Repeat("*", 10), " REQUEST ", h.key.srcString(), " -----> ", h.key.dstString(), " // ", h.startTime.Format(time.RFC3339Nano))
+	hrd.Method = req.Method
+	hrd.Proto = req.Proto
+	hrd.RequestURI = req.RequestURI
+	h.printHeader(req.Header, hrd)
 
-	h.writeLine(req.Method, req.RequestURI, req.Proto)
-	h.printHeader(req.Header)
-
-	var hasBody = true
-	if req.ContentLength == 0 || req.Method == "GET" || req.Method == "HEAD" || req.Method == "TRACE" ||
-		req.Method == "OPTIONS" {
-		hasBody = false
-	}
-
-	if h.option.DumpBody {
-		filename := "request-" + uriToFileName(req.RequestURI, h.startTime)
-		h.writeLine("\n// dump body to file:", filename)
-
-		err := filex.WriteAllFromReader(filename, req.Body)
+	if !(req.ContentLength == 0 || req.Method == "GET" || req.Method == "HEAD" || req.Method == "TRACE" ||
+		req.Method == "OPTIONS") {
+		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
-			h.writeLine("dump to file failed:", err)
+			hrd.ReqBody = string(body)
 		}
-		return
-	}
-
-	if h.option.Level == "header" {
-		if hasBody {
-			h.writeLine("\n// body size:", discardAll(req.Body),
-				", set [level = all] to display http body")
-		}
-		return
-	}
-
-	h.writeLine()
-
-	if hasBody {
-		h.printBody(req.Header, req.Body)
 	}
 }
 
 // print http response
-func (h *HTTPTrafficHandler) printResponse(uri string, resp *httpport.Response) {
+func (h *HTTPTrafficHandler) printResponse(resp *httpport.Response, hrd *HTTPResponseData) {
 	defer discardAll(resp.Body)
 	if h.option.Level == "url" {
 		return
 	}
-
-	h.writeLine(strings.Repeat("*", 10), " RESPONSE ", h.key.srcString(), " <----- ", h.key.dstString(), " // ", h.startTime.Format(time.RFC3339Nano), "-", h.endTime.Format(time.RFC3339Nano), "=", h.endTime.Sub(h.startTime).String())
-
-	h.writeLine(resp.StatusLine)
-	for _, header := range resp.RawHeaders {
-		h.writeLine(header)
-	}
-
-	var hasBody = true
-	if resp.ContentLength == 0 || resp.StatusCode == 304 || resp.StatusCode == 204 {
-		hasBody = false
-	}
-
-	if h.option.DumpBody {
-		filename := "response-" + uriToFileName(uri, h.startTime)
-		h.writeLine("\n// dump body to file:", filename)
-
-		err := filex.WriteAllFromReader(filename, resp.Body)
-		if err != nil {
-			h.writeLine("dump to file failed:", err)
+	hrd.SourceIP = h.key.srcString()
+	hrd.DestinationIP = h.key.dstString()
+	hrd.StartTime = h.startTime.Format(time.RFC3339Nano)
+	hrd.StatusCode = resp.StatusCode
+	hrd.Headers = resp.RawHeaders
+	if !(resp.ContentLength == 0 || resp.StatusCode == 304 || resp.StatusCode == 204) {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			hrd.ResBody = string(body)
 		}
-		return
-	}
-
-	if h.option.Level == "header" {
-		if hasBody {
-			h.writeLine("\n// body size:", discardAll(resp.Body),
-				", set [level = all] to display http body")
-		}
-		return
-	}
-
-	h.writeLine()
-	if hasBody {
-		h.printBody(resp.Header, resp.Body)
 	}
 }
 

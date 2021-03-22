@@ -41,7 +41,7 @@ func StartKnark() {
 func runKnarkService(lifecycle fx.Lifecycle,
 	zlog *zap.Logger,
 	files []utils.FilesInfo,
-	NetChan chan string,
+	NetChan chan *khttp.HTTPNetData,
 	cmdChan chan *events.KprobeEvent,
 	cm *workers.CommandMatches,
 	pm *workers.PacketMatches) {
@@ -70,8 +70,8 @@ func runKnarkService(lifecycle fx.Lifecycle,
 }
 
 //MatchNetChan return channel for net packet match
-func MatchNetChan() chan string {
-	return make(chan string, 1000)
+func MatchNetChan() chan *khttp.HTTPNetData {
+	return make(chan *khttp.HTTPNetData, 1000)
 }
 
 //MatchCmdChan return channel for cmd packet match
