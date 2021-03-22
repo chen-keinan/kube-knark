@@ -24,6 +24,9 @@ func (pm *PacketMatches) Invoke() {
 		go func() {
 			for k := range pm.pmc {
 				// display process execution event
+				if k.HttpRequestData.RequestURI == "/health" || k.HttpRequestData.RequestURI == "/ready" {
+					continue
+				}
 				kwriter := new(bytes.Buffer)
 				err := json.NewEncoder(kwriter).Encode(&k)
 				if err != nil {

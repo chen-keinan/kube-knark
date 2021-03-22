@@ -11,4 +11,14 @@ const (
 	BpfHelperHeaderFile = "bpf_helpers.h"
 	//KprobeCompiledFile kprobe program compiled file
 	KprobeCompiledFile = "kprobe.elf"
+	//GET Method
+	GET = "GET"
+	//POST Method
+	DELETE = "DELETE"
+	//PUT Method
+	PUT = "PUT"
+	//POST Method
+	POST = "POST"
+	//PATCH Method
+	PATCH = "PATCH"
 )
