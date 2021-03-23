@@ -53,3 +53,12 @@ func TestGenerateEbpfFiles(t *testing.T) {
 	assert.Equal(t, files[1].Name, common.BpfHeaderFile)
 	assert.Equal(t, files[2].Name, common.BpfHelperHeaderFile)
 }
+
+func TestSaveFilesIfNotExist(t *testing.T) {
+	files, err := GenerateEbpfFiles()
+	assert.NoError(t, err)
+	err = utils.CreateKubeKnarkFolders()
+	assert.NoError(t, err)
+	err = SaveFilesIfNotExist(files, utils.GetEbpfSourceFolder)
+	assert.NoError(t, err)
+}
