@@ -46,3 +46,10 @@ func Test_CompileEbpfSources(t *testing.T) {
 	assert.Equal(t, cfiles[0].Name, common.KprobeCompiledFile)
 
 }
+func TestGenerateEbpfFiles(t *testing.T) {
+	files, err := GenerateEbpfFiles()
+	assert.NoError(t, err)
+	assert.Equal(t, files[0].Name, common.KprobeSourceFile)
+	assert.Equal(t, files[1].Name, common.BpfHeaderFile)
+	assert.Equal(t, files[2].Name, common.BpfHelperHeaderFile)
+}
