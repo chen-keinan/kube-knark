@@ -26,7 +26,8 @@ func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
 	if err != nil {
 		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHeaderFile, Data: bh})
+	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHeaderFile,
+		Data: bh})
 	// Add bph_helper header file
 	bhh, err := box.FindString(common.BpfHelperHeaderFile)
 	if err != nil {
@@ -36,14 +37,14 @@ func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
 	return fileInfo, nil
 }
 
-//SaveEbpfFilesIfNotExist create ebpf source files if not exist
-func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
-	ebpfFolder, err := utils.GetEbpfSourceFolder()
+//SaveFilesIfNotExist save files if not exist
+func SaveFilesIfNotExist(filesData []utils.FilesInfo, f func() (string, error)) error {
+	folder, err := f()
 	if err != nil {
-		return fmt.Errorf(err.Error())
+		return err
 	}
 	for _, fileData := range filesData {
-		filePath := filepath.Join(ebpfFolder, fileData.Name)
+		filePath := filepath.Join(folder, fileData.Name)
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
 			f, err := os.Create(filePath)
 			if err != nil {
@@ -51,7 +52,7 @@ func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
 			}
 			_, err = f.WriteString(fileData.Data)
 			if err != nil {
-				return fmt.Errorf("failed to write benchmark file")
+				return fmt.Errorf("failed to write files")
 			}
 			err = f.Close()
 			if err != nil {
@@ -63,14 +64,14 @@ func SaveEbpfFilesIfNotExist(filesData []utils.FilesInfo) error {
 }
 
 //CompileEbpfSources compile ebpf program to elf file
-func CompileEbpfSources(filesData []utils.FilesInfo, cc *shell.ClangCompiler) error {
+func CompileEbpfSources(filesData []utils.FilesInfo, cc shell.ClangExecutor) error {
 	ebpfSourceFolder, err := utils.GetEbpfSourceFolder()
 	if err != nil {
-		return fmt.Errorf(err.Error())
+		return err
 	}
 	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
 	if err != nil {
-		return fmt.Errorf(err.Error())
+		return err
 	}
 	for _, fileData := range filesData {
 		if !strings.HasSuffix(fileData.Name, ".c") {
@@ -78,7 +79,7 @@ func CompileEbpfSources(filesData []utils.FilesInfo, cc *shell.ClangCompiler) er
 		}
 		sourcefilePath := filepath.Join(ebpfSourceFolder, fileData.Name)
 		compiledFilePath := filepath.Join(ebpfCompiledFolder, strings.Replace(fileData.Name, ".c", ".elf", -1))
-		cmd := shell.NewExecCommand(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath)
+		cmd := cc.NewExecCommand(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath)
 		cmdResult, err := cc.CompileSourceToElf(cmd)
 		if cmdResult.Stderr != "" || err != nil {
 			return fmt.Errorf(cmdResult.Stderr)

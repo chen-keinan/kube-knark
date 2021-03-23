@@ -2,14 +2,18 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
 	"github.com/chen-keinan/kube-knark/internal/logger"
+	"github.com/chen-keinan/kube-knark/internal/matches"
+	"github.com/chen-keinan/kube-knark/internal/routes"
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 	"github.com/chen-keinan/kube-knark/internal/workers"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
+	"github.com/gorilla/mux"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"os"
@@ -20,6 +24,10 @@ import (
 func StartKnark() {
 	app := fx.New(
 		fx.Provide(logger.NewZapLogger),
+		fx.Provide(ProvideSpecFiles),
+		fx.Provide(ProvideSpecRoutes),
+		fx.Provide(mux.NewRouter),
+		fx.Provide(matches.NewRouteMatches),
 		fx.Provide(utils.GetEbpfCompiledFolder),
 		fx.Provide(shell.NewClangCompiler),
 		fx.Provide(ProvideCompiledFiles),
@@ -85,12 +93,16 @@ func NumOfWorkers() int {
 }
 
 //ProvideCompiledFiles return ebpf compiled files
-func ProvideCompiledFiles(sc *shell.ClangCompiler, folder string) []utils.FilesInfo {
+func ProvideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesInfo {
+	err := utils.CreateKubeKnarkFolders()
+	if err != nil {
+		panic(err)
+	}
 	fi, err := startup.GenerateEbpfFiles()
 	if err != nil {
 		panic(err)
 	}
-	err = startup.SaveEbpfFilesIfNotExist(fi)
+	err = startup.SaveFilesIfNotExist(fi, utils.GetEbpfSourceFolder)
 	if err != nil {
 		panic(err)
 	}
@@ -98,9 +110,47 @@ func ProvideCompiledFiles(sc *shell.ClangCompiler, folder string) []utils.FilesI
 	if err != nil {
 		panic(err)
 	}
-	files, err := utils.GetEbpfFiles(folder)
+	files, err := utils.GetFiles(folder)
 	if err != nil {
 		panic(err)
 	}
 	return files
+}
+
+//ProvideSpecFiles return spec files
+func ProvideSpecFiles() []string {
+	err := utils.CreateKubeKnarkFolders()
+	if err != nil {
+		panic(err)
+	}
+	fi, err := startup.GenerateSpecFiles()
+	if err != nil {
+		panic(err)
+	}
+	err = startup.SaveFilesIfNotExist(fi, utils.GetSpecAPIFolder)
+	if err != nil {
+		panic(err)
+	}
+	folder, err := utils.GetSpecAPIFolder()
+	if err != nil {
+		panic(err)
+	}
+	files, err := utils.GetFiles(folder)
+	fmt.Println(files)
+	if err != nil {
+		panic(err)
+	}
+	dataFiles := make([]string, 0)
+	for _, f := range files {
+		dataFiles = append(dataFiles, f.Data)
+	}
+	return dataFiles
+}
+
+func ProvideSpecRoutes(files []string) []routes.Routes {
+	routes, err := routes.BuildSpecRoutes(files)
+	if err != nil {
+		panic(err)
+	}
+	return routes
 }

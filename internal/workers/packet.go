@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 )
 
@@ -11,11 +12,12 @@ import (
 type PacketMatches struct {
 	numOfWorkers int
 	pmc          chan *khttp.HTTPNetData
+	rm           *matches.RouteMatches
 }
 
 //NewMatches return new packet instance
-func NewPacketMatches(numOfWorkers int, pmc chan *khttp.HTTPNetData) *PacketMatches {
-	return &PacketMatches{numOfWorkers: numOfWorkers, pmc: pmc}
+func NewPacketMatches(numOfWorkers int, pmc chan *khttp.HTTPNetData,rm *matches.RouteMatches) *PacketMatches {
+	return &PacketMatches{numOfWorkers: numOfWorkers, pmc: pmc,rm:rm}
 }
 
 //Invoke invoke packet matches workers

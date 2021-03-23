@@ -1,23 +1,10 @@
 package matches
 
 import (
+	"github.com/chen-keinan/kube-knark/internal/routes"
 	"github.com/gorilla/mux"
 	"net/http"
 )
-
-//Routes api routes
-type Routes []Route
-
-// A Route defines the parameters for an api endpoint
-type Route struct {
-	Method  string
-	Pattern string
-}
-
-//Router interface include all routes pattern and method
-type Router interface {
-	Routes() Routes
-}
 
 //RouteMatches Object
 type RouteMatches struct {
@@ -25,9 +12,9 @@ type RouteMatches struct {
 }
 
 //NewRouteMatches create new routes matches instance
-func NewRouteMatches(ValidationRoutes []Router, router *mux.Router) *RouteMatches {
+func NewRouteMatches(ValidationRoutes []routes.Routes, router *mux.Router) *RouteMatches {
 	for _, mo := range ValidationRoutes {
-		for _, rt := range mo.Routes() {
+		for _, rt := range mo {
 			router.Methods(rt.Method).Path(rt.Pattern)
 		}
 	}

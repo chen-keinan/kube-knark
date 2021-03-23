@@ -21,4 +21,6 @@ const (
 	POST = "POST"
 	//PATCH Method
 	PATCH = "PATCH"
+	//Workload Method
+	Workload = "workload.yml"
 )

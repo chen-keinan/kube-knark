@@ -14,7 +14,7 @@ func Test_CreateEbfFilesIfNotExist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = SaveEbpfFilesIfNotExist(bFiles)
+	err = SaveFilesIfNotExist(bFiles,utils.GetEbpfSourceFolder)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func Test_CompileEbpfSources(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	cfiles, err := utils.GetEbpfFiles(ebpfCompiledFolder)
+	cfiles, err := utils.GetFiles(ebpfCompiledFolder)
 	if err != nil {
 		t.Fatal(err)
 	}

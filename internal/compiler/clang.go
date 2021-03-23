@@ -13,11 +13,19 @@ const (
 	ShellToUse = "bash"
 )
 
-//Executor defines the interface for clang compiler
+//Executor defines the interface for command exec
 //clang.go
-//go:generate mockgen -destination=../mocks/mock_Executor.go -package=mocks . Executor
+//go:generate mockgen -destination=./mocks/mock_Executor.go -package=mocks . Executor
 type Executor interface {
 	Run() error
+}
+
+//ClangExecutor defines the interface for clang compiler
+//clang.go
+//go:generate mockgen -destination=../mocks/mock_ClangExecutor.go -package=mocks . ClangExecutor
+type ClangExecutor interface {
+	CompileSourceToElf(cmd Executor) (*CommandResult, error)
+	NewExecCommand(args ...string) Executor
 }
 
 //ClangCompiler object
@@ -25,7 +33,7 @@ type ClangCompiler struct {
 }
 
 //NewClangCompiler return new instance of shell executor
-func NewClangCompiler() *ClangCompiler {
+func NewClangCompiler() ClangExecutor {
 	return &ClangCompiler{}
 }
 
@@ -37,7 +45,7 @@ type CommandResult struct {
 
 //NewExecCommand return new exec Command instance
 // #nosec
-func NewExecCommand(args ...string) Executor {
+func (ce ClangCompiler) NewExecCommand(args ...string) Executor {
 	fullCmd := fmt.Sprintf(Command, args[0], args[1], args[2])
 	return exec.Command(ShellToUse, "-c", fullCmd)
 }

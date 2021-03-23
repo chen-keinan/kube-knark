@@ -2,14 +2,15 @@ package shell
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/mocks"
+	"github.com/chen-keinan/kube-knark/internal/compiler/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func Test_ExecCommand(t *testing.T) {
-	exec := NewExecCommand("a", "b", "c")
+	cl:=ClangCompiler{}
+	exec := cl.NewExecCommand("a", "b", "c")
 	args := cmdArgs(exec)
 	assert.Equal(t, args[0], "bash")
 	assert.Equal(t, args[1], "-c")

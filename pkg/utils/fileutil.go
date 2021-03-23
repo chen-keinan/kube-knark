@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	"io/ioutil"
 	"os"
@@ -10,32 +9,63 @@ import (
 	"path/filepath"
 )
 
+const SpecSubFolder = "spec/api"
+const SourceSubFolder = "ebpf/source"
+const CompileSubFolder = "ebpf/compile"
+
+//FolderMgr defines the interface for kube-knark folder
+//fileutil.go
+//go:generate mockgen -destination=./mocks/mock_FolderMgr.go -package=mocks . FolderMgr
+type FolderMgr interface {
+	CreateFolder(folderName string) error
+}
+
+//KFolder kube-knark folder object
+type KFolder struct {
+}
+
+//NewKFolder return KFolder instance
+func NewKFolder() FolderMgr {
+	return &KFolder{}
+}
+
+//CreateFolder create new kube knark folder
+func (kf KFolder) CreateFolder(folderName string) error {
+	_, err := os.Stat(folderName)
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(folderName, 0750)
+		if errDir != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+//GetSpecAPIFolder return spec files source folder path
+func GetSpecAPIFolder() (string, error) {
+	folder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(folder, SpecSubFolder), nil
+}
+
 //GetEbpfSourceFolder return ebpf source folder path
 func GetEbpfSourceFolder() (string, error) {
-	err := CreateHomeFolderIfNotExist()
+	folder, err := GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
-	ebpfFolder, err := CreateEbpfSourceFolderIfNotExist()
-	if err != nil {
-		return "", err
-	}
-	return ebpfFolder, nil
+	return path.Join(folder, SourceSubFolder), nil
 }
 
 //GetEbpfCompiledFolder return ebpf compiled folder path
 func GetEbpfCompiledFolder() (string, error) {
-	err := CreateHomeFolderIfNotExist()
+	folder, err := GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
-	ebpfFolder, err := CreateEbpfCompiledFolderIfNotExist()
-	if err != nil {
-		if err != nil {
-			return "", err
-		}
-	}
-	return ebpfFolder, nil
+	return path.Join(folder, CompileSubFolder), nil
 }
 
 //GetHomeFolder return beacon home folder
@@ -63,68 +93,80 @@ type FilesInfo struct {
 	Data string
 }
 
-//GetEbpfFiles return ebpf source files
-func GetEbpfFiles(folder string) ([]FilesInfo, error) {
+//GetFiles return ebpf source files
+func GetFiles(folder string) ([]FilesInfo, error) {
 	filesData := make([]FilesInfo, 0)
 	filesInfo, err := ioutil.ReadDir(filepath.Join(folder))
 	if err != nil {
 		return nil, err
 	}
 	for _, fileInfo := range filesInfo {
+		f, err := os.Open(filepath.Join(folder, fileInfo.Name()))
 		if err != nil {
 			return nil, err
 		}
-		filesData = append(filesData, FilesInfo{Name: fileInfo.Name()})
+		fData, err := ioutil.ReadAll(f)
+		if err != nil {
+			return nil, err
+		}
+		filesData = append(filesData, FilesInfo{Name: fileInfo.Name(), Data: string(fData)})
 	}
 	return filesData, nil
 }
 
 //CreateHomeFolderIfNotExist create ebpf home folder if not exist
-func CreateHomeFolderIfNotExist() error {
+func CreateHomeFolderIfNotExist(fm FolderMgr) error {
 	knarkFolder, err := GetHomeFolder()
 	if err != nil {
 		return err
 	}
-	_, err = os.Stat(knarkFolder)
-	if os.IsNotExist(err) {
-		errDir := os.MkdirAll(knarkFolder, 0750)
-		if errDir != nil {
-			return fmt.Errorf("failed to create beacon home folder at %s", knarkFolder)
-		}
-	}
-	return nil
+	return fm.CreateFolder(knarkFolder)
 }
 
 //CreateEbpfSourceFolderIfNotExist create ebpf source folder if not exist
-func CreateEbpfSourceFolderIfNotExist() (string, error) {
-	homeFolder, err := GetHomeFolder()
+func CreateEbpfSourceFolderIfNotExist(fm FolderMgr) error {
+	ebpfFolder, err := GetEbpfSourceFolder()
 	if err != nil {
-		return "", err
+		return err
 	}
-	ebpfFolder := filepath.Join(homeFolder, "ebpf/source")
-	_, err = os.Stat(ebpfFolder)
-	if os.IsNotExist(err) {
-		errDir := os.MkdirAll(ebpfFolder, 0750)
-		if errDir != nil {
-			return "", fmt.Errorf("failed to create ebpf homeFolder homeFolder at %s", ebpfFolder)
-		}
+	return fm.CreateFolder(ebpfFolder)
+}
+
+//CreateSpecAPIFolderIfNotExist create spec api folder if not exist
+func CreateSpecAPIFolderIfNotExist(fm FolderMgr) error {
+	specFolder, err := GetSpecAPIFolder()
+	if err != nil {
+		return err
 	}
-	return ebpfFolder, nil
+	return fm.CreateFolder(specFolder)
 }
 
 //CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
-func CreateEbpfCompiledFolderIfNotExist() (string, error) {
-	homeFolder, err := GetHomeFolder()
+func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
+	ebpfFolder, err := GetEbpfCompiledFolder()
 	if err != nil {
-		return "", err
+		return err
 	}
-	ebpfFolder := filepath.Join(homeFolder, "ebpf/compiled")
-	_, err = os.Stat(ebpfFolder)
-	if os.IsNotExist(err) {
-		errDir := os.MkdirAll(ebpfFolder, 0750)
-		if errDir != nil {
-			return "", fmt.Errorf("failed to create ebpf folder folder at %s", ebpfFolder)
-		}
+	return fm.CreateFolder(ebpfFolder)
+}
+
+func CreateKubeKnarkFolders() error {
+	fm := NewKFolder()
+	err := CreateHomeFolderIfNotExist(fm)
+	if err != nil {
+		return err
 	}
-	return ebpfFolder, nil
+	err = CreateEbpfSourceFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	err = CreateEbpfCompiledFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	err = CreateSpecAPIFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	return nil
 }
