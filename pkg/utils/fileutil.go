@@ -9,8 +9,13 @@ import (
 	"path/filepath"
 )
 
+//SpecSubFolder spec api sub folder name
 const SpecSubFolder = "spec/api"
+
+//SourceSubFolder ebpf file source folder
 const SourceSubFolder = "ebpf/source"
+
+//CompileSubFolder ebpf complied folder
 const CompileSubFolder = "ebpf/compile"
 
 //FolderMgr defines the interface for kube-knark folder
@@ -101,11 +106,16 @@ func GetFiles(folder string) ([]FilesInfo, error) {
 		return nil, err
 	}
 	for _, fileInfo := range filesInfo {
+		//nolint:gosec
 		f, err := os.Open(filepath.Join(folder, fileInfo.Name()))
 		if err != nil {
 			return nil, err
 		}
 		fData, err := ioutil.ReadAll(f)
+		if err != nil {
+			return nil, err
+		}
+		err = f.Close()
 		if err != nil {
 			return nil, err
 		}
@@ -150,6 +160,7 @@ func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
 	return fm.CreateFolder(ebpfFolder)
 }
 
+//CreateKubeKnarkFolders create kube knark compiled and spec folders
 func CreateKubeKnarkFolders() error {
 	fm := NewKFolder()
 	err := CreateHomeFolderIfNotExist(fm)

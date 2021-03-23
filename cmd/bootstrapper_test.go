@@ -26,6 +26,7 @@ func TestProvideCompiledFiles(t *testing.T) {
 	exec := mocks.NewMockExecutor(ctl)
 	clang := mock2.NewMockClangExecutor(ctl)
 	folder, err := utils.GetEbpfSourceFolder()
+	assert.NoError(t, err)
 	ebpfSourceFolder, err := utils.GetEbpfSourceFolder()
 	assert.NoError(t, err)
 	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
@@ -70,10 +71,10 @@ func TestMatchCmdChan(t *testing.T) {
 func TestMatchNetChan(t *testing.T) {
 	kpc := MatchNetChan()
 	go func() {
-		kpc <- &khttp.HTTPNetData{HttpRequestData: &khttp.HTTPRequestData{Method: common.GET}}
+		kpc <- &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: common.GET}}
 	}()
 	dt := <-kpc
-	assert.Equal(t, dt.HttpRequestData.Method, common.GET)
+	assert.Equal(t, dt.HTTPRequestData.Method, common.GET)
 }
 
 func TestNumOfWorkers(t *testing.T) {

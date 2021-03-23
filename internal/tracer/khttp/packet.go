@@ -75,6 +75,7 @@ func openSingleDevice(device string, filterIP string, filterPort uint16) (localP
 	return
 }
 
+//StartNetListener invoke net listener for kernel http events
 func StartNetListener(log *zap.Logger, matchChan chan *HTTPNetData) error {
 	var option = &Option{}
 	cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
@@ -89,6 +90,7 @@ func StartNetListener(log *zap.Logger, matchChan chan *HTTPNetData) error {
 	return nil
 }
 
+//nolint:gocyclo
 func run(option *Option, matchChan chan *HTTPNetData) error {
 	if option.Port > 65536 {
 		return fmt.Errorf("ignored invalid port %v", option.Port)
@@ -148,7 +150,7 @@ func run(option *Option, matchChan chan *HTTPNetData) error {
 	var assembler = newTCPAssembler(handler)
 	assembler.filterIP = option.Ip
 	assembler.filterPort = uint16(option.Port)
-	var ticker = time.Tick(time.Second * 10)
+	var ticker = time.NewTicker(time.Second * 10).C
 
 outer:
 	for {

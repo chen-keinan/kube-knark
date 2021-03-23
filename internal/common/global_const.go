@@ -13,7 +13,7 @@ const (
 	KprobeCompiledFile = "kprobe.elf"
 	//GET Method
 	GET = "GET"
-	//POST Method
+	//DELETE Method
 	DELETE = "DELETE"
 	//PUT Method
 	PUT = "PUT"

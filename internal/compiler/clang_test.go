@@ -9,7 +9,7 @@ import (
 )
 
 func Test_ExecCommand(t *testing.T) {
-	cl:=ClangCompiler{}
+	cl := ClangCompiler{}
 	exec := cl.NewExecCommand("a", "b", "c")
 	args := cmdArgs(exec)
 	assert.Equal(t, args[0], "bash")

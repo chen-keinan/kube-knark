@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // HTTP Response reading and parsing.
-
+//nolint
 package httpport
 
 import (

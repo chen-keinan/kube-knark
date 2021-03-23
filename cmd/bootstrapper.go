@@ -60,12 +60,15 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		pm.Invoke()
 		// start Net Listener
 		go func() {
-			khttp.StartNetListener(zlog, NetChan)
+			err := khttp.StartNetListener(zlog, NetChan)
+			if err != nil {
+				panic("failed to init net listener")
+			}
 		}()
 		// start exec Listener
 		err := kexec.StartCmdListener(files, zlog, errChan, cmdChan)
 		if err != nil {
-			zlog.Error(err.Error())
+			panic("failed to init cmd listener")
 		}
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
@@ -147,6 +150,7 @@ func ProvideSpecFiles() []string {
 	return dataFiles
 }
 
+//ProvideSpecRoutes provide spec api route for endpoint validation
 func ProvideSpecRoutes(files []string) []routes.Routes {
 	routes, err := routes.BuildSpecRoutes(files)
 	if err != nil {

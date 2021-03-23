@@ -11,7 +11,8 @@ import (
 	"path"
 )
 
-func StartCmdListener(files []utils.FilesInfo, zlog *zap.Logger, errChan chan error,matchChan chan *events.KprobeEvent) error {
+//StartCmdListener start exec listener for exec program events
+func StartCmdListener(files []utils.FilesInfo, zlog *zap.Logger, errChan chan error, matchChan chan *events.KprobeEvent) error {
 	go func(errChan chan error) {
 		// cleanup old probes
 		if err := goebpf.CleanupProbes(); err != nil {

@@ -20,13 +20,14 @@ type SubCategory struct {
 
 //API data model
 type API struct {
-	Name        string `mapstructure:"name" yaml:"name"`
-	Description string `mapstructure:"description" yaml:"description"`
-	URI         string `mapstructure:"uri" json:"uri"`
-	Method      string `mapstructure:"method" json:"uri"`
-	Severity    string `mapstructure:"severity" json:"severity"`
+	Name        string `yaml:"name"`
+	Description string `yaml:"description"`
+	URI         string `yaml:"uri"`
+	Method      string `yaml:"method"`
+	Severity    string `yaml:"severity"`
 }
 
+//Routes build routes
 func (s *Spec) Routes() Routes {
 	r := make(Routes, 0)
 	for _, c := range s.Categories {

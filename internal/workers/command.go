@@ -7,7 +7,7 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 )
 
-//PacketMatches instance which match command data to specific pattern
+//CommandMatches instance which match command data to specific pattern
 type CommandMatches struct {
 	numOfWorkers int
 	cmc          chan *events.KprobeEvent

@@ -1,5 +1,6 @@
 package khttp
 
+//HTTPRequestData http request data for validation
 type HTTPRequestData struct {
 	Method        string
 	Host          string
@@ -12,6 +13,7 @@ type HTTPRequestData struct {
 	Proto         string
 }
 
+//HTTPResponseData http response data for validation
 type HTTPResponseData struct {
 	SourceIP      string
 	DestinationIP string
@@ -21,11 +23,13 @@ type HTTPResponseData struct {
 	StartTime     string
 }
 
+//HTTPNetData encapsulate request and response
 type HTTPNetData struct {
-	HttpRequestData  *HTTPRequestData
-	HttpResponseData *HTTPResponseData
+	HTTPRequestData  *HTTPRequestData
+	HTTPResponseData *HTTPResponseData
 }
 
-func NewHTTPNetData(HttpRequestData *HTTPRequestData, HttpResponseData *HTTPResponseData) *HTTPNetData {
-	return &HTTPNetData{HttpRequestData: HttpRequestData, HttpResponseData: HttpResponseData}
+//NewHTTPNetData return new NewHTTPNetData object
+func NewHTTPNetData(HTTPRequestData *HTTPRequestData, HTTPResponseData *HTTPResponseData) *HTTPNetData {
+	return &HTTPNetData{HTTPRequestData: HTTPRequestData, HTTPResponseData: HTTPResponseData}
 }

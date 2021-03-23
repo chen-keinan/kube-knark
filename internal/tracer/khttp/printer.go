@@ -1,5 +1,5 @@
+//nolint
 package khttp
-
 import (
 	"io"
 	"os"
@@ -22,9 +22,9 @@ func newPrinter(matchChan chan *HTTPNetData) *Printer {
 }
 
 func (p *Printer) send(data *HTTPNetData) {
-	if len(data.HttpRequestData.Method) == 0 ||
-		len(data.HttpRequestData.Host) == 0 ||
-		len(data.HttpRequestData.RequestURI) == 0 {
+	if len(data.HTTPRequestData.Method) == 0 ||
+		len(data.HTTPRequestData.Host) == 0 ||
+		len(data.HTTPRequestData.RequestURI) == 0 {
 		return
 	}
 	p.OutputQueue <- data

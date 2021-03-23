@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
- 	"github.com/chen-keinan/kube-knark/pkg/utils/mocks"
+	"github.com/chen-keinan/kube-knark/pkg/utils/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"os"
@@ -42,16 +42,16 @@ func TestCreateEbpfCompiledFolderIfNotExist(t *testing.T) {
 	ctl := gomock.NewController(t)
 	fm := mocks.NewMockFolderMgr(ctl)
 	folder, err := GetEbpfCompiledFolder()
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	fm.EXPECT().CreateFolder(folder).Return(fmt.Errorf("failed to create folder")).Times(1)
- 	err = CreateEbpfCompiledFolderIfNotExist(fm)
+	err = CreateEbpfCompiledFolderIfNotExist(fm)
 	assert.Error(t, err)
 }
 func TestCreateSpecAPIFolderIfNotExist(t *testing.T) {
 	ctl := gomock.NewController(t)
 	fm := mocks.NewMockFolderMgr(ctl)
 	folder, err := GetSpecAPIFolder()
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	fm.EXPECT().CreateFolder(folder).Return(fmt.Errorf("failed to create folder")).Times(1)
 	err = CreateSpecAPIFolderIfNotExist(fm)
 	assert.Error(t, err)
@@ -60,7 +60,7 @@ func TestCreateEbpfSourceFolderIfNotExist(t *testing.T) {
 	ctl := gomock.NewController(t)
 	fm := mocks.NewMockFolderMgr(ctl)
 	folder, err := GetEbpfSourceFolder()
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	fm.EXPECT().CreateFolder(folder).Return(fmt.Errorf("failed to create folder")).Times(1)
 	err = CreateEbpfSourceFolderIfNotExist(fm)
 	assert.Error(t, err)

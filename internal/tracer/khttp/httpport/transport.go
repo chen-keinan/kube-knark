@@ -6,7 +6,7 @@
 //
 // This is the low-level Transport implementation of RoundTripper.
 // The high-level interface is in client.go.
-
+//nolint
 package httpport
 
 import (

@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // HTTP server.  See RFC 2616.
-
+//nolint
 package httpport
 
 import (

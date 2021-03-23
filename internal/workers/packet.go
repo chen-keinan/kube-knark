@@ -15,9 +15,9 @@ type PacketMatches struct {
 	rm           *matches.RouteMatches
 }
 
-//NewMatches return new packet instance
-func NewPacketMatches(numOfWorkers int, pmc chan *khttp.HTTPNetData,rm *matches.RouteMatches) *PacketMatches {
-	return &PacketMatches{numOfWorkers: numOfWorkers, pmc: pmc,rm:rm}
+//NewPacketMatches return new packet instance
+func NewPacketMatches(numOfWorkers int, pmc chan *khttp.HTTPNetData, rm *matches.RouteMatches) *PacketMatches {
+	return &PacketMatches{numOfWorkers: numOfWorkers, pmc: pmc, rm: rm}
 }
 
 //Invoke invoke packet matches workers
@@ -26,9 +26,6 @@ func (pm *PacketMatches) Invoke() {
 		go func() {
 			for k := range pm.pmc {
 				// display process execution event
-				if k.HttpRequestData.RequestURI == "/health" || k.HttpRequestData.RequestURI == "/ready" {
-					continue
-				}
 				kwriter := new(bytes.Buffer)
 				err := json.NewEncoder(kwriter).Encode(&k)
 				if err != nil {

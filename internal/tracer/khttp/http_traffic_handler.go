@@ -1,5 +1,5 @@
+//nolint
 package khttp
-
 import (
 	"bytes"
 	"compress/gzip"

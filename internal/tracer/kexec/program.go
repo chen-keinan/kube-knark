@@ -42,7 +42,7 @@ func LoadProgram(filename string) (*Program, error) {
 }
 
 //startPerfEvents pull ebpf events
-func (p *Program) startPerfEvents(kevents <-chan []byte,matchChan chan *events.KprobeEvent) {
+func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.KprobeEvent) {
 	p.wg.Add(1)
 	go func(kevents <-chan []byte) {
 		defer p.wg.Done()
@@ -123,7 +123,7 @@ func (p *Program) AttachProbes(matchChan chan *events.KprobeEvent) error {
 
 	// start event listeners
 	p.wg = sync.WaitGroup{}
-	p.startPerfEvents(events,matchChan)
+	p.startPerfEvents(events, matchChan)
 
 	return nil
 }
