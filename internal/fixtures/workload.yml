@@ -16,5 +16,12 @@ categories:
       uri: /api/v1/namespaces/{namespace}/pods
       method: PUT
       severity: Major
-      
-      
+- name: services
+  sub_category:
+    name: service
+    api:
+    - name: list or watch objects of kind Service
+      description: list objects of kind Service namespace
+      uri: /api/v1/services
+      method: GET
+      severity: INFO

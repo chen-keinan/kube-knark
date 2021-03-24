@@ -22,6 +22,7 @@ func TestBuildSpecRoutes(t *testing.T) {
 	routes := spec.Routes()
 	assert.Equal(t, routes[0].Method, common.POST)
 	assert.Equal(t, routes[1].Method, common.PUT)
+	assert.Equal(t, routes[2].Method, common.GET)
 
 }
 
