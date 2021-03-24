@@ -21,6 +21,8 @@ const (
 	POST = "POST"
 	//PATCH Method
 	PATCH = "PATCH"
-	//Workload Method
+	//Workload spec
 	Workload = "workload.yml"
+	//ConfigFilesPermission spec
+	ConfigFilesPermission = "config_files_permission.yml"
 )
