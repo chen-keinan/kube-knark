@@ -78,7 +78,7 @@ func TestMatchNetChan(t *testing.T) {
 }
 
 func TestNumOfWorkers(t *testing.T) {
-	assert.Equal(t, numOfWorkers(), 5)
+	assert.Equal(t, numOfWorkers(), 15)
 }
 
 //TestprovideSpecMap provide spec api cache for endpoint validation

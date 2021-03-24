@@ -22,7 +22,9 @@ import (
 // StartKnark start kube-knark event tracer
 func StartKnark() {
 	app := fx.New(
+		// dependency injection
 		fx.Provide(logger.NewZapLogger),
+		// validation spec files
 		fx.Provide(provideSpecFiles),
 		fx.Provide(provideSpecRoutes),
 		fx.Provide(provideAPISpecMap),
@@ -59,7 +61,7 @@ func runKnarkService(lifecycle fx.Lifecycle,
 	pm *workers.PacketMatchesWorker) {
 
 	lifecycle.Append(fx.Hook{OnStart: func(context.Context) error {
-		errChan := make(chan error)
+		errChan := make(chan bool)
 		cm.Invoke()
 		pm.Invoke()
 		// start Net Listener
@@ -70,14 +72,12 @@ func runKnarkService(lifecycle fx.Lifecycle,
 			}
 		}()
 		// start exec Listener
-		err := kexec.StartCmdListener(files, zlog, errChan, cmdChan)
-		if err != nil {
-			panic("failed to init cmd listener")
-		}
+		kexec.StartCmdListener(files, zlog, errChan, cmdChan)
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
 		signal.Notify(ctrlC, os.Interrupt)
 		<-ctrlC
+		errChan <- true
 		return nil
 	},
 	})
@@ -96,7 +96,7 @@ func matchCmdChan() chan *events.KprobeEvent {
 
 //numOfWorkers return num of cmd workers
 func numOfWorkers() int {
-	return 5
+	return 15
 }
 
 //provideCompiledFiles return ebpf compiled files

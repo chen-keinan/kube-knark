@@ -46,14 +46,9 @@ func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.
 	p.wg.Add(1)
 	go func(kevents <-chan []byte) {
 		defer p.wg.Done()
-
-		// print header
-		fmt.Printf("\nTIME          PCOMM             PID    UID    GID    DESC\n\n")
 		for {
-
 			// receive exec events
 			if b, ok := <-kevents; ok {
-
 				// parse proc info
 				var ev EventKprobe
 				buf := bytes.NewBuffer(b)
@@ -61,7 +56,6 @@ func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.
 					fmt.Printf("error: %v\n", err)
 					continue
 				}
-
 				// parse args
 				tokens := bytes.Split(buf.Bytes(), []byte{0x00})
 				var args []string
@@ -70,7 +64,6 @@ func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.
 						args = append(args, string(arg))
 					}
 				}
-
 				// build display strings
 				ts := goebpf.KtimeToTime(ev.KtimeNs)
 				comm := goebpf.NullTerminatedStringToString(ev.Comm[:])
@@ -152,12 +145,12 @@ func (p *Program) ShowInfo() {
 			fmt.Printf("\t%s: %v, Fd %v\n", m.Name, m.Type, m.GetFd())
 		}
 	}
-	fmt.Println("\nPrograms:")
+	/*fmt.Println("\nPrograms:")
 	for _, prog := range p.bpf.GetPrograms() {
 		fmt.Printf("\t%s: %v (%s), size %d, license \"%s\"\n",
 			prog.GetName(), prog.GetType(), prog.GetSection(), prog.GetSize(), prog.GetLicense(),
 		)
-	}
+	}*/
 }
 
 //EventsLost return num of ebpf event lost
