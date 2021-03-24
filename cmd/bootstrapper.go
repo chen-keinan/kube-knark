@@ -40,6 +40,7 @@ func StartKnark() {
 		fx.Provide(matchNetChan),
 		fx.Provide(workers.NewPacketMatchesWorker),
 		fx.Provide(providePacketData),
+		fx.Provide(provideFSMatches),
 		fx.Provide(provideCommandData),
 		fx.Invoke(runKnarkService),
 	)
@@ -204,7 +205,12 @@ func providePacketData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, ca
 	return workers.NewPacketMatchData(rm, pmc, cache, numOfWorkers)
 }
 
+//provideFSMatches return fs matches instance
+func provideFSMatches(fsCommandMap map[string]interface{}) *matches.FSMatches {
+	return matches.NewFSMatches(fsCommandMap)
+}
+
 //provideCommandData provide spec data for command worker
-func provideCommandData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMathMap map[string]interface{}) *workers.CommandMatchData {
-	return workers.NewCommandMatchesData(cmc, NumOfWorkers, fsMathMap)
+func provideCommandData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches) *workers.CommandMatchData {
+	return workers.NewCommandMatchesData(cmc, NumOfWorkers, fsMatches)
 }

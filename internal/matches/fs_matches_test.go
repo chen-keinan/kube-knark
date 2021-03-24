@@ -48,6 +48,18 @@ func TestFSMatches_No_Match(t *testing.T) {
 	ok := NewFSMatches(fsMap).Match([]string{"kkk", "abc", "ddd"})
 	assert.False(t, ok)
 }
+func TestFSMatches_Diff_Order(t *testing.T) {
+	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.ConfigFilesPermission))
+	assert.NoError(t, err)
+	data, err := ioutil.ReadAll(f)
+	assert.NoError(t, err)
+	spec := routes.SpecFS{}
+	yaml.Unmarshal(data, &spec)
+	fsMap := make(map[string]interface{})
+	routes.BuildMatchMap(fsMap, spec)
+	ok := NewFSMatches(fsMap).Match([]string{"chmod-rrr", "chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"})
+	assert.True(t, ok)
+}
 
 func TestFSMatches_EmptyCmd(t *testing.T) {
 	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.ConfigFilesPermission))

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 )
 
@@ -18,15 +19,15 @@ func NewCommandMatchesWorker(commandMatchData *CommandMatchData) *CommandMatches
 }
 
 //NewCommandMatchesData return new command instance
-func NewCommandMatchesData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMathMap map[string]interface{}) *CommandMatchData {
-	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMathMap: fsMathMap}
+func NewCommandMatchesData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches) *CommandMatchData {
+	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMatches: fsMatches}
 }
 
 //CommandMatchData encapsulate command worker properties
 type CommandMatchData struct {
 	cmc          chan *events.KprobeEvent
 	numOfWorkers int
-	fsMathMap    map[string]interface{}
+	fsMatches    *matches.FSMatches
 }
 
 //Invoke invoke packet matches workers
@@ -35,12 +36,14 @@ func (pm *CommandMatchesWorker) Invoke() {
 		go func() {
 			for ke := range pm.cmd.cmc {
 				// display process execution event
-				kwriter := new(bytes.Buffer)
-				err := json.NewEncoder(kwriter).Encode(&ke)
-				if err != nil {
-					continue
+				if ok := pm.cmd.fsMatches.Match(ke.Args); ok {
+					kwriter := new(bytes.Buffer)
+					err := json.NewEncoder(kwriter).Encode(&ke)
+					if err != nil {
+						continue
+					}
+					fmt.Println(kwriter.String())
 				}
-				fmt.Println(kwriter.String())
 			}
 		}()
 	}
