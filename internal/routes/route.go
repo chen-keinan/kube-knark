@@ -17,7 +17,7 @@ type Route struct {
 func BuildSpecRoutes(files []string) ([]Routes, error) {
 	routes := make([]Routes, 0)
 	for _, f := range files {
-		spec := Spec{}
+		spec := SpecAPI{}
 		err := yaml.Unmarshal([]byte(f), &spec)
 		if err != nil {
 			return nil, err

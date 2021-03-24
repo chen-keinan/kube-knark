@@ -5,8 +5,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-//Spec data model
-type Spec struct {
+//SpecAPI data model
+type SpecAPI struct {
 	SpecFile   string     `yaml:"spec"`
 	Categories []Category `yaml:"categories"`
 }
@@ -33,7 +33,7 @@ type API struct {
 }
 
 //Routes build routes
-func (s *Spec) Routes() Routes {
+func (s *SpecAPI) Routes() Routes {
 	r := make(Routes, 0)
 	for _, c := range s.Categories {
 		for _, a := range c.SubCategory.API {
@@ -43,7 +43,7 @@ func (s *Spec) Routes() Routes {
 	return r
 }
 
-func buildSpecMap(specMap map[string]*API, spec *Spec) {
+func buildSpecMap(specMap map[string]*API, spec *SpecAPI) {
 	for _, s := range spec.Categories {
 		for _, a := range s.SubCategory.API {
 			specMap[fmt.Sprintf("%s_%s", a.Method, a.URI)] = a
@@ -55,7 +55,7 @@ func buildSpecMap(specMap map[string]*API, spec *Spec) {
 func CreateMapFromSpecFiles(specFiles []string) (map[string]*API, error) {
 	specMap := make(map[string]*API)
 	for _, f := range specFiles {
-		spec := Spec{}
+		spec := SpecAPI{}
 		err := yaml.Unmarshal([]byte(f), &spec)
 		if err != nil {
 			return nil, err

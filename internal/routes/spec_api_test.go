@@ -37,7 +37,7 @@ func TestCreateMapFromSpecFiles(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := Spec{}
+	spec := SpecAPI{}
 	yaml.Unmarshal(data, &spec)
 	mapAPI, err := CreateMapFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
@@ -48,7 +48,7 @@ func TestCreateMapFromSpecFiles(t *testing.T) {
 func TestCreateMapFromSpecFilesError(t *testing.T) {
 	data, err := ioutil.ReadAll(strings.NewReader("aaa"))
 	assert.NoError(t, err)
-	spec := Spec{}
+	spec := SpecAPI{}
 	yaml.Unmarshal(data, &spec)
 	_, err = CreateMapFromSpecFiles([]string{string(data)})
 	assert.Error(t, err)

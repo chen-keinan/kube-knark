@@ -1,0 +1,13 @@
+---
+spec: k8s commands
+categories:
+- name: file system
+  sub_category:
+    name: api config permission
+    api:
+    - name: change kube-apiserver.yaml file permission
+      description: trace kube-apiserver.yaml file permission changes
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/kube-apiserver.yaml
+      severity: Critical

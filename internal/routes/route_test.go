@@ -16,7 +16,7 @@ func TestBuildSpecRoutes(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := Spec{}
+	spec := SpecAPI{}
 	err = yaml.Unmarshal(data, &spec)
 	assert.NoError(t, err)
 	routes := spec.Routes()
