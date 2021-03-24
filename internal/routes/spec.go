@@ -1,5 +1,10 @@
 package routes
 
+import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+)
+
 //Spec data model
 type Spec struct {
 	SpecFile   string     `yaml:"spec"`
@@ -36,4 +41,26 @@ func (s *Spec) Routes() Routes {
 		}
 	}
 	return r
+}
+
+func buildSpecMap(specMap map[string]*API, spec *Spec) {
+	for _, s := range spec.Categories {
+		for _, a := range s.SubCategory.API {
+			specMap[fmt.Sprintf("%s_%s", a.Method, a.URI)] = a
+		}
+	}
+}
+
+//CreateMapFromSpecFiles build spec api cache for presenting trace data
+func CreateMapFromSpecFiles(specFiles []string) (map[string]*API, error) {
+	specMap := make(map[string]*API)
+	for _, f := range specFiles {
+		spec := Spec{}
+		err := yaml.Unmarshal([]byte(f), &spec)
+		if err != nil {
+			return nil, err
+		}
+		buildSpecMap(specMap, &spec)
+	}
+	return specMap, nil
 }

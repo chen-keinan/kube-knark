@@ -39,7 +39,7 @@ func TestProvideCompiledFiles(t *testing.T) {
 		compiledFilePath := filepath.Join(ebpfCompiledFolder, strings.Replace(f.Name, ".c", ".elf", -1))
 		clang.EXPECT().NewExecCommand(fmt.Sprintf(".%s", ebpfSourceFolder), sourcefilePath, compiledFilePath).Return(exec).Times(1)
 		clang.EXPECT().CompileSourceToElf(exec).Return(&shell.CommandResult{}, nil).Times(1)
-		sf := ProvideCompiledFiles(clang, folder)
+		sf := provideCompiledFiles(clang, folder)
 		assert.Equal(t, sf[0].Name, "bpf.h")
 		assert.Equal(t, sf[1].Name, "bpf_helpers.h")
 		assert.Equal(t, sf[2].Name, "kprobe.c")
@@ -47,20 +47,20 @@ func TestProvideCompiledFiles(t *testing.T) {
 }
 
 func TestProvideSpecFiles(t *testing.T) {
-	sf := ProvideSpecFiles()
+	sf := provideSpecFiles()
 	assert.True(t, len(sf[0]) > 0)
 
 }
 func TestProvideSpecRoutes(t *testing.T) {
-	sf := ProvideSpecFiles()
-	sr := ProvideSpecRoutes(sf)
+	sf := provideSpecFiles()
+	sr := provideSpecRoutes(sf)
 	assert.Equal(t, sr[0][0].Method, common.POST)
 	assert.Equal(t, sr[0][0].Pattern, "/api/v1/namespaces/{namespace}/pods")
 	assert.Equal(t, sr[0][1].Method, common.PUT)
 	assert.Equal(t, sr[0][1].Pattern, "/api/v1/namespaces/{namespace}/pods")
 }
 func TestMatchCmdChan(t *testing.T) {
-	kpc := MatchCmdChan()
+	kpc := matchCmdChan()
 	go func() {
 		kpc <- &events.KprobeEvent{Pid: uint32(1)}
 	}()
@@ -69,7 +69,7 @@ func TestMatchCmdChan(t *testing.T) {
 }
 
 func TestMatchNetChan(t *testing.T) {
-	kpc := MatchNetChan()
+	kpc := matchNetChan()
 	go func() {
 		kpc <- &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: common.GET}}
 	}()
@@ -78,5 +78,5 @@ func TestMatchNetChan(t *testing.T) {
 }
 
 func TestNumOfWorkers(t *testing.T) {
-	assert.Equal(t, NumOfWorkers(), 5)
+	assert.Equal(t, numOfWorkers(), 5)
 }

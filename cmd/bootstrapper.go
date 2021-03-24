@@ -24,20 +24,22 @@ import (
 func StartKnark() {
 	app := fx.New(
 		fx.Provide(logger.NewZapLogger),
-		fx.Provide(ProvideSpecFiles),
-		fx.Provide(ProvideSpecRoutes),
+		fx.Provide(provideSpecFiles),
+		fx.Provide(provideSpecRoutes),
+		fx.Provide(provideSpecMap),
 		fx.Provide(mux.NewRouter),
 		fx.Provide(matches.NewRouteMatches),
 		fx.Provide(utils.GetEbpfCompiledFolder),
 		fx.Provide(shell.NewClangCompiler),
-		fx.Provide(ProvideCompiledFiles),
+		fx.Provide(provideCompiledFiles),
 		// init cmd workers
-		fx.Provide(NumOfWorkers),
-		fx.Provide(MatchCmdChan),
+		fx.Provide(numOfWorkers),
+		fx.Provide(matchCmdChan),
 		fx.Provide(workers.NewCommandMatches),
 		// init packet workers
-		fx.Provide(MatchNetChan),
+		fx.Provide(matchNetChan),
 		fx.Provide(workers.NewPacketMatches),
+		fx.Provide(providePacketData),
 		fx.Invoke(runKnarkService),
 	)
 	if err := app.Start(context.Background()); err != nil {
@@ -80,23 +82,23 @@ func runKnarkService(lifecycle fx.Lifecycle,
 
 }
 
-//MatchNetChan return channel for net packet match
-func MatchNetChan() chan *khttp.HTTPNetData {
+//matchNetChan return channel for net packet match
+func matchNetChan() chan *khttp.HTTPNetData {
 	return make(chan *khttp.HTTPNetData, 1000)
 }
 
-//MatchCmdChan return channel for cmd packet match
-func MatchCmdChan() chan *events.KprobeEvent {
+//matchCmdChan return channel for cmd packet match
+func matchCmdChan() chan *events.KprobeEvent {
 	return make(chan *events.KprobeEvent, 1000)
 }
 
-//NumOfWorkers return num of cmd workers
-func NumOfWorkers() int {
+//numOfWorkers return num of cmd workers
+func numOfWorkers() int {
 	return 5
 }
 
-//ProvideCompiledFiles return ebpf compiled files
-func ProvideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesInfo {
+//provideCompiledFiles return ebpf compiled files
+func provideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesInfo {
 	err := utils.CreateKubeKnarkFolders()
 	if err != nil {
 		panic(err)
@@ -120,8 +122,8 @@ func ProvideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesIn
 	return files
 }
 
-//ProvideSpecFiles return spec files
-func ProvideSpecFiles() []string {
+//provideSpecFiles return spec files
+func provideSpecFiles() []string {
 	err := utils.CreateKubeKnarkFolders()
 	if err != nil {
 		panic(err)
@@ -150,11 +152,25 @@ func ProvideSpecFiles() []string {
 	return dataFiles
 }
 
-//ProvideSpecRoutes provide spec api route for endpoint validation
-func ProvideSpecRoutes(files []string) []routes.Routes {
-	routes, err := routes.BuildSpecRoutes(files)
+//provideSpecRoutes provide spec api route for endpoint validation
+func provideSpecRoutes(files []string) []routes.Routes {
+	routesFile, err := routes.BuildSpecRoutes(files)
 	if err != nil {
 		panic(err)
 	}
-	return routes
+	return routesFile
+}
+
+//provideSpecMap provide spec api cache for endpoint validation
+func provideSpecMap(files []string) map[string]*routes.API {
+	specMap, err := routes.CreateMapFromSpecFiles(files)
+	if err != nil {
+		panic(err)
+	}
+	return specMap
+}
+
+//providePacketData provide spec data for packet worker
+func providePacketData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int) *workers.PacketMatchData {
+	return workers.NewPacketMatchData(rm, pmc, cache, numOfWorkers)
 }
