@@ -57,6 +57,15 @@ func TestCreateSpecAPIFolderIfNotExistError(t *testing.T) {
 	err = CreateSpecAPIFolderIfNotExist(fm)
 	assert.Error(t, err)
 }
+func TestCreateSpecFSFolderIfNotExistError(t *testing.T) {
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	folder, err := GetSpecFilesystemFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().CreateFolder(folder).Return(fmt.Errorf("failed to create folder")).Times(1)
+	err = CreateSpecFSFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
 func TestCreateEbpfSourceFolderIfNotExistError(t *testing.T) {
 	ctl := gomock.NewController(t)
 	fm := mocks.NewMockFolderMgr(ctl)
@@ -84,6 +93,15 @@ func TestCreateSpecAPIFolderIfNotExist(t *testing.T) {
 	err = CreateSpecAPIFolderIfNotExist(fm)
 	assert.NoError(t, err)
 }
+func TestCreateSpecFSFolderIfNotExist(t *testing.T) {
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	folder, err := GetSpecFilesystemFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().CreateFolder(folder).Return(nil).Times(1)
+	err = CreateSpecFSFolderIfNotExist(fm)
+	assert.NoError(t, err)
+}
 func TestKFolder_CreateFolder(t *testing.T) {
 	folder, err := GetHomeFolder()
 	if err != nil {
@@ -104,8 +122,16 @@ func TestGetSpecAPIFolder(t *testing.T) {
 	assert.NoError(t, err)
 	homeFolder, err := GetHomeFolder()
 	assert.NoError(t, err)
-	assert.Equal(t, folder, path.Join(homeFolder, SpecSubFolder))
+	assert.Equal(t, folder, path.Join(homeFolder, SpecAPISubFolder))
 }
+func TestGetSpecFilesystemFolder(t *testing.T) {
+	folder, err := GetSpecFilesystemFolder()
+	assert.NoError(t, err)
+	homeFolder, err := GetHomeFolder()
+	assert.NoError(t, err)
+	assert.Equal(t, folder, path.Join(homeFolder, SpecFileSystemSubFolder))
+}
+
 func TestGetEbpfSourceFolder(t *testing.T) {
 	folder, err := GetEbpfSourceFolder()
 	assert.NoError(t, err)

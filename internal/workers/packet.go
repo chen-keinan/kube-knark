@@ -9,8 +9,8 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 )
 
-//PacketMatches instance which match packet data to specific pattern
-type PacketMatches struct {
+//PacketMatchesWorker instance which match packet data to specific pattern
+type PacketMatchesWorker struct {
 	pmd *PacketMatchData
 }
 
@@ -22,9 +22,9 @@ type PacketMatchData struct {
 	numOfWorkers int
 }
 
-//NewPacketMatches return new packet instance
-func NewPacketMatches(pmd *PacketMatchData) *PacketMatches {
-	return &PacketMatches{pmd: pmd}
+//NewPacketMatchesWorker return new packet instance
+func NewPacketMatchesWorker(pmd *PacketMatchData) *PacketMatchesWorker {
+	return &PacketMatchesWorker{pmd: pmd}
 }
 
 //NewPacketMatchData return new packet data
@@ -33,7 +33,7 @@ func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, c
 }
 
 //Invoke invoke packet matches workers
-func (pm *PacketMatches) Invoke() {
+func (pm *PacketMatchesWorker) Invoke() {
 	for i := 0; i < pm.pmd.numOfWorkers; i++ {
 		go func() {
 			for k := range pm.pmd.pmc {

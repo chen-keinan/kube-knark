@@ -17,6 +17,18 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return []utils.FilesInfo{}, fmt.Errorf("faild to load workload spec api %s", err.Error())
 	}
 	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.Workload, Data: ksf})
-
 	return fileInfo, nil
+}
+
+//GenerateFileSystemSpec generate spec file system from template
+func GenerateFileSystemSpec() ([]utils.FilesInfo, error) {
+	fileInfoCom := make([]utils.FilesInfo, 0)
+	boxCom := packr.NewBox("./../spec/filesystem")
+	// Add workload spec api
+	ksfCom, err := boxCom.FindString(common.ConfigFilesPermission)
+	if err != nil {
+		return []utils.FilesInfo{}, fmt.Errorf("faild to load filesystem spec api %s", err.Error())
+	}
+	fileInfoCom = append(fileInfoCom, utils.FilesInfo{Name: common.ConfigFilesPermission, Data: ksfCom})
+	return fileInfoCom, nil
 }

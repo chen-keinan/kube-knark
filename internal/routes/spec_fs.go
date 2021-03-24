@@ -1,5 +1,7 @@
 package routes
 
+import "gopkg.in/yaml.v2"
+
 //SpecFS data model
 type SpecFS struct {
 	SpecFile   string       `yaml:"spec"`
@@ -27,14 +29,12 @@ type FS struct {
 }
 
 //BuildMatchMap build fs match map
-func BuildMatchMap(s SpecFS) map[string]interface{} {
-	FSSpecMap := make(map[string]interface{})
+func BuildMatchMap(FSSpecMap map[string]interface{}, s SpecFS) {
 	for _, c := range s.Categories {
 		for _, a := range c.SubCategory.FS {
 			buildRecursiveMap(FSSpecMap, a.Commands)
 		}
 	}
-	return FSSpecMap
 }
 
 //buildRecursiveMap build fs map helper
@@ -44,4 +44,18 @@ func buildRecursiveMap(FSSpecMap map[string]interface{}, comm []string) {
 		FSSpecMap[comm[0]] = SubFSSpecMap
 		buildRecursiveMap(SubFSSpecMap, comm[1:])
 	}
+}
+
+//CreateFSMapFromSpecFiles build spec api cache for presenting trace data
+func CreateFSMapFromSpecFiles(specFiles []string) (map[string]interface{}, error) {
+	specMap := make(map[string]interface{})
+	for _, f := range specFiles {
+		spec := SpecFS{}
+		err := yaml.Unmarshal([]byte(f), &spec)
+		if err != nil {
+			return nil, err
+		}
+		BuildMatchMap(specMap, spec)
+	}
+	return specMap, nil
 }

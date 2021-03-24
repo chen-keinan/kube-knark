@@ -11,3 +11,8 @@ func TestGenerateSpecFiles(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, specFiles[0].Name, common.Workload)
 }
+func TestGenerateFileSystemSpec(t *testing.T) {
+	specFiles, err := GenerateFileSystemSpec()
+	assert.NoError(t, err)
+	assert.Equal(t, specFiles[0].Name, common.ConfigFilesPermission)
+}

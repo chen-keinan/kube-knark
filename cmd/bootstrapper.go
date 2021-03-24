@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
 	"github.com/chen-keinan/kube-knark/internal/logger"
 	"github.com/chen-keinan/kube-knark/internal/matches"
@@ -26,7 +25,8 @@ func StartKnark() {
 		fx.Provide(logger.NewZapLogger),
 		fx.Provide(provideSpecFiles),
 		fx.Provide(provideSpecRoutes),
-		fx.Provide(provideSpecMap),
+		fx.Provide(provideAPISpecMap),
+		fx.Provide(provideFSSpecMap),
 		fx.Provide(mux.NewRouter),
 		fx.Provide(matches.NewRouteMatches),
 		fx.Provide(utils.GetEbpfCompiledFolder),
@@ -35,11 +35,12 @@ func StartKnark() {
 		// init cmd workers
 		fx.Provide(numOfWorkers),
 		fx.Provide(matchCmdChan),
-		fx.Provide(workers.NewCommandMatches),
+		fx.Provide(workers.NewCommandMatchesWorker),
 		// init packet workers
 		fx.Provide(matchNetChan),
-		fx.Provide(workers.NewPacketMatches),
+		fx.Provide(workers.NewPacketMatchesWorker),
 		fx.Provide(providePacketData),
+		fx.Provide(provideCommandData),
 		fx.Invoke(runKnarkService),
 	)
 	if err := app.Start(context.Background()); err != nil {
@@ -53,8 +54,8 @@ func runKnarkService(lifecycle fx.Lifecycle,
 	files []utils.FilesInfo,
 	NetChan chan *khttp.HTTPNetData,
 	cmdChan chan *events.KprobeEvent,
-	cm *workers.CommandMatches,
-	pm *workers.PacketMatches) {
+	cm *workers.CommandMatchesWorker,
+	pm *workers.PacketMatchesWorker) {
 
 	lifecycle.Append(fx.Hook{OnStart: func(context.Context) error {
 		errChan := make(chan error)
@@ -141,7 +142,6 @@ func provideSpecFiles() []string {
 		panic(err)
 	}
 	files, err := utils.GetFiles(folder)
-	fmt.Println(files)
 	if err != nil {
 		panic(err)
 	}
@@ -161,9 +161,38 @@ func provideSpecRoutes(files []string) []routes.Routes {
 	return routesFile
 }
 
-//provideSpecMap provide spec api cache for endpoint validation
-func provideSpecMap(files []string) map[string]*routes.API {
+//provideAPISpecMap provide spec api cache for endpoint validation
+func provideAPISpecMap(files []string) map[string]*routes.API {
 	specMap, err := routes.CreateMapFromSpecFiles(files)
+	if err != nil {
+		panic(err)
+	}
+	return specMap
+}
+
+//provideFSSpecMap provide spec fs map validation
+func provideFSSpecMap() map[string]interface{} {
+	fi, err := startup.GenerateFileSystemSpec()
+	if err != nil {
+		panic(err)
+	}
+	err = startup.SaveFilesIfNotExist(fi, utils.GetSpecFilesystemFolder)
+	if err != nil {
+		panic(err)
+	}
+	folder, err := utils.GetSpecFilesystemFolder()
+	if err != nil {
+		panic(err)
+	}
+	files, err := utils.GetFiles(folder)
+	if err != nil {
+		panic(err)
+	}
+	dataFiles := make([]string, 0)
+	for _, f := range files {
+		dataFiles = append(dataFiles, f.Data)
+	}
+	specMap, err := routes.CreateFSMapFromSpecFiles(dataFiles)
 	if err != nil {
 		panic(err)
 	}
@@ -173,4 +202,9 @@ func provideSpecMap(files []string) map[string]*routes.API {
 //providePacketData provide spec data for packet worker
 func providePacketData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int) *workers.PacketMatchData {
 	return workers.NewPacketMatchData(rm, pmc, cache, numOfWorkers)
+}
+
+//provideCommandData provide spec data for command worker
+func provideCommandData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMathMap map[string]interface{}) *workers.CommandMatchData {
+	return workers.NewCommandMatchesData(cmc, NumOfWorkers, fsMathMap)
 }

@@ -84,8 +84,16 @@ func TestNumOfWorkers(t *testing.T) {
 //TestprovideSpecMap provide spec api cache for endpoint validation
 func TestProvideSpecMap(t *testing.T) {
 	sf := provideSpecFiles()
-	sr := provideSpecMap(sf)
+	sr := provideAPISpecMap(sf)
 	fmt.Println(sr)
 	assert.Equal(t, sr[fmt.Sprintf("%s_%s", "POST", "/api/v1/namespaces/{namespace}/pods")].Method, "POST")
 	assert.Equal(t, sr[fmt.Sprintf("%s_%s", "POST", "/api/v1/namespaces/{namespace}/pods")].URI, "/api/v1/namespaces/{namespace}/pods")
+}
+
+func TestProvideFSSpecMap(t *testing.T) {
+	spm := provideFSSpecMap()
+	val, ok := spm["chmod"]
+	assert.True(t, ok)
+	_, ok2 := val.(map[string]interface{})["/etc/kubernetes/manifests/kube-apiserver.yaml"]
+	assert.True(t, ok2)
 }

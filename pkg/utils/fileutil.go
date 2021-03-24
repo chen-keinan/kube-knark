@@ -9,8 +9,11 @@ import (
 	"path/filepath"
 )
 
-//SpecSubFolder spec api sub folder name
-const SpecSubFolder = "spec/api"
+//SpecAPISubFolder spec api sub folder name
+const SpecAPISubFolder = "spec/api"
+
+//SpecFileSystemSubFolder spec filesystem sub folder name
+const SpecFileSystemSubFolder = "spec/filesystem"
 
 //SourceSubFolder ebpf file source folder
 const SourceSubFolder = "ebpf/source"
@@ -46,13 +49,22 @@ func (kf KFolder) CreateFolder(folderName string) error {
 	return nil
 }
 
-//GetSpecAPIFolder return spec files source folder path
+//GetSpecAPIFolder return spec api folder path
 func GetSpecAPIFolder() (string, error) {
 	folder, err := GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
-	return path.Join(folder, SpecSubFolder), nil
+	return path.Join(folder, SpecAPISubFolder), nil
+}
+
+//GetSpecFilesystemFolder return spec file system folder path
+func GetSpecFilesystemFolder() (string, error) {
+	folder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(folder, SpecFileSystemSubFolder), nil
 }
 
 //GetEbpfSourceFolder return ebpf source folder path
@@ -151,6 +163,15 @@ func CreateSpecAPIFolderIfNotExist(fm FolderMgr) error {
 	return fm.CreateFolder(specFolder)
 }
 
+//CreateSpecFSFolderIfNotExist create spec file system folder if not exist
+func CreateSpecFSFolderIfNotExist(fm FolderMgr) error {
+	specFolder, err := GetSpecFilesystemFolder()
+	if err != nil {
+		return err
+	}
+	return fm.CreateFolder(specFolder)
+}
+
 //CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
 func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
 	ebpfFolder, err := GetEbpfCompiledFolder()
@@ -176,6 +197,10 @@ func CreateKubeKnarkFolders() error {
 		return err
 	}
 	err = CreateSpecAPIFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	err = CreateSpecFSFolderIfNotExist(fm)
 	if err != nil {
 		return err
 	}
