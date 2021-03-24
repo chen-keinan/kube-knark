@@ -80,3 +80,12 @@ func TestMatchNetChan(t *testing.T) {
 func TestNumOfWorkers(t *testing.T) {
 	assert.Equal(t, numOfWorkers(), 5)
 }
+
+//TestprovideSpecMap provide spec api cache for endpoint validation
+func TestProvideSpecMap(t *testing.T) {
+	sf := provideSpecFiles()
+	sr := provideSpecMap(sf)
+	fmt.Println(sr)
+	assert.Equal(t, sr[fmt.Sprintf("%s_%s", "POST", "/api/v1/namespaces/{namespace}/pods")].Method, "POST")
+	assert.Equal(t, sr[fmt.Sprintf("%s_%s", "POST", "/api/v1/namespaces/{namespace}/pods")].URI, "/api/v1/namespaces/{namespace}/pods")
+}
