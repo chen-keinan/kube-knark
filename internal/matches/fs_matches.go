@@ -18,16 +18,16 @@ func (mr *FSMatches) Match(cmd []string) bool {
 	return mr.recursiveMatch(mr.fsCommandMap, cmd)
 }
 
-func (mr *FSMatches) recursiveMatch(subMap map[string]interface{}, cmd []string) bool {
-	if len(subMap) == 0 {
+func (mr *FSMatches) recursiveMatch(currMap map[string]interface{}, cmd []string) bool {
+	if len(currMap) == 0 {
 		return true
 	}
 	if len(cmd) == 0 {
 		return false
 	}
-	valMap, ok := subMap[cmd[0]]
+	subMap, ok := currMap[cmd[0]]
 	if !ok { // stay with current map
-		return mr.recursiveMatch(subMap, cmd[1:])
+		return mr.recursiveMatch(currMap, cmd[1:])
 	} //continue to sub map
-	return mr.recursiveMatch(valMap.(map[string]interface{}), cmd[1:])
+	return mr.recursiveMatch(subMap.(map[string]interface{}), cmd[1:])
 }
