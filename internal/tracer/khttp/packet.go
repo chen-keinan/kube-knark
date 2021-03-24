@@ -7,7 +7,6 @@ import (
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 	"github.com/hsiafan/glow/flagx"
-	"go.uber.org/zap"
 	"os"
 	"runtime"
 	"strconv"
@@ -76,22 +75,22 @@ func openSingleDevice(device string, filterIP string, filterPort uint16) (localP
 }
 
 //StartNetListener invoke net listener for kernel http events
-func StartNetListener(log *zap.Logger, matchChan chan *HTTPNetData) error {
-	var option = &Option{}
-	cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
-		return run(option, matchChan)
-	})
-	if err != nil {
-		log.Error(fmt.Sprintf("failed to call new command %s", err.Error()))
-		return err
-	}
-	os.Args = append(os.Args, "-level=all")
-	cmd.ParseOsArgsAndExecute()
-	return nil
+func StartNetListener(errChan chan error, netEventChan chan *HTTPNetData) {
+	go func() {
+		var option = &Option{}
+		cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
+			return run(option, errChan, netEventChan)
+		})
+		if err != nil {
+			errChan <- fmt.Errorf("failed to get command for net listener")
+		}
+		os.Args = append(os.Args, "-level=all")
+		cmd.ParseOsArgsAndExecute()
+	}()
 }
 
 //nolint:gocyclo
-func run(option *Option, matchChan chan *HTTPNetData) error {
+func run(option *Option, errChan chan error, netEventChan chan *HTTPNetData) error {
 	if option.Port > 65536 {
 		return fmt.Errorf("ignored invalid port %v", option.Port)
 	}
@@ -99,7 +98,7 @@ func run(option *Option, matchChan chan *HTTPNetData) error {
 	if option.Status != "" {
 		statusSet, err := ParseIntSet(option.Status)
 		if err != nil {
-			return fmt.Errorf("status range not valid %v", option.Status)
+			errChan <- fmt.Errorf("status range not valid %v", option.Status)
 		}
 		option.StatusSet = statusSet
 	}
@@ -110,7 +109,7 @@ func run(option *Option, matchChan chan *HTTPNetData) error {
 		// read from pcap file
 		var handle, err = pcap.OpenOffline(option.File)
 		if err != nil {
-			return fmt.Errorf("open file %v error: %w", option.File, err)
+			errChan <- fmt.Errorf("open file %v error: %w", option.File, err)
 		}
 		packets = listenOneSource(handle)
 	} else if option.Device == "any" && runtime.GOOS != "linux" {
@@ -118,14 +117,13 @@ func run(option *Option, matchChan chan *HTTPNetData) error {
 		// Only linux 2.2+ support any interface. we have to list all network device and listened on them all
 		interfaces, err := pcap.FindAllDevs()
 		if err != nil {
-			return fmt.Errorf("find device error: %w", err)
+			errChan <- fmt.Errorf("find device error: %w", err)
 		}
 
 		var packetsSlice = make([]chan gopacket.Packet, len(interfaces))
 		for _, itf := range interfaces {
 			localPackets, err := openSingleDevice(itf.Name, option.Ip, uint16(option.Port))
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "open device", itf, "error:", err)
 				continue
 			}
 			packetsSlice = append(packetsSlice, localPackets)
@@ -136,16 +134,16 @@ func run(option *Option, matchChan chan *HTTPNetData) error {
 		var err error
 		packets, err = openSingleDevice(option.Device, option.Ip, uint16(option.Port))
 		if err != nil {
-			return fmt.Errorf("listen on device %v failed, error: %w", option.Device, err)
+			errChan <- fmt.Errorf("listen on device %v failed, error: %w", option.Device, err)
 		}
 	} else {
-		return errors.New("no device or pcap file specified")
+		errChan <- errors.New("no device or pcap file specified")
 	}
 
 	var handler = &HTTPConnectionHandler{
 		option: option,
 		// TODO: stdout
-		printer: newPrinter(matchChan),
+		printer: newPrinter(netEventChan),
 	}
 	var assembler = newTCPAssembler(handler)
 	assembler.filterIP = option.Ip
@@ -160,7 +158,6 @@ outer:
 			if packet == nil {
 				break outer
 			}
-
 			// only assembly tcp/ip packets
 			if packet.NetworkLayer() == nil || packet.TransportLayer() == nil ||
 				packet.TransportLayer().LayerType() != layers.LayerTypeTCP {
@@ -169,13 +166,11 @@ outer:
 			var tcp = packet.TransportLayer().(*layers.TCP)
 
 			assembler.assemble(packet.NetworkLayer().NetworkFlow(), tcp, packet.Metadata().Timestamp)
-
 		case <-ticker:
 			// flush connections that haven't been activity in the idle time
 			assembler.flushOlderThan(time.Now().Add(-option.Idle))
 		}
 	}
-
 	assembler.finishAll()
 	waitGroup.Wait()
 	handler.printer.finish()

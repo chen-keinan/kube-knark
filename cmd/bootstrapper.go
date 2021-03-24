@@ -55,33 +55,34 @@ func StartKnark() {
 func runKnarkService(lifecycle fx.Lifecycle,
 	zlog *zap.Logger,
 	files []utils.FilesInfo,
-	NetChan chan *khttp.HTTPNetData,
-	cmdChan chan *events.KprobeEvent,
+	NetEventChan chan *khttp.HTTPNetData,
+	cmdEventChan chan *events.KprobeEvent,
 	cm *workers.CommandMatchesWorker,
 	pm *workers.PacketMatchesWorker) {
 
 	lifecycle.Append(fx.Hook{OnStart: func(context.Context) error {
-		errChan := make(chan bool)
+		quitChan := make(chan bool)
+		errNetChan := make(chan error)
+		errCmdChan := make(chan error)
 		cm.Invoke()
 		pm.Invoke()
 		// start Net Listener
-		go func() {
-			err := khttp.StartNetListener(zlog, NetChan)
-			if err != nil {
-				panic("failed to init net listener")
-			}
-		}()
+		khttp.StartNetListener(errNetChan, NetEventChan)
 		// start exec Listener
-		kexec.StartCmdListener(files, zlog, errChan, cmdChan)
+		kexec.StartCmdListener(files, errCmdChan, quitChan, cmdEventChan)
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
 		signal.Notify(ctrlC, os.Interrupt)
-		<-ctrlC
-		errChan <- true
-		return nil
+		select {
+		case <-ctrlC:
+			return nil
+		case cmdErr := <-errCmdChan:
+			panic(cmdErr)
+		case netErr := <-errNetChan:
+			panic(netErr)
+		}
 	},
 	})
-
 }
 
 //matchNetChan return channel for net packet match
