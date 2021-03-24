@@ -39,10 +39,13 @@ func BuildMatchMap(FSSpecMap map[string]interface{}, s SpecFS) {
 
 //buildRecursiveMap build fs map helper
 func buildRecursiveMap(FSSpecMap map[string]interface{}, comm []string) {
-	SubFSSpecMap := make(map[string]interface{})
 	if len(comm) >= 1 {
-		FSSpecMap[comm[0]] = SubFSSpecMap
-		buildRecursiveMap(SubFSSpecMap, comm[1:])
+		subFSSpecMap, ok := FSSpecMap[comm[0]]
+		if !ok {
+			subFSSpecMap = make(map[string]interface{})
+			FSSpecMap[comm[0]] = subFSSpecMap
+		}
+		buildRecursiveMap(subFSSpecMap.(map[string]interface{}), comm[1:])
 	}
 }
 

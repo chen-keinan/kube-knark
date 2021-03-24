@@ -36,5 +36,7 @@ func TestCreateFSMapFromSpecFiles(t *testing.T) {
 	val, ok := fsm["chmod"]
 	assert.True(t, ok)
 	_, ok2 := val.(map[string]interface{})["/etc/kubernetes/manifests/kube-apiserver.yaml"]
+	_, ok3 := val.(map[string]interface{})["/etc/kubernetes/manifests/proxy-apiserver.yaml"]
 	assert.True(t, ok2)
+	assert.True(t, ok3)
 }
