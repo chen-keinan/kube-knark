@@ -3,7 +3,6 @@ package workers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 )
 
@@ -29,7 +28,7 @@ func (pm *CommandMatches) Invoke() {
 				if err != nil {
 					continue
 				}
-				fmt.Println(kwriter.String())
+				//	fmt.Println(kwriter.String())
 			}
 		}()
 	}

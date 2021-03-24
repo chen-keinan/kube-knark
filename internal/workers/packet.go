@@ -31,7 +31,9 @@ func (pm *PacketMatches) Invoke() {
 				if err != nil {
 					continue
 				}
-				fmt.Println(kwriter.String())
+				if ok, _ := pm.rm.Match(k.HTTPRequestData.RequestURI, k.HTTPRequestData.Method); ok {
+					fmt.Println(kwriter.String())
+				}
 			}
 		}()
 	}
