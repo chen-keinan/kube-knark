@@ -75,10 +75,14 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		signal.Notify(ctrlC, os.Interrupt)
 		select {
 		case <-ctrlC:
+			// release cmd go routine before panic
+			quitChan <- true
 			return nil
 		case cmdErr := <-errCmdChan:
 			panic(cmdErr)
 		case netErr := <-errNetChan:
+			// release cmd go routine before panic
+			quitChan <- true
 			panic(netErr)
 		}
 	},
