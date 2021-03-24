@@ -64,7 +64,9 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		quitChan := make(chan bool)
 		errNetChan := make(chan error)
 		errCmdChan := make(chan error)
+		// invoke cmd msg processing worker
 		cm.Invoke()
+		// invoke net msg processing worker
 		pm.Invoke()
 		// start Net Listener
 		khttp.StartNetListener(errNetChan, NetEventChan)
