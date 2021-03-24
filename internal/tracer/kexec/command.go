@@ -13,26 +13,26 @@ func StartCmdListener(files []utils.FilesInfo, errChan chan error, quitChan chan
 	go func(quitChan chan bool, errChan chan error) {
 		// cleanup old probes
 		if err := goebpf.CleanupProbes(); err != nil {
-			return
+			errChan <- fmt.Errorf("cleanup Probes failed: %s", err.Error())
 		}
 		ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
 		if err != nil {
-			return
+			errChan <- fmt.Errorf("get Ebpf program failed: %s", err.Error())
 		}
 		filePath := path.Join(ebpfCompiledFolder, files[0].Name)
 		p, err := LoadProgram(filePath)
 		if err != nil {
-			return
+			errChan <- fmt.Errorf("load ebpf program failed: %s", err.Error())
 		}
 		p.ShowInfo()
 		// attach ebpf kprobes
 		if err := p.AttachProbes(cmdEventChan); err != nil {
-			errChan <- fmt.Errorf("Attach Probes failed: %s", err.Error())
+			errChan <- fmt.Errorf("attach probes failed: %s", err.Error())
 		}
 		defer func() {
 			err := p.DetachProbes()
 			if err != nil {
-				errChan <- fmt.Errorf("Detach Probes failed: %s", err.Error())
+				errChan <- fmt.Errorf("detach probes failed: %s", err.Error())
 			}
 		}()
 		<-quitChan
