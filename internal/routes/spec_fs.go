@@ -1,6 +1,10 @@
 package routes
 
-import "gopkg.in/yaml.v2"
+import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+	"strings"
+)
 
 //SpecFS data model
 type SpecFS struct {
@@ -59,6 +63,28 @@ func CreateFSMapFromSpecFiles(specFiles []string) (map[string]interface{}, error
 			return nil, err
 		}
 		BuildMatchMap(specMap, spec)
+	}
+	return specMap, nil
+}
+
+//CreateFSCacheFromSpecFiles build spec fs cache for data processing
+func CreateFSCacheFromSpecFiles(specFiles []string) (map[string]*FS, error) {
+	specMap := make(map[string]*FS)
+	for _, f := range specFiles {
+		spec := SpecFS{}
+		err := yaml.Unmarshal([]byte(f), &spec)
+		if err != nil {
+			return nil, err
+		}
+		for _, categories := range spec.Categories {
+			for _, fs := range categories.SubCategory.FS {
+				var sb strings.Builder
+				for _, com := range fs.Commands {
+					sb.WriteString(fmt.Sprintf("%s_", com))
+				}
+				specMap[sb.String()] = fs
+			}
+		}
 	}
 	return specMap, nil
 }

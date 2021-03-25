@@ -1,6 +1,10 @@
 package ui
 
 import (
+	"fmt"
+	"github.com/chen-keinan/kube-knark/internal/routes"
+	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
+	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 	tb "github.com/nsf/termbox-go"
@@ -8,18 +12,20 @@ import (
 
 //KubeKnarkUI return UI object
 type KubeKnarkUI struct {
-	netEvtChan chan NetEvt
-	fsEvtChan  chan FilesystemEvt
+	NetEvtChan chan NetEvt
+	FsEvtChan  chan FilesystemEvt
 }
 
 // NetEvt net event msg
 type NetEvt struct {
-	Msg string
+	Msg  *khttp.HTTPNetData
+	Spec *routes.API
 }
 
 // FilesystemEvt fs event msg
 type FilesystemEvt struct {
-	Msg string
+	Msg  *events.KprobeEvent
+	Spec *routes.FS
 }
 
 //NewNetEvtChan return net event channel
@@ -34,7 +40,7 @@ func NewFilesystemEvtChan() chan FilesystemEvt {
 
 //NewKubeKnarkUI return new KubeKnarkUI object
 func NewKubeKnarkUI(netData chan NetEvt, fsData chan FilesystemEvt) *KubeKnarkUI {
-	return &KubeKnarkUI{netEvtChan: netData, fsEvtChan: fsData}
+	return &KubeKnarkUI{NetEvtChan: netData, FsEvtChan: fsData}
 }
 
 //Draw draw ui kube knark ui with paragraph and lists
@@ -71,13 +77,18 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 					tb.Close()
 					return
 				}
-			case fsEvent := <-kku.fsEvtChan:
-				fsEvents = append(fsEvents, fsEvent.Msg)
+			case fsEvent := <-kku.FsEvtChan:
+				value := fmt.Sprintf("%s:%s:%s", fsEvent.Spec.Severity, fsEvent.Spec.Name, fsEvent.Msg.Args)
+				fsEvents = append(fsEvents, value)
 				fsSection.Rows = fsEvents
 				ui.Render(fsSection)
 
-			case netEvent := <-kku.netEvtChan:
-				netEvents = append(netEvents, netEvent.Msg)
+			case netEvent := <-kku.NetEvtChan:
+				value := fmt.Sprintf("%s:%s:%s %s", netEvent.Spec.Severity,
+					netEvent.Spec.Name,
+					netEvent.Msg.HTTPRequestData.Method,
+					netEvent.Msg.HTTPRequestData.RequestURI)
+				netEvents = append(netEvents, value)
 				netSection.Rows = netEvents
 				ui.Render(netSection)
 			}

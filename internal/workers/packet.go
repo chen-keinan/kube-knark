@@ -1,6 +1,7 @@
 package workers
 
 import (
+	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/internal/routes"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
@@ -14,11 +15,11 @@ type PacketMatchesWorker struct {
 
 //PacketMatchData encapsulate packet worker properties
 type PacketMatchData struct {
-	rm           *matches.RouteMatches
-	pmc          chan *khttp.HTTPNetData
-	cache        map[string]*routes.API
-	uiChan       chan ui.NetEvt
-	numOfWorkers int
+	rm              *matches.RouteMatches
+	pmc             chan *khttp.HTTPNetData
+	validationCache map[string]*routes.API
+	uiChan          chan ui.NetEvt
+	numOfWorkers    int
 }
 
 //NewPacketMatchesWorker return new packet instance
@@ -27,8 +28,8 @@ func NewPacketMatchesWorker(pmd *PacketMatchData) *PacketMatchesWorker {
 }
 
 //NewPacketMatchData return new packet data
-func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int, uichan chan ui.NetEvt) *PacketMatchData {
-	return &PacketMatchData{rm: rm, pmc: pmc, cache: cache, numOfWorkers: numOfWorkers, uiChan: uichan}
+func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, validationCache map[string]*routes.API, numOfWorkers int, uichan chan ui.NetEvt) *PacketMatchData {
+	return &PacketMatchData{rm: rm, pmc: pmc, validationCache: validationCache, numOfWorkers: numOfWorkers, uiChan: uichan}
 }
 
 //Invoke invoke packet matches workers
@@ -38,7 +39,8 @@ func (pm *PacketMatchesWorker) Invoke() {
 			for k := range pm.pmd.pmc {
 				// display process execution event
 				if ok, _ := pm.pmd.rm.Match(k.HTTPRequestData.RequestURI, k.HTTPRequestData.Method); ok {
-					pm.pmd.uiChan <- ui.NetEvt{Msg: k.HTTPRequestData.RequestURI}
+					spec := pm.pmd.validationCache[fmt.Sprintf("%s_%s", k.HTTPRequestData.Method, k.HTTPRequestData.RequestURI)]
+					pm.pmd.uiChan <- ui.NetEvt{Msg: k, Spec: spec}
 				}
 			}
 		}()

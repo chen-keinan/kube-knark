@@ -29,6 +29,7 @@ func StartKnark() {
 		fx.Provide(provideSpecRoutes),
 		fx.Provide(provideAPISpecMap),
 		fx.Provide(provideFSSpecMap),
+		fx.Provide(provideFSSpecCache),
 		fx.Provide(mux.NewRouter),
 		fx.Provide(matches.NewRouteMatches),
 		fx.Provide(utils.GetEbpfCompiledFolder),
@@ -185,6 +186,31 @@ func provideAPISpecMap(files []string) map[string]*routes.API {
 
 //provideFSSpecMap provide spec fs map validation
 func provideFSSpecMap() map[string]interface{} {
+	dataFiles, err := getDataFileContent()
+	if err != nil {
+		panic(err)
+	}
+	specMap, err := routes.CreateFSMapFromSpecFiles(dataFiles)
+	if err != nil {
+		panic(err)
+	}
+	return specMap
+}
+
+//provideFSSpecCache provide spec fs cache
+func provideFSSpecCache() map[string]*routes.FS {
+	dataFiles, err := getDataFileContent()
+	if err != nil {
+		panic(err)
+	}
+	specMap, err := routes.CreateFSCacheFromSpecFiles(dataFiles)
+	if err != nil {
+		panic(err)
+	}
+	return specMap
+}
+
+func getDataFileContent() ([]string, error) {
 	fi, err := startup.GenerateFileSystemSpec()
 	if err != nil {
 		panic(err)
@@ -205,9 +231,5 @@ func provideFSSpecMap() map[string]interface{} {
 	for _, f := range files {
 		dataFiles = append(dataFiles, f.Data)
 	}
-	specMap, err := routes.CreateFSMapFromSpecFiles(dataFiles)
-	if err != nil {
-		panic(err)
-	}
-	return specMap
+	return dataFiles, err
 }

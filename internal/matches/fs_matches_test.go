@@ -1,6 +1,7 @@
 package matches
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	"github.com/chen-keinan/kube-knark/internal/routes"
@@ -20,7 +21,11 @@ func TestFSMatches_Full_Match(t *testing.T) {
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
 	routes.BuildMatchMap(fsMap, spec)
-	ok := NewFSMatches(fsMap).Match([]string{"chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"})
+	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	var sb = new(bytes.Buffer)
+	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"}, sb)
+	assert.Equal(t, sb.String(), "chmod_/etc/kubernetes/manifests/kube-apiserver.yaml_")
 	assert.True(t, ok)
 }
 func TestFSMatches_Partial_Match(t *testing.T) {
@@ -32,7 +37,11 @@ func TestFSMatches_Partial_Match(t *testing.T) {
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
 	routes.BuildMatchMap(fsMap, spec)
-	ok := NewFSMatches(fsMap).Match([]string{"chmod", "abc", "ddd"})
+	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	var sb = new(bytes.Buffer)
+	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod", "abc", "ddd"}, sb)
+	assert.Equal(t, sb.String(), "chmod_")
 	assert.False(t, ok)
 }
 
@@ -45,7 +54,10 @@ func TestFSMatches_No_Match(t *testing.T) {
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
 	routes.BuildMatchMap(fsMap, spec)
-	ok := NewFSMatches(fsMap).Match([]string{"kkk", "abc", "ddd"})
+	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	var sb = new(bytes.Buffer)
+	ok := NewFSMatches(fsMap, cache).Match([]string{"kkk", "abc", "ddd"}, sb)
 	assert.False(t, ok)
 }
 func TestFSMatches_Diff_Order(t *testing.T) {
@@ -57,7 +69,11 @@ func TestFSMatches_Diff_Order(t *testing.T) {
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
 	routes.BuildMatchMap(fsMap, spec)
-	ok := NewFSMatches(fsMap).Match([]string{"chmod-rrr", "chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"})
+	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	var sb = new(bytes.Buffer)
+	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod-rrr", "chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"}, sb)
+	assert.Equal(t, sb.String(), "chmod_/etc/kubernetes/manifests/kube-apiserver.yaml_")
 	assert.True(t, ok)
 }
 
@@ -70,6 +86,9 @@ func TestFSMatches_EmptyCmd(t *testing.T) {
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
 	routes.BuildMatchMap(fsMap, spec)
-	ok := NewFSMatches(fsMap).Match([]string{})
+	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	var sb = new(bytes.Buffer)
+	ok := NewFSMatches(fsMap, cache).Match([]string{}, sb)
 	assert.False(t, ok)
 }

@@ -40,3 +40,14 @@ func TestCreateFSMapFromSpecFiles(t *testing.T) {
 	assert.True(t, ok2)
 	assert.True(t, ok3)
 }
+
+func TestCreateFSCacheFromSpecFiles(t *testing.T) {
+	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.ConfigFilesPermission))
+	assert.NoError(t, err)
+	data, err := ioutil.ReadAll(f)
+	assert.NoError(t, err)
+	cache, err := CreateFSCacheFromSpecFiles([]string{string(data)})
+	assert.NoError(t, err)
+	assert.True(t, cache["chmod_/etc/kubernetes/manifests/kube-apiserver.yaml_"].Name == "change kube-apiserver.yaml file permission")
+	assert.True(t, cache["chmod_/etc/kubernetes/manifests/proxy-apiserver.yaml_"].Name == "change proxy-apiserver.yaml file permission")
+}

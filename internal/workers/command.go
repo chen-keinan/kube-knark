@@ -2,7 +2,6 @@ package workers
 
 import (
 	"bytes"
-	"encoding/json"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/chen-keinan/kube-knark/pkg/ui"
@@ -37,13 +36,10 @@ func (pm *CommandMatchesWorker) Invoke() {
 		go func() {
 			for ke := range pm.cmd.cmc {
 				// display process execution event
-				if ok := pm.cmd.fsMatches.Match(ke.Args); ok {
-					kwriter := new(bytes.Buffer)
-					err := json.NewEncoder(kwriter).Encode(&ke)
-					if err != nil {
-						continue
-					}
-					pm.cmd.uiChan <- ui.FilesystemEvt{Msg: kwriter.String()}
+				var sb = new(bytes.Buffer)
+				if ok := pm.cmd.fsMatches.Match(ke.Args, sb); ok {
+					fSpec := pm.cmd.fsMatches.Cache[sb.String()]
+					pm.cmd.uiChan <- ui.FilesystemEvt{Msg: ke, Spec: fSpec}
 				}
 			}
 		}()
