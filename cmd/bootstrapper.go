@@ -76,7 +76,7 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		khttp.StartNetListener(errNetChan, NetEventChan)
 		// start exec Listener
 		kexec.StartCmdListener(files, errCmdChan, quitChan, cmdEventChan)
-		ui.NewKubeKnarkUI(netUIChan, fsUIChan).Draw()
+		ui.NewKubeKnarkUI(netUIChan, fsUIChan).Draw(errNetChan)
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
 		signal.Notify(ctrlC, os.Interrupt)

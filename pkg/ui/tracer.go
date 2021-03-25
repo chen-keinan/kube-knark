@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 )
@@ -38,10 +37,11 @@ func NewKubeKnarkUI(netData chan NetEvt, fsData chan FilesystemEvt) *KubeKnarkUI
 }
 
 //Draw draw ui kube knark ui with paragraph and lists
-func (kku *KubeKnarkUI) Draw() {
+func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 	go func() {
 		if err := ui.Init(); err != nil {
-			fmt.Println(err)
+			errNetChan <- err
+			return
 		}
 		defer ui.Close()
 		// draw external paragraph
