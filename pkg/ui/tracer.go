@@ -3,6 +3,7 @@ package ui
 import (
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
+	tb "github.com/nsf/termbox-go"
 )
 
 //KubeKnarkUI return UI object
@@ -44,6 +45,15 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 			return
 		}
 		defer ui.Close()
+		// init term buffer
+		if err := tb.Init(); err != nil {
+			errNetChan <- err
+			return
+		}
+		if err := tb.Sync(); err != nil {
+			errNetChan <- err
+			return
+		}
 		// draw external paragraph
 		p := drawParagraph()
 		// draw net event and fs event sections
@@ -58,6 +68,7 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 			case e := <-uiEvents:
 				switch e.ID {
 				case "q", "<C-c>":
+					tb.Close()
 					return
 				}
 			case fsEvent := <-kku.fsEvtChan:
@@ -75,17 +86,19 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 }
 
 func drawParagraph() *widgets.Paragraph {
+	w, h := tb.Size()
 	p := widgets.NewParagraph()
 	p.Title = "Kube-Knark Tracer"
-	p.SetRect(0, 0, 156, 30)
+	p.SetRect(0, 0, w, h)
 	p.TextStyle.Fg = ui.ColorWhite
 	p.BorderStyle.Fg = ui.ColorCyan
 	return p
 }
 
 func drawSections() (*widgets.List, *widgets.List) {
-	a := createSectionList(1, 1, 155, 14, "K8s configuration file change events")
-	b := createSectionList(1, 15, 155, 29, "K8s API change events")
+	w, h := tb.Size()
+	a := createSectionList(1, 1, w-1, h/2, "K8s configuration file change events")
+	b := createSectionList(1, h/2, w-1, h-1, "K8s API change events")
 	return a, b
 }
 
