@@ -51,23 +51,25 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 			return
 		}
 		defer ui.Close()
-		// init term buffer
-		if err := tb.Init(); err != nil {
-			errNetChan <- err
-			return
-		}
-		if err := tb.Sync(); err != nil {
-			errNetChan <- err
-			return
-		}
 		// draw external paragraph
-		p := drawParagraph()
+		termWidth, termHeight := ui.TerminalDimensions()
+		p := drawParagraph(termWidth, termHeight)
 		// draw net event and fs event sections
-		fsSection, netSection := drawSections()
+		_, netSection := drawSections(termWidth, termHeight)
+		///
+		fsTable := widgets.NewTable()
+		fsEvents := make([][]string, 0)
+		fsEvents = append(fsEvents, []string{"Severity", "Name", "Command args"})
+		fsTable.Rows = fsEvents
+		fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
+		fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
+		fsTable.Title = "K8s configuration file change events"
+		ui.Render(fsTable)
+		///q
 		// render to ui
-		ui.Render(p, fsSection, netSection)
+		ui.Render(p, fsTable, netSection)
 		uiEvents := ui.PollEvents()
-		fsEvents := make([]string, 0)
+
 		netEvents := make([]string, 0)
 		for {
 			select {
@@ -78,10 +80,10 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 					return
 				}
 			case fsEvent := <-kku.FsEvtChan:
-				value := fmt.Sprintf("%s:%s:%s", fsEvent.Spec.Severity, fsEvent.Spec.Name, fsEvent.Msg.Args)
-				fsEvents = append(fsEvents, value)
-				fsSection.Rows = fsEvents
-				ui.Render(fsSection)
+				args := fmt.Sprintf("%s", fsEvent.Msg.Args)
+				fsEvents = append(fsEvents, []string{fsEvent.Spec.Severity, fsEvent.Spec.Name, args})
+				fsTable.Rows = fsEvents
+				ui.Render(fsTable)
 
 			case netEvent := <-kku.NetEvtChan:
 				value := fmt.Sprintf("%s:%s:%s %s", netEvent.Spec.Severity,
@@ -96,21 +98,19 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 	}()
 }
 
-func drawParagraph() *widgets.Paragraph {
-	w, h := tb.Size()
+func drawParagraph(termWidth, termHeight int) *widgets.Paragraph {
 	p := widgets.NewParagraph()
 	p.Title = "Kube-Knark Tracer"
-	p.SetRect(0, 0, w, h)
+	p.SetRect(0, 0, termWidth, termHeight)
 	p.TextStyle.Fg = ui.ColorWhite
 	p.BorderStyle.Fg = ui.ColorCyan
 	return p
 }
 
-func drawSections() (*widgets.List, *widgets.List) {
-	w, h := tb.Size()
-	a := createSectionList(1, 1, w-1, h/2, "K8s configuration file change events")
+func drawSections(w, h int) (*widgets.List, *widgets.List) {
+	//a := createSectionList(1, 1, w-1, h/2, "K8s configuration file change events")
 	b := createSectionList(1, h/2, w-1, h-1, "K8s API change events")
-	return a, b
+	return nil, b
 }
 
 func createSectionList(x0, y0, x1, y1 int, title string) *widgets.List {
