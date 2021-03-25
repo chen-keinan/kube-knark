@@ -44,11 +44,13 @@ func (kku *KubeKnarkUI) Draw() {
 			fmt.Println(err)
 		}
 		defer ui.Close()
+		// draw external paragraph
 		p := drawParagraph()
+		// draw net event and fs event sections
 		fsSection, netSection := drawSections()
+		// render to ui
 		ui.Render(p, fsSection, netSection)
 		uiEvents := ui.PollEvents()
-		tickerCount := 10
 		fsEvents := make([]string, 0)
 		netEvents := make([]string, 0)
 		for {
@@ -62,13 +64,11 @@ func (kku *KubeKnarkUI) Draw() {
 				fsEvents = append(fsEvents, fsEvent.Msg)
 				fsSection.Rows = fsEvents
 				ui.Render(fsSection)
-				tickerCount++
 
 			case netEvent := <-kku.netEvtChan:
 				netEvents = append(netEvents, netEvent.Msg)
 				netSection.Rows = netEvents
 				ui.Render(netSection)
-				tickerCount++
 			}
 		}
 	}()
