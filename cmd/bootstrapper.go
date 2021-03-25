@@ -11,10 +11,10 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 	"github.com/chen-keinan/kube-knark/internal/workers"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/ui"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/gorilla/mux"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 	"os"
 	"os/signal"
 )
@@ -35,15 +35,18 @@ func StartKnark() {
 		fx.Provide(shell.NewClangCompiler),
 		fx.Provide(provideCompiledFiles),
 		// init cmd workers
+		fx.Provide(ui.NewNetEvtChan),
+		fx.Provide(ui.NewKubeKnarkUI),
 		fx.Provide(numOfWorkers),
 		fx.Provide(matchCmdChan),
 		fx.Provide(workers.NewCommandMatchesWorker),
 		// init packet workers
 		fx.Provide(matchNetChan),
 		fx.Provide(workers.NewPacketMatchesWorker),
-		fx.Provide(providePacketData),
-		fx.Provide(provideFSMatches),
-		fx.Provide(provideCommandData),
+		fx.Provide(workers.NewPacketMatchData),
+		fx.Provide(matches.NewFSMatches),
+		fx.Provide(workers.NewCommandMatchesData),
+		fx.Provide(ui.NewFilesystemEvtChan),
 		fx.Invoke(runKnarkService),
 	)
 	if err := app.Start(context.Background()); err != nil {
@@ -53,7 +56,8 @@ func StartKnark() {
 
 // load ebpf program and trace events
 func runKnarkService(lifecycle fx.Lifecycle,
-	zlog *zap.Logger,
+	netUIChan chan ui.NetEvt,
+	fsUIChan chan ui.FilesystemEvt,
 	files []utils.FilesInfo,
 	NetEventChan chan *khttp.HTTPNetData,
 	cmdEventChan chan *events.KprobeEvent,
@@ -72,6 +76,7 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		khttp.StartNetListener(errNetChan, NetEventChan)
 		// start exec Listener
 		kexec.StartCmdListener(files, errCmdChan, quitChan, cmdEventChan)
+		ui.NewKubeKnarkUI(netUIChan, fsUIChan).Draw()
 		// wait until Ctrl+C pressed
 		ctrlC := make(chan os.Signal, 1)
 		signal.Notify(ctrlC, os.Interrupt)
@@ -205,19 +210,4 @@ func provideFSSpecMap() map[string]interface{} {
 		panic(err)
 	}
 	return specMap
-}
-
-//providePacketData provide spec data for packet worker
-func providePacketData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int) *workers.PacketMatchData {
-	return workers.NewPacketMatchData(rm, pmc, cache, numOfWorkers)
-}
-
-//provideFSMatches return fs matches instance
-func provideFSMatches(fsCommandMap map[string]interface{}) *matches.FSMatches {
-	return matches.NewFSMatches(fsCommandMap)
-}
-
-//provideCommandData provide spec data for command worker
-func provideCommandData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches) *workers.CommandMatchData {
-	return workers.NewCommandMatchesData(cmc, NumOfWorkers, fsMatches)
 }

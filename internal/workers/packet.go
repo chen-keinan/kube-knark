@@ -1,12 +1,10 @@
 package workers
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/internal/routes"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
+	"github.com/chen-keinan/kube-knark/pkg/ui"
 )
 
 //PacketMatchesWorker instance which match packet data to specific pattern
@@ -19,6 +17,7 @@ type PacketMatchData struct {
 	rm           *matches.RouteMatches
 	pmc          chan *khttp.HTTPNetData
 	cache        map[string]*routes.API
+	uiChan       chan ui.NetEvt
 	numOfWorkers int
 }
 
@@ -28,8 +27,8 @@ func NewPacketMatchesWorker(pmd *PacketMatchData) *PacketMatchesWorker {
 }
 
 //NewPacketMatchData return new packet data
-func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int) *PacketMatchData {
-	return &PacketMatchData{rm: rm, pmc: pmc, cache: cache, numOfWorkers: numOfWorkers}
+func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, cache map[string]*routes.API, numOfWorkers int, uichan chan ui.NetEvt) *PacketMatchData {
+	return &PacketMatchData{rm: rm, pmc: pmc, cache: cache, numOfWorkers: numOfWorkers, uiChan: uichan}
 }
 
 //Invoke invoke packet matches workers
@@ -38,13 +37,8 @@ func (pm *PacketMatchesWorker) Invoke() {
 		go func() {
 			for k := range pm.pmd.pmc {
 				// display process execution event
-				kwriter := new(bytes.Buffer)
-				err := json.NewEncoder(kwriter).Encode(&k)
-				if err != nil {
-					continue
-				}
 				if ok, _ := pm.pmd.rm.Match(k.HTTPRequestData.RequestURI, k.HTTPRequestData.Method); ok {
-					fmt.Println(kwriter.String())
+					pm.pmd.uiChan <- ui.NetEvt{Msg: k.HTTPRequestData.RequestURI}
 				}
 			}
 		}()

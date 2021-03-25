@@ -3,9 +3,9 @@ package workers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/ui"
 )
 
 //CommandMatchesWorker instance which match command data to specific pattern
@@ -19,8 +19,8 @@ func NewCommandMatchesWorker(commandMatchData *CommandMatchData) *CommandMatches
 }
 
 //NewCommandMatchesData return new command instance
-func NewCommandMatchesData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches) *CommandMatchData {
-	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMatches: fsMatches}
+func NewCommandMatchesData(cmc chan *events.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches, uiChan chan ui.FilesystemEvt) *CommandMatchData {
+	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMatches: fsMatches, uiChan: uiChan}
 }
 
 //CommandMatchData encapsulate command worker properties
@@ -28,6 +28,7 @@ type CommandMatchData struct {
 	cmc          chan *events.KprobeEvent
 	numOfWorkers int
 	fsMatches    *matches.FSMatches
+	uiChan       chan ui.FilesystemEvt
 }
 
 //Invoke invoke packet matches workers
@@ -42,7 +43,7 @@ func (pm *CommandMatchesWorker) Invoke() {
 					if err != nil {
 						continue
 					}
-					fmt.Println(kwriter.String())
+					pm.cmd.uiChan <- ui.FilesystemEvt{Msg: kwriter.String()}
 				}
 			}
 		}()
