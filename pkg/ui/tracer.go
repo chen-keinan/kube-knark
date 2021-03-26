@@ -7,7 +7,6 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
-	tb "github.com/nsf/termbox-go"
 )
 
 //KubeKnarkUI return UI object
@@ -54,48 +53,71 @@ func (kku *KubeKnarkUI) Draw(errNetChan chan error) {
 		// draw external paragraph
 		termWidth, termHeight := ui.TerminalDimensions()
 		p := drawParagraph(termWidth, termHeight)
-		// draw net event and fs event sections
-		_, netSection := drawSections(termWidth, termHeight)
-		///
-		fsTable := widgets.NewTable()
-		fsEvents := make([][]string, 0)
-		fsEvents = append(fsEvents, []string{"Severity", "Name", "Command args"})
-		fsTable.Rows = fsEvents
-		fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
-		fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
-		fsTable.Title = "K8s configuration file change events"
-		ui.Render(fsTable)
-		///q
+		// init event tables
+		fsTable, fsEvents := kku.drawFileSystemTable(termWidth, termHeight)
+		netTable, netEvents := kku.drawNetTable(termWidth, termHeight)
 		// render to ui
-		ui.Render(p, fsTable, netSection)
+		ui.Render(p, fsTable, netTable)
 		uiEvents := ui.PollEvents()
-
-		netEvents := make([]string, 0)
-		for {
-			select {
-			case e := <-uiEvents:
-				switch e.ID {
-				case "q", "<C-c>":
-					tb.Close()
-					return
-				}
-			case fsEvent := <-kku.FsEvtChan:
-				args := fmt.Sprintf("%s", fsEvent.Msg.Args)
-				fsEvents = append(fsEvents, []string{fsEvent.Spec.Severity, fsEvent.Spec.Name, args})
-				fsTable.Rows = fsEvents
-				ui.Render(fsTable)
-
-			case netEvent := <-kku.NetEvtChan:
-				value := fmt.Sprintf("%s:%s:%s %s", netEvent.Spec.Severity,
-					netEvent.Spec.Name,
-					netEvent.Msg.HTTPRequestData.Method,
-					netEvent.Msg.HTTPRequestData.RequestURI)
-				netEvents = append(netEvents, value)
-				netSection.Rows = netEvents
-				ui.Render(netSection)
-			}
-		}
+		// watch for net , file system events
+		kku.watchEvents(uiEvents, fsTable, netTable, fsEvents, netEvents)
 	}()
+}
+
+func (kku *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, netTable *Table, fsEvents [][]string, netEvents [][]string) {
+	for {
+		select {
+		case e := <-uiEvents:
+			switch e.ID {
+			case "q", "<C-c>":
+				return
+			case "j", "<Down>":
+				fsTable.ScrollDown()
+			case "k", "<Up>":
+				fsTable.ScrollUp()
+			case "w":
+				netTable.ScrollUp()
+			case "s":
+				fsTable.ScrollDown()
+			}
+		case fsEvent := <-kku.FsEvtChan:
+			args := fmt.Sprintf("%s", fsEvent.Msg.Args)
+			fsEvents = append(fsEvents, []string{fsEvent.Spec.Severity, fsEvent.Spec.Name, args})
+			fsTable.Rows = fsEvents
+			ui.Render(fsTable)
+
+		case netEvent := <-kku.NetEvtChan:
+			netEvents = append(netEvents, []string{netEvent.Spec.Severity, netEvent.Spec.Name, netEvent.Msg.HTTPRequestData.RequestURI})
+			netTable.Rows = netEvents
+			ui.Render(netTable)
+		}
+		ui.Render(fsTable)
+		ui.Render(netTable)
+	}
+}
+
+func (kku *KubeKnarkUI) drawFileSystemTable(termWidth int, termHeight int) (*Table, [][]string) {
+	fsTable := NewTable(true)
+	fsEvents := make([][]string, 0)
+	fsEvents = append(fsEvents, []string{"Severity", "Name", "Command args"})
+	fsTable.Rows = fsEvents
+	fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
+	fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
+	fsTable.Title = "K8s configuration file change events"
+	ui.Render(fsTable)
+	return fsTable, fsEvents
+}
+
+func (kku *KubeKnarkUI) drawNetTable(termWidth int, termHeight int) (*Table, [][]string) {
+	netTable := NewTable(true)
+	netEvents := make([][]string, 0)
+	netEvents = append(netEvents, []string{"Severity", "Name", "API Call"})
+	netTable.Rows = netEvents
+	netTable.TextStyle = ui.NewStyle(ui.ColorWhite)
+	netTable.SetRect(1, termHeight/2, termWidth-1, termHeight-1)
+	netTable.Title = "K8s API change events"
+	ui.Render(netTable)
+	return netTable, netEvents
 }
 
 func drawParagraph(termWidth, termHeight int) *widgets.Paragraph {
@@ -105,19 +127,4 @@ func drawParagraph(termWidth, termHeight int) *widgets.Paragraph {
 	p.TextStyle.Fg = ui.ColorWhite
 	p.BorderStyle.Fg = ui.ColorCyan
 	return p
-}
-
-func drawSections(w, h int) (*widgets.List, *widgets.List) {
-	//a := createSectionList(1, 1, w-1, h/2, "K8s configuration file change events")
-	b := createSectionList(1, h/2, w-1, h-1, "K8s API change events")
-	return nil, b
-}
-
-func createSectionList(x0, y0, x1, y1 int, title string) *widgets.List {
-	l := widgets.NewList()
-	l.Title = title
-	l.TextStyle = ui.NewStyle(ui.ColorYellow)
-	l.WrapText = true
-	l.SetRect(x0, y0, x1, y1)
-	return l
 }
