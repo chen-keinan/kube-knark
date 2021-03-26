@@ -327,3 +327,591 @@ categories:
       uri: /apis/apps/v1/namespaces/{namespace}/deployments
       method: DELETE
       severity: MAJOR
+- name: workload
+  sub_category:
+    name: StatefulSet
+    api:
+    - name: read the specified StatefulSet
+      description: read the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified StatefulSet
+      description: read status of the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind StatefulSet
+      description: list or watch objects of kind StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind StatefulSet
+      description: list or watch objects of kind StatefulSet
+      node: Master
+      uri: /apis/apps/v1/statefulsets
+      method: GET
+      severity: INFO
+    - name: create a StatefulSet
+      description: create a StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets
+      method: POST
+      severity: MAJOR
+    - name: replace the specified StatefulSet
+      description: replace the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified StatefulSet
+      description: replace status of the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified StatefulSet
+      description: partially update the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified StatefulSet
+      description: partially update status of the specified StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a StatefulSet
+      description: delete a StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of StatefulSet
+      description: delete collection of StatefulSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/statefulsets
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: ControllerRevision
+    api:
+    - name: read the specified ControllerRevision
+      description: read the specified ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ControllerRevision
+      description: list or watch objects of kind ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ControllerRevision
+      description: list or watch objects of kind ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/controllerrevisions
+      method: GET
+      severity: INFO
+    - name: create a ControllerRevision
+      description: create a ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions
+      method: POST
+      severity: MAJOR
+    - name: replace the specified ControllerRevision
+      description: replace the specified ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified ControllerRevision
+      description: partially update the specified ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a ControllerRevision
+      description: delete a ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of ControllerRevision
+      description: delete collection of ControllerRevision
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: DaemonSet
+    api:
+    - name: read the specified DaemonSet
+      description: read the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified DaemonSet
+      description: read status of the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind DaemonSet
+      description: list or watch objects of kind DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind DaemonSet
+      description: list or watch objects of kind DaemonSet
+      node: Master
+      uri: /apis/apps/v1/daemonsets
+      method: GET
+      severity: INFO
+    - name: create a DaemonSet
+      description: create a DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets
+      method: POST
+      severity: MAJOR
+    - name: replace the specified DaemonSet
+      description: replace the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified DaemonSet
+      description: replace status of the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified DaemonSet
+      description: partially update the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified DaemonSet
+      description: partially update status of the specified DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a DaemonSet
+      description: delete a DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of DaemonSet
+      description: delete collection of DaemonSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/daemonsets
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: Job
+    api:
+    - name: read the specified Job
+      description: read the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified Job
+      description: read status of the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Job
+      description: list or watch objects of kind Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Job
+      description: list or watch objects of kind Job
+      node: Master
+      uri: /apis/batch/v1/jobs
+      method: GET
+      severity: INFO
+    - name: create create a Job
+      description: create create a Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs
+      method: POST
+      severity: MAJOR
+    - name: replace the specified Job
+      description: replace the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified Job
+      description: replace status of the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified Job
+      description: partially update the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified Job
+      description: partially update status of the specified Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a Job
+      description: delete a Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of Job
+      description: delete collection of Job
+      node: Master
+      uri: /apis/batch/v1/namespaces/{namespace}/jobs
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: CronJob v1beta1
+    api:
+    - name: read the specified CronJob
+      description: read the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified CronJob
+      description: read status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind CronJob
+      description: list or watch objects of kind CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind CronJob
+      description: list or watch objects of kind CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/cronjobs
+      method: GET
+      severity: INFO
+    - name: create a CronJob
+      description: create a CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs
+      method: POST
+      severity: MAJOR
+    - name: replace the specified CronJob
+      description: replace the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified CronJob
+      description: replace status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified CronJob
+      description: partially update the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified CronJob
+      description: partially update status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a CronJob
+      description: delete a CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of CronJob
+      description: delete collection of CronJob
+      node: Master
+      uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: CronJob v2alpha1
+    api:
+    - name: read the specified CronJob
+      description: read the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified CronJob
+      description: read status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind CronJob
+      description: list or watch objects of kind CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind CronJob
+      description: list or watch objects of kind CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/cronjobs
+      method: GET
+      severity: INFO
+    - name: create a CronJob
+      description: create a CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs
+      method: POST
+      severity: MAJOR
+    - name: replace the specified CronJob
+      description: replace the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified CronJob
+      description: replace status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified CronJob
+      description: partially update the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified CronJob
+      description: partially update status of the specified CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a CronJob
+      description: delete a CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of CronJob
+      description: delete collection of CronJob
+      node: Master
+      uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: HorizontalPodAutoscaler
+    api:
+    - name: read the specified HorizontalPodAutoscaler
+      description: read the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified HorizontalPodAutoscaler
+      description: read status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind HorizontalPodAutoscaler
+      description: list or watch objects of kind HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind HorizontalPodAutoscaler
+      description: list or watch objects of kind HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/horizontalpodautoscalers
+      method: GET
+      severity: INFO
+    - name: create a HorizontalPodAutoscaler
+      description: create a HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers
+      method: POST
+      severity: MAJOR
+    - name: replace the specified HorizontalPodAutoscaler
+      description: replace the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified HorizontalPodAutoscaler
+      description: replace status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified HorizontalPodAutoscaler
+      description: partially update the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified HorizontalPodAutoscaler
+      description: partially update status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a HorizontalPodAutoscaler
+      description: delete a HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of HorizontalPodAutoscaler
+      description: delete collection of HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: HorizontalPodAutoscaler v2beta2
+    api:
+    - name: read the specified HorizontalPodAutoscaler
+      description: read the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified HorizontalPodAutoscaler
+      description: read status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind HorizontalPodAutoscaler
+      description: list or watch objects of kind HorizontalPodAutoscaler
+      node: Master
+      uri:  /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind HorizontalPodAutoscaler
+      description: list or watch objects of kind HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/horizontalpodautoscalers
+      method: GET
+      severity: INFO
+    - name: create a HorizontalPodAutoscaler
+      description: create a HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers
+      method: POST
+      severity: MAJOR
+    - name: replace the specified HorizontalPodAutoscaler
+      description: replace the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified HorizontalPodAutoscaler
+      description: replace status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified HorizontalPodAutoscaler
+      description: partially update the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified HorizontalPodAutoscaler
+      description: partially update status of the specified HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a HorizontalPodAutoscaler
+      description: delete a HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of HorizontalPodAutoscaler
+      description: delete collection of HorizontalPodAutoscaler
+      node: Master
+      uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: PriorityClass
+    api:
+    - name: read the specified PriorityClass
+      description: read the specified PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind PriorityClass
+      description: list or watch objects of kind PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses
+      method: GET
+      severity: INFO
+    - name: create a PriorityClass
+      description: create a PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses
+      method: POST
+      severity: MAJOR
+    - name: replace the specified PriorityClass
+      description: replace the specified PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified PriorityClass
+      description: partially update the specified PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a PriorityClass
+      description: delete a PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of PriorityClass
+      description: delete collection of PriorityClass
+      node: Master
+      uri: /apis/scheduling.k8s.io/v1/priorityclasses
+      method: DELETE
+      severity: MAJOR
