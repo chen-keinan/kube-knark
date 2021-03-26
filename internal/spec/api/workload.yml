@@ -5,23 +5,325 @@ categories:
   sub_category:
     name: pod
     api:
+    - name: read the specified Pod
+      description: read the specified Pod in namespace
+      uri: /api/v1/namespaces/{namespace}/pods/{name}
+      method: GET
+      severity: INFO
+    - name: read log of the specified Pod
+      description: read log of the specified Pod
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/log
+      method: GET
+      severity: INFO
+    - name: read status of the specified Pod
+      description: read status of the specified Pod
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Pod
+      description: list or watch objects of kind Pod in namespace
+      uri: /api/v1/namespaces/{namespace}/pods
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Pod
+      description: list or watch objects of kind Pod
+      uri: /api/v1/pods
+      method: GET
+      severity: INFO
     - name: create new pod
       description: create new pos to namespace
       uri: /api/v1/namespaces/{namespace}/pods
       method: POST
-      severity: Major
+      severity: MAJOR
     - name: update replace the specified Pod
       description: update existing pod in namespace
-      profile_applicability: Master
+      node: Master
       uri: /api/v1/namespaces/{namespace}/pods
       method: PUT
-      severity: Major
-- name: services
+      severity: MAJOR
+    - name: update replace status of specific pod
+      description: update status of existing pod in namespace
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partialy update specific pod
+      description: partial update of existing pod in namespace
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/pods/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partialy update status of specific pod
+      description: partial update the status of existing pod in namespace
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a specific pod
+      description: delete a specific pod in namespace
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/pods/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of pods
+      description: delete a collection of pods in namespace
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/pods
+      method: DELETE
+      severity: MAJOR
+- name: workload
   sub_category:
-    name: service
+    name: PodTemplate
     api:
-    - name: list or watch objects of kind Service
-      description: list objects of kind Service namespace
-      uri: /api/v1/services
+    - name: read the specified PodTemplate
+      description: read the specified PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
       method: GET
       severity: INFO
+    - name: list or watch objects of kind PodTemplate
+      description: list or watch objects of kind PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind PodTemplate
+      description: list or watch objects of kind PodTemplate
+      node: Master
+      uri: /api/v1/podtemplates
+      method: GET
+      severity: INFO
+    - name: create a PodTemplate
+      description: create a PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates
+      method: POST
+      severity: MAJOR
+    - name: replace the specified PodTemplate
+      description: replace the specified PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified PodTemplate
+      description: partially update the specified PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a PodTemplate
+      description: delete a PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of PodTemplate
+      description: delete collection of PodTemplate
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/podtemplates
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: ReplicationController
+    api:
+    - name: read the specified ReplicationController
+      description: read the specified ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified ReplicationController
+      description: read status of the specified ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ReplicationController
+      description: list or watch objects of kind ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ReplicationController
+      description: list or watch objects of kind ReplicationController
+      node: Master
+      uri: /api/v1/replicationcontrollers
+      method: GET
+      severity: INFO
+    - name: create a ReplicationController
+      description: create a ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers
+      method: POST
+      severity: MAJOR
+    - name: replace the specified ReplicationController
+      description: replace the specified ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified ReplicationController
+      description: replace status of the specified ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified ReplicationController
+      description: partially update the specified ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified ReplicationControlle
+      description: partially update status of the specified ReplicationControlle
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a ReplicationController
+      description: delete a ReplicationController
+      node: Master
+      uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: ReplicaSet
+    api:
+    - name: read the specified ReplicaSet
+      description: read the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified ReplicaSet
+      description: read status of the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ReplicaSet
+      description: list or watch objects of kind ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ReplicaSet
+      description: list or watch objects of kind ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/replicasets
+      method: GET
+      severity: INFO
+    - name: create a ReplicaSet
+      description: create a ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets
+      method: POST
+      severity: MAJOR
+    - name: replace the specified ReplicaSet
+      description: replace the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified ReplicaSet
+      description: replace status of the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified ReplicaSet
+      description: partially update the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified ReplicaSet
+      description: partially update status of the specified ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a ReplicaSet
+      description: delete a ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of ReplicaSet
+      description: delete collection of ReplicaSet
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/replicasets
+      method: DELETE
+      severity: MAJOR
+- name: workload
+  sub_category:
+    name: Deployment
+    api:
+    - name: read the specified Deployment
+      description: read the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified Deployment
+      description: read status of the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Deployment
+      description:  list or watch objects of kind Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Deployment
+      description: list or watch objects of kind Deployment
+      node: Master
+      uri: /apis/apps/v1/deployments
+      method: GET
+      severity: INFO
+    - name: create a Deployment
+      description: create a Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments
+      method: POST
+      severity: MAJOR
+    - name: replace the specified Deployment
+      description: replace the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified Deployment
+      description: replace status of the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified Deployment
+      description: partially update the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified Deployment
+      description: partially update status of the specified Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a Deployment
+      description: delete a Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of Deployment
+      description: delete collection of Deployment
+      node: Master
+      uri: /apis/apps/v1/namespaces/{namespace}/deployments
+      method: DELETE
+      severity: MAJOR
