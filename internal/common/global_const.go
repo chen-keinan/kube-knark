@@ -25,6 +25,8 @@ const (
 	Workload = "workload.yml"
 	//Services spec
 	Services = "services.yml"
+	//ConfigAndStorage spec
+	ConfigAndStorage = "config_and_storage.yml"
 	//ConfigFilesPermission spec
 	ConfigFilesPermission = "config_files_permission.yml"
 )

@@ -23,6 +23,11 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return []utils.FilesInfo{}, fmt.Errorf("faild to load services spec api %s", err.Error())
 	}
 	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.Services, Data: sb})
+	cas, err := box.FindString(common.ConfigAndStorage)
+	if err != nil {
+		return []utils.FilesInfo{}, fmt.Errorf("faild to load services Config And Storage api %s", err.Error())
+	}
+	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.ConfigAndStorage, Data: cas})
 	return fileInfo, nil
 }
 

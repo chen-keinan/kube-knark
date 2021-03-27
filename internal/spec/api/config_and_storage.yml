@@ -1,0 +1,376 @@
+---
+spec: k8s api
+categories:
+- name: config and storage
+  sub_category:
+    name: ConfigMap
+    api:
+    - name: read the specified ConfigMap
+      description: read the specified ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ConfigMap
+      description: list or watch objects of kind ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ConfigMap
+      description: list or watch objects of kind ConfigMap
+      uri: /api/v1/configmaps
+      method: GET
+      severity: INFO
+    - name: create a ConfigMap
+      description: create a ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps
+      method: POST
+      severity: MAJOR
+    - name: replace the specified ConfigMap
+      description: replace the specified ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified ConfigMap
+      description: partially update the specified ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a ConfigMap
+      description: delete a ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of ConfigMap
+      description: delete collection of ConfigMap
+      uri: /api/v1/namespaces/{namespace}/configmaps
+      method: DELETE
+      severity: MAJOR
+- name: config and storage
+  sub_category:
+    name: Secret
+    api:
+    - name: read the specified Secret
+      description: read the specified Secret
+      uri: /api/v1/namespaces/{namespace}/secrets/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind Secret
+      description: list or watch objects of kind Secret
+      uri: /api/v1/namespaces/{namespace}/secrets
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind Secret
+      description: list or watch objects of kind Secret
+      uri: /api/v1/secrets
+      method: GET
+      severity: MAJOR
+    - name: create a Secret
+      description: create a Secret
+      uri: /api/v1/secrets
+      method: POST
+      severity: MAJOR
+    - name: replace the specified Secret
+      description: replace the specified Secret
+      uri: /api/v1/namespaces/{namespace}/secrets/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified Secret
+      description: partially update the specified Secret
+      uri: /api/v1/namespaces/{namespace}/secrets/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a Secret
+      description: delete a Secret
+      uri: /api/v1/namespaces/{namespace}/secrets/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of Secret
+      description: delete collection of Secret
+      uri: /api/v1/namespaces/{namespace}/secrets
+      method: DELETE
+      severity: CRITICAL
+- name: config and storage
+  sub_category:
+    name: PersistentVolumeClaim
+    api:
+    - name: read the specified PersistentVolumeClaim
+      description: read the specified PersistentVolumeClaim
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified PersistentVolumeClaim
+      description: read status of the specified PersistentVolumeClaim
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind PersistentVolumeClaim
+      description: list or watch objects of kind PersistentVolumeClaim
+      method: GET
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims
+      severity: MAJOR
+    - name: list or watch objects of kind PersistentVolumeClaim
+      description: list or watch objects of kind PersistentVolumeClaim
+      method: GET
+      uri: /api/v1/persistentvolumeclaims
+      severity: MAJOR
+    - name: create a PersistentVolumeClaim
+      description: create a PersistentVolumeClaim
+      method: POST
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims
+      severity: CRITIAL
+    - name: replace the specified PersistentVolumeClaim
+      description: replace the specified PersistentVolumeClaim
+      method: PUT
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}
+      severity: CRITIAL
+    - name: replace status of the specified PersistentVolumeClaim
+      description: replace status of the specified PersistentVolumeClaim
+      method: PUT
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}/status
+      severity: CRITIAL
+    - name: partially update the specified PersistentVolumeClaim
+      description: partially update the specified PersistentVolumeClaim
+      method: PATCH
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}
+      severity: CRITIAL
+    - name: partially update status of the specified PersistentVolumeClaim
+      description: partially update status of the specified PersistentVolumeClaim
+      method: PATCH
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}/status
+      severity: CRITIAL
+    - name: delete a PersistentVolumeClaim
+      description: delete a PersistentVolumeClaim
+      method: DELETE
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims/{name}
+      severity: CRITIAL
+    - name: delete collection of PersistentVolumeClaim
+      description: delete collection of PersistentVolumeClaim
+      method: DELETE
+      uri: /api/v1/namespaces/{namespace}/persistentvolumeclaims
+      severity: CRITIAL
+- name: config and storage
+  sub_category:
+    name: PersistentVolume
+    api:
+    - name: read the specified PersistentVolume
+      description: read the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified PersistentVolume
+      description: read status of the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind PersistentVolume
+      description: list or watch objects of kind PersistentVolume
+      uri: /api/v1/persistentvolumes
+      method: GET
+      severity: MAJOR
+    - name: create a PersistentVolume
+      description: create a PersistentVolume
+      uri: /api/v1/persistentvolumes
+      method: POST
+      severity: MAJOR
+    - name: replace the specified PersistentVolume
+      description: replace the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified PersistentVolume
+      description: replace status of the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified PersistentVolume
+      description: partially update the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified PersistentVolume
+      description: partially update status of the specified PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a PersistentVolume
+      description: delete a PersistentVolume
+      uri: /api/v1/persistentvolumes/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of PersistentVolume
+      description: delete collection of PersistentVolume
+      uri: /api/v1/persistentvolumes
+      method: DELETE
+      severity: MAJOR
+- name: config and storage
+  sub_category:
+    name: StorageClass
+    api:
+    - name: read the specified StorageClass
+      description: read the specified StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind StorageClass
+      description: list or watch objects of kind StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses
+      method: GET
+      severity: MAJOR
+    - name: create a StorageClass
+      description: create a StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses
+      method: POST
+      severity: MAJOR
+    - name: replace the specified StorageClass
+      description: replace the specified StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified StorageClass
+      description: partially update the specified StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a StorageClass
+      description: delete a StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of StorageClass
+      description: delete collection of StorageClass
+      uri: /apis/storage.k8s.io/v1/storageclasses
+      method: DELETE
+      severity: MAJOR
+- name: config and storage
+  sub_category:
+    name: VolumeAttachment
+    api:
+    - name: read the specified VolumeAttachment
+      description: read the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified VolumeAttachment
+      description: read status of the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind VolumeAttachment
+      description: list or watch objects of kind VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments
+      method: GET
+      severity: MAJOR
+    - name: create a VolumeAttachment
+      description: create a VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments
+      method: POST
+      severity: MAJOR
+    - name: replace the specified VolumeAttachment
+      description: replace the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified VolumeAttachment
+      description: replace status of the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified VolumeAttachment
+      description: partially update the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified VolumeAttachment
+      description: partially update status of the specified VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a VolumeAttachment
+      description: delete a VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of VolumeAttachment
+      description: delete collection of VolumeAttachment
+      uri: /apis/storage.k8s.io/v1/volumeattachments
+      method: DELETE
+      severity: MAJOR
+- name: config and storage
+  sub_category:
+    name: CSIDriver
+    api:
+    - name: read the specified CSIDriver
+      description: read the specified CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind CSIDriver
+      description: list or watch objects of kind CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers
+      method: GET
+      severity: MAJOR
+    - name: create a CSIDriver
+      description: create a CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers
+      method: POST
+      severity: MAJOR
+    - name: replace the specified CSIDriver
+      description: replace the specified CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified CSIDriver
+      description: partially update the specified CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a CSIDriver
+      description: delete a CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of CSIDriver
+      description: delete collection of CSIDriver
+      uri: /apis/storage.k8s.io/v1/csidrivers
+      method: DELETE
+      severity: MAJOR
+- name: config and storage
+  sub_category:
+    name: CSINode
+    api:
+    - name: read the specified CSINode
+      description: read the specified CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind CSINode
+      description: list or watch objects of kind CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes
+      method: GET
+      severity: MAJOR
+    - name: create a CSINode
+      description: create a CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes
+      method: POST
+      severity: MAJOR
+    - name: replace the specified CSINode
+      description: replace the specified CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified CSINode
+      description: partially update the specified CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a CSINode
+      description: delete a CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of CSINode
+      description: delete collection of CSINode
+      uri: /apis/storage.k8s.io/v1/csinodes
+      method: DELETE
+      severity: MAJOR
+    
