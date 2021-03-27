@@ -13,27 +13,36 @@ import (
 
 //GenerateEbpfFiles ebpf file from template
 func GenerateEbpfFiles() ([]utils.FilesInfo, error) {
-	fileInfo := make([]utils.FilesInfo, 0)
-	box := packr.NewBox("./../../ebpf/")
-	// Add ebpf kprobe program
-	ksf, err := box.FindString(common.KprobeSourceFile)
+	filesInfo := make([]utils.FilesInfo, 0)
+	kprobFile, err := createFileFromTemplate("./../../ebpf/", common.KprobeSourceFile)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.KprobeSourceFile, Data: ksf})
+	filesInfo = append(filesInfo, kprobFile...)
 	// Add bpf header file
-	bh, err := box.FindString(common.BpfHeaderFile)
+	bpfHeaderFile, err := createFileFromTemplate("./../../ebpf/", common.BpfHeaderFile)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHeaderFile,
-		Data: bh})
+	filesInfo = append(filesInfo, bpfHeaderFile...)
 	// Add bph_helper header file
-	bhh, err := box.FindString(common.BpfHelperHeaderFile)
+	bpfHeaderHelperFile, err := createFileFromTemplate("./../../ebpf/", common.BpfHelperHeaderFile)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.BpfHelperHeaderFile, Data: bhh})
+	filesInfo = append(filesInfo, bpfHeaderHelperFile...)
+	return filesInfo, nil
+}
+
+func createFileFromTemplate(path, fileName string) ([]utils.FilesInfo, error) {
+	fileInfo := make([]utils.FilesInfo, 0)
+	box := packr.NewBox(path)
+	// Add ebpf kprobe program
+	ksf, err := box.FindString(fileName)
+	if err != nil {
+		return nil, fmt.Errorf("faild to load ebpf source file %s", err.Error())
+	}
+	fileInfo = append(fileInfo, utils.FilesInfo{Name: fileName, Data: ksf})
 	return fileInfo, nil
 }
 

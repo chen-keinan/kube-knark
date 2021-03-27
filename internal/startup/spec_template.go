@@ -9,26 +9,26 @@ import (
 
 //GenerateSpecFiles generate spec api files from template
 func GenerateSpecFiles() ([]utils.FilesInfo, error) {
-	fileInfo := make([]utils.FilesInfo, 0)
-	box := packr.NewBox("./../spec/api")
-	// Add workload spec api
-	ksf, err := box.FindString(common.Workload)
+	// add workload spec file
+	filesInfo := make([]utils.FilesInfo, 0)
+	workloadFile, err := createFileFromTemplate("./../spec/api", common.Workload)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load workload spec api %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.Workload, Data: ksf})
-	// Add services spec api
-	sb, err := box.FindString(common.Services)
+	filesInfo = append(filesInfo, workloadFile...)
+	// add services spec file
+	servicesFile, err := createFileFromTemplate("./../spec/api", common.Services)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load services spec api %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.Services, Data: sb})
-	cas, err := box.FindString(common.ConfigAndStorage)
+	filesInfo = append(filesInfo, servicesFile...)
+	// Add config storage spec api
+	configStorageFile, err := createFileFromTemplate("./../spec/api", common.ConfigAndStorage)
 	if err != nil {
-		return []utils.FilesInfo{}, fmt.Errorf("faild to load services Config And Storage api %s", err.Error())
+		return nil, err
 	}
-	fileInfo = append(fileInfo, utils.FilesInfo{Name: common.ConfigAndStorage, Data: cas})
-	return fileInfo, nil
+	filesInfo = append(filesInfo, configStorageFile...)
+	return filesInfo, nil
 }
 
 //GenerateFileSystemSpec generate spec file system from template
