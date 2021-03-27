@@ -1,0 +1,238 @@
+---
+spec: k8s api
+categories:
+- name: services
+  sub_category:
+    name: service
+    api:
+    - name: read status of the specified Service
+      description: read status of the specified Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Service
+      description: list or watch objects of kind Service
+      uri: /api/v1/namespaces/{namespace}/services
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Service
+      description: list or watch objects of kind Service
+      uri: /api/v1/services
+      method: GET
+      severity: INFO
+    - name: create a Service
+      description: create a Service
+      uri: /api/v1/namespaces/{namespace}/services
+      method: POST
+      severity: MINOR
+    - name: replace the specified Service
+      description: replace the specified Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified Service
+      description: replace status of the specified Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Service
+      description: partially update the specified Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified Service
+      description: partially update status of the specified Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete a Service
+      description: delete a Service
+      uri: /api/v1/namespaces/{namespace}/services/{name}
+      method: DELETE
+      severity: MINOR
+- name: services
+  sub_category:
+    name: Endpoints
+    api:
+    - name: read the specified Endpoints
+      description: read the specified Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Endpoints
+      description: list or watch objects of kind Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Endpoints
+      description: list or watch objects of kind Endpoints
+      uri: /api/v1/endpoints
+      method: GET
+      severity: INFO
+    - name: create Endpoints
+      description: create Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints
+      method: POST
+      severity: MINOR
+    - name: replace the specified Endpoints
+      description: replace the specified Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Endpoints
+      description: partially update the specified Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete Endpoints
+      description: delete Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of Endpoints
+      description: delete collection of Endpoints
+      uri: /api/v1/namespaces/{namespace}/endpoints
+      method: DELETE
+      severity: MINOR
+- name: services
+  sub_category:
+    name: EndpointSlice v1beta1
+    api:
+    - name: read the specified EndpointSlice
+      description: read the specified EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind EndpointSlice
+      description: list or watch objects of kind EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind EndpointSlice
+      description: list or watch objects of kind EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/endpointslices
+      method: GET
+      severity: INFO
+    - name: create an EndpointSlice
+      description: create an EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices
+      method: POST
+      severity: MINOR
+    - name: replace the specified EndpointSlice
+      description: replace the specified EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified EndpointSlice
+      description: partially update the specified EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete an EndpointSlice
+      description: delete an EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of EndpointSlice
+      description: delete collection of EndpointSlice
+      uri: /apis/discovery.k8s.io/v1beta1/namespaces/{namespace}/endpointslices
+      method: DELETE
+      severity: MINOR
+- name: services
+  sub_category:
+    name: Ingress
+    api:
+    - name: read the specified Ingress
+      description: read the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified Ingress
+      description: read status of the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Ingress
+      description: list or watch objects of kind Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Ingress
+      description: list or watch objects of kind Ingress
+      uri: /apis/networking.k8s.io/v1/ingresses
+      method: GET
+      severity: INFO
+    - name: create an Ingress
+      description: create an Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses
+      method: POST
+      severity: MINOR
+    - name: replace the specified Ingress
+      description: replace the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified Ingress
+      description: replace status of the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Ingress
+      description: partially update the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified Ingress
+      description: partially update status of the specified Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete an Ingress
+      description: delete an Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of Ingress
+      description: delete collection of Ingress
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/ingresses
+      method: DELETE
+      severity: MINOR
+- name: services
+  sub_category:
+    name: IngressClass
+    api:
+    - name: read the specified IngressClass
+      description: read the specified IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind IngressClass
+      description: list or watch objects of kind IngressClass
+      uri: GET /apis/networking.k8s.io/v1/ingressclasses
+      method: GET
+      severity: INFO
+    - name: create an IngressClass
+      description: create an IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses
+      method: POST
+      severity: MINOR
+    - name: replace the specified IngressClass
+      description: replace the specified IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified IngressClass
+      description: partially update the specified IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete an IngressClass
+      description: delete an IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of IngressClass
+      description: delete collection of IngressClass
+      uri: /apis/networking.k8s.io/v1/ingressclasses
+      method: DELETE
+      severity: MINOR

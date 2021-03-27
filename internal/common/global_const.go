@@ -23,6 +23,8 @@ const (
 	PATCH = "PATCH"
 	//Workload spec
 	Workload = "workload.yml"
+	//Services spec
+	Services = "services.yml"
 	//ConfigFilesPermission spec
 	ConfigFilesPermission = "config_files_permission.yml"
 )

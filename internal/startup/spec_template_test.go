@@ -10,6 +10,7 @@ func TestGenerateSpecFiles(t *testing.T) {
 	specFiles, err := GenerateSpecFiles()
 	assert.NoError(t, err)
 	assert.Equal(t, specFiles[0].Name, common.Workload)
+	assert.Equal(t, specFiles[1].Name, common.Services)
 }
 func TestGenerateFileSystemSpec(t *testing.T) {
 	specFiles, err := GenerateFileSystemSpec()

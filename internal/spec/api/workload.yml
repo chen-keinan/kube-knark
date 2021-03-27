@@ -34,43 +34,43 @@ categories:
       description: create new pos to namespace
       uri: /api/v1/namespaces/{namespace}/pods
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: update replace the specified Pod
       description: update existing pod in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: update replace status of specific pod
       description: update status of existing pod in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partialy update specific pod
       description: partial update of existing pod in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partialy update status of specific pod
       description: partial update the status of existing pod in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a specific pod
       description: delete a specific pod in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of pods
       description: delete a collection of pods in namespace
       node: Master
       uri: /api/v1/namespaces/{namespace}/pods
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: PodTemplate
@@ -98,31 +98,31 @@ categories:
       node: Master
       uri: /api/v1/namespaces/{namespace}/podtemplates
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified PodTemplate
       description: replace the specified PodTemplate
       node: Master
       uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified PodTemplate
       description: partially update the specified PodTemplate
       node: Master
       uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a PodTemplate
       description: delete a PodTemplate
       node: Master
       uri: /api/v1/namespaces/{namespace}/podtemplates/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of PodTemplate
       description: delete collection of PodTemplate
       node: Master
       uri: /api/v1/namespaces/{namespace}/podtemplates
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: ReplicationController
@@ -156,37 +156,37 @@ categories:
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified ReplicationController
       description: replace the specified ReplicationController
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified ReplicationController
       description: replace status of the specified ReplicationController
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified ReplicationController
       description: partially update the specified ReplicationController
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified ReplicationControlle
       description: partially update status of the specified ReplicationControlle
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a ReplicationController
       description: delete a ReplicationController
       node: Master
       uri: /api/v1/namespaces/{namespace}/replicationcontrollers/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: ReplicaSet
@@ -220,43 +220,43 @@ categories:
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified ReplicaSet
       description: replace the specified ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified ReplicaSet
       description: replace status of the specified ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified ReplicaSet
       description: partially update the specified ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified ReplicaSet
       description: partially update status of the specified ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a ReplicaSet
       description: delete a ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of ReplicaSet
       description: delete collection of ReplicaSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/replicasets
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: Deployment
@@ -290,43 +290,43 @@ categories:
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified Deployment
       description: replace the specified Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified Deployment
       description: replace status of the specified Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified Deployment
       description: partially update the specified Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified Deployment
       description: partially update status of the specified Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a Deployment
       description: delete a Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of Deployment
       description: delete collection of Deployment
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/deployments
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: StatefulSet
@@ -360,43 +360,43 @@ categories:
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified StatefulSet
       description: replace the specified StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified StatefulSet
       description: replace status of the specified StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified StatefulSet
       description: partially update the specified StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified StatefulSet
       description: partially update status of the specified StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a StatefulSet
       description: delete a StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of StatefulSet
       description: delete collection of StatefulSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/statefulsets
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: ControllerRevision
@@ -424,31 +424,31 @@ categories:
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified ControllerRevision
       description: replace the specified ControllerRevision
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified ControllerRevision
       description: partially update the specified ControllerRevision
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a ControllerRevision
       description: delete a ControllerRevision
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of ControllerRevision
       description: delete collection of ControllerRevision
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/controllerrevisions
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: DaemonSet
@@ -482,43 +482,43 @@ categories:
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified DaemonSet
       description: replace the specified DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified DaemonSet
       description: replace status of the specified DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified DaemonSet
       description: partially update the specified DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified DaemonSet
       description: partially update status of the specified DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a DaemonSet
       description: delete a DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of DaemonSet
       description: delete collection of DaemonSet
       node: Master
       uri: /apis/apps/v1/namespaces/{namespace}/daemonsets
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: Job
@@ -552,43 +552,43 @@ categories:
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified Job
       description: replace the specified Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified Job
       description: replace status of the specified Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified Job
       description: partially update the specified Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified Job
       description: partially update status of the specified Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a Job
       description: delete a Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of Job
       description: delete collection of Job
       node: Master
       uri: /apis/batch/v1/namespaces/{namespace}/jobs
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: CronJob v1beta1
@@ -622,43 +622,43 @@ categories:
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified CronJob
       description: replace the specified CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified CronJob
       description: replace status of the specified CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified CronJob
       description: partially update the specified CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified CronJob
       description: partially update status of the specified CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a CronJob
       description: delete a CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of CronJob
       description: delete collection of CronJob
       node: Master
       uri: /apis/batch/v1beta1/namespaces/{namespace}/cronjobs
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: CronJob v2alpha1
@@ -692,43 +692,43 @@ categories:
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified CronJob
       description: replace the specified CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified CronJob
       description: replace status of the specified CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified CronJob
       description: partially update the specified CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified CronJob
       description: partially update status of the specified CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a CronJob
       description: delete a CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of CronJob
       description: delete collection of CronJob
       node: Master
       uri: /apis/batch/v2alpha1/namespaces/{namespace}/cronjobs
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: HorizontalPodAutoscaler
@@ -762,43 +762,43 @@ categories:
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified HorizontalPodAutoscaler
       description: replace the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified HorizontalPodAutoscaler
       description: replace status of the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified HorizontalPodAutoscaler
       description: partially update the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified HorizontalPodAutoscaler
       description: partially update status of the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a HorizontalPodAutoscaler
       description: delete a HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of HorizontalPodAutoscaler
       description: delete collection of HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v1/namespaces/{namespace}/horizontalpodautoscalers
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: HorizontalPodAutoscaler v2beta2
@@ -832,43 +832,43 @@ categories:
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified HorizontalPodAutoscaler
       description: replace the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: replace status of the specified HorizontalPodAutoscaler
       description: replace status of the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified HorizontalPodAutoscaler
       description: partially update the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: partially update status of the specified HorizontalPodAutoscaler
       description: partially update status of the specified HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}/status
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a HorizontalPodAutoscaler
       description: delete a HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of HorizontalPodAutoscaler
       description: delete collection of HorizontalPodAutoscaler
       node: Master
       uri: /apis/autoscaling/v2beta2/namespaces/{namespace}/horizontalpodautoscalers
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
 - name: workload
   sub_category:
     name: PriorityClass
@@ -890,28 +890,28 @@ categories:
       node: Master
       uri: /apis/scheduling.k8s.io/v1/priorityclasses
       method: POST
-      severity: MAJOR
+      severity: MINOR
     - name: replace the specified PriorityClass
       description: replace the specified PriorityClass
       node: Master
       uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
       method: PUT
-      severity: MAJOR
+      severity: MINOR
     - name: partially update the specified PriorityClass
       description: partially update the specified PriorityClass
       node: Master
       uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
       method: PATCH
-      severity: MAJOR
+      severity: MINOR
     - name: delete a PriorityClass
       description: delete a PriorityClass
       node: Master
       uri: /apis/scheduling.k8s.io/v1/priorityclasses/{name}
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
     - name: delete collection of PriorityClass
       description: delete collection of PriorityClass
       node: Master
       uri: /apis/scheduling.k8s.io/v1/priorityclasses
       method: DELETE
-      severity: MAJOR
+      severity: MINOR
