@@ -1,0 +1,129 @@
+---
+spec: k8s api
+categories:
+- name: authentication
+  sub_category:
+    name: ServiceAccount
+    api:
+    - name: read the specified ServiceAccount
+      description: read the specified ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ServiceAccount
+      description: list or watch objects of kind ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ServiceAccount
+      description: list or watch objects of kind ServiceAccount
+      uri: /api/v1/serviceaccounts
+      method: GET
+      severity: MAJOR
+    - name: create a ServiceAccount
+      description: create a ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified ServiceAccount
+      description: replace the specified ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified ServiceAccount
+      description: partially update the specified ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a ServiceAccount
+      description: delete a ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of ServiceAccount
+      description: delete collection of ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts
+      method: DELETE
+      severity: CRITICAL
+- name: authentication
+  sub_category:
+    name: TokenRequest
+    api:
+    - name: create token of a ServiceAccount
+      description: create token of a ServiceAccount
+      uri: /api/v1/namespaces/{namespace}/serviceaccounts/{name}/token
+      method: POST
+      severity: CRITICAL
+- name: authentication
+  sub_category:
+    name: TokenReview
+    api:
+    - name: create a TokenReview
+      description: create a TokenReview
+      uri: /apis/authentication.k8s.io/v1/tokenreviews
+      method: POST
+      severity: CRITICAL
+- name: authentication
+  sub_category:
+    name: CertificateSigningRequest
+    api:
+    - name: read the specified CertificateSigningRequest
+      description: read the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}
+      method: GET
+      severity: MAJOR
+    - name: read approval of the specified CertificateSigningRequest
+      description: read approval of the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}/approval
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified CertificateSigningRequest
+      description: read status of the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind CertificateSigningRequest
+      description: list or watch objects of kind CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests
+      method: GET
+      severity: MAJOR
+    - name: create a CertificateSigningRequest
+      description: create a CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified CertificateSigningRequest
+      description: replace the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: replace status of the specified CertificateSigningRequest
+      description: replace status of the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}/status
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified CertificateSigningRequest
+      description: partially update the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: partially update approval of the specified CertificateSigningRequest
+      description: partially update approval of the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}/approval
+      method: PATCH
+      severity: CRITICAL
+    - name: partially update status of the specified CertificateSigningRequest
+      description: partially update status of the specified CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}/status
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a CertificateSigningRequest
+      description: delete a CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of CertificateSigningRequest
+      description: delete collection of CertificateSigningRequest
+      uri: /apis/certificates.k8s.io/v1/certificatesigningrequests
+      method: DELETE
+      severity: CRITICAL

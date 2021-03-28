@@ -29,4 +29,6 @@ const (
 	ConfigAndStorage = "config_and_storage.yml"
 	//ConfigFilesPermission spec
 	ConfigFilesPermission = "config_files_permission.yml"
+	//Authentication spec
+	Authentication = "authentication.yml"
 )
