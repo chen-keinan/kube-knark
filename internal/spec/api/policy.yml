@@ -1,0 +1,248 @@
+---
+spec: k8s api
+categories:
+- name: policy
+  sub_category:
+    name: LimitRange
+    api:
+    - name: read the specified LimitRange
+      description: read the specified LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind LimitRange
+      description: list or watch objects of kind LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind LimitRange
+      description: list or watch objects of kind LimitRange
+      uri: /api/v1/limitranges
+      method: GET
+      severity: MAJOR
+    - name: create a LimitRange
+      description: create a LimitRange
+      uri: /api/v1/limitranges
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified LimitRange
+      description: replace the specified LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified LimitRange
+      description: partially update the specified LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a LimitRange
+      description: delete a LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of LimitRange
+      description: delete collection of LimitRange
+      uri: /api/v1/namespaces/{namespace}/limitranges
+      method: DELETE
+      severity: CRITICAL
+- name: policy
+  sub_category:
+    name: ResourceQuota
+    api:
+    - name: read the specified ResourceQuota
+      description: read the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified ResourceQuota
+      description: read status of the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ResourceQuota
+      description: list or watch objects of kind ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ResourceQuota
+      description: list or watch objects of kind ResourceQuota
+      uri: /api/v1/resourcequotas
+      method: GET
+      severity: MAJOR
+    - name: create a ResourceQuota
+      description: create a ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified ResourceQuota
+      description: replace the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: replace status of the specified ResourceQuota
+      description: replace status of the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}/status
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified ResourceQuota
+      description: partially update the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: partially update status of the specified ResourceQuota
+      description: partially update status of the specified ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}/status
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a ResourceQuota
+      description: delete a ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of ResourceQuota
+      description: delete collection of ResourceQuota
+      uri: /api/v1/namespaces/{namespace}/resourcequotas
+      method: DELETE
+      severity: CRITICAL
+- name: policy
+  sub_category:
+    name: NetworkPolicy
+    api:
+    - name: read the specified NetworkPolicy
+      description: read the specified NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind NetworkPolicy
+      description: list or watch objects of kind NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind NetworkPolicy
+      description: list or watch objects of kind NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/networkpolicies
+      method: GET
+      severity: MAJOR
+    - name: create a NetworkPolicy
+      description: create a NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified NetworkPolicy
+      description: replace the specified NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified NetworkPolicy
+      description: partially update the specified NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a NetworkPolicy
+      description: delete a NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of NetworkPolicy
+      description: delete collection of NetworkPolicy
+      uri: /apis/networking.k8s.io/v1/namespaces/{namespace}/networkpolicies
+      method: DELETE
+      severity: CRITICAL
+- name: policy
+  sub_category:
+    name: PodDisruptionBudget v1beta1
+    api:
+    - name: read the specified PodDisruptionBudget
+      description: read the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}
+      method: GET
+      severity: MAJOR
+    - name: read status of the specified PodDisruptionBudget
+      description: read status of the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}/status
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind PodDisruptionBudget
+      description: list or watch objects of kind PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind PodDisruptionBudget
+      description: list or watch objects of kind PodDisruptionBudget
+      uri: /apis/policy/v1beta1/poddisruptionbudgets
+      method: GET
+      severity: MAJOR
+    - name: create a PodDisruptionBudget
+      description: create a PodDisruptionBudget
+      uri: /apis/policy/v1beta1/poddisruptionbudgets
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified PodDisruptionBudget
+      description: replace the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: replace status of the specified PodDisruptionBudget
+      description: replace status of the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}/status
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified PodDisruptionBudget
+      description: partially update the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}/status
+      method: PATCH
+      severity: CRITICAL
+    - name: partially update status of the specified PodDisruptionBudget
+      description: partially update status of the specified PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}/status
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a PodDisruptionBudget
+      description: delete a PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of PodDisruptionBudget
+      description: delete collection of PodDisruptionBudget
+      uri: /apis/policy/v1beta1/namespaces/{namespace}/poddisruptionbudgets
+      method: DELETE
+      severity: CRITICAL
+- name: policy
+  sub_category:
+    name: PodSecurityPolicy v1beta1
+    api:
+    - name: read the specified PodSecurityPolicy
+      description: read the specified PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind PodSecurityPolicy
+      description: list or watch objects of kind PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies
+      method: GET
+      severity: MAJOR
+    - name: create a PodSecurityPolicy
+      description: create a PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified PodSecurityPolicy
+      description: replace the specified PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified PodSecurityPolicy
+      description: partially update the specified PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a PodSecurityPolicy
+      description: delete a PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of PodSecurityPolicy
+      description: delete collection of PodSecurityPolicy
+      uri: /apis/policy/v1beta1/podsecuritypolicies
+      method: DELETE
+      severity: CRITICAL

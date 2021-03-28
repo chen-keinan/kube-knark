@@ -33,4 +33,6 @@ const (
 	Authentication = "authentication.yml"
 	//Authorization spec
 	Authorization = "authorization.yml"
+	//Policy spec
+	Policy = "policy.yml"
 )

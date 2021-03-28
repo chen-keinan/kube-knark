@@ -38,6 +38,11 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return nil, err
 	}
 	filesInfo = append(filesInfo, authorizationFile...)
+	policyFile, err := createFileFromTemplate("./../spec/api", common.Policy)
+	if err != nil {
+		return nil, err
+	}
+	filesInfo = append(filesInfo, policyFile...)
 	return filesInfo, nil
 }
 
