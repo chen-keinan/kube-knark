@@ -33,6 +33,11 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return nil, err
 	}
 	filesInfo = append(filesInfo, authenticationFile...)
+	authorizationFile, err := createFileFromTemplate("./../spec/api", common.Authorization)
+	if err != nil {
+		return nil, err
+	}
+	filesInfo = append(filesInfo, authorizationFile...)
 	return filesInfo, nil
 }
 

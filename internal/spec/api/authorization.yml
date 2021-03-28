@@ -1,0 +1,205 @@
+---
+spec: k8s api
+categories:
+- name: Authorization
+  sub_category:
+    name: LocalSubjectAccessReview
+    api:
+    - name: create a LocalSubjectAccessReview
+      description: create a LocalSubjectAccessReview
+      uri: /apis/authorization.k8s.io/v1/namespaces/{namespace}/localsubjectaccessreviews
+      method: POST
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: SelfSubjectAccessReview
+    api:
+    - name: create a SelfSubjectAccessReview
+      description: create a SelfSubjectAccessReview
+      uri: /apis/authorization.k8s.io/v1/selfsubjectaccessreviews
+      method: POST
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: SelfSubjectRulesReview
+    api:
+    - name: create a SelfSubjectRulesReview
+      description: create a SelfSubjectRulesReview
+      uri: /apis/authorization.k8s.io/v1/selfsubjectrulesreviews
+      method: POST
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: SubjectAccessReview
+    api:
+    - name: create a SubjectAccessReview
+      description: create a SubjectAccessReview
+      uri: /apis/authorization.k8s.io/v1/subjectaccessreviews
+      method: POST
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: ClusterRole
+    api:
+    - name: read the specified ClusterRole
+      description: read the specified ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ClusterRole
+      description: list or watch objects of kind ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles
+      method: GET
+      severity: MAJOR
+    - name: create a ClusterRole
+      description: create a ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified ClusterRole
+      description: replace the specified ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified ClusterRole
+      description: partially update the specified ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a ClusterRole
+      description: delete a ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of ClusterRole
+      description: delete collection of ClusterRole
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterroles
+      method: DELETE
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: ClusterRoleBinding
+    api:
+    - name: read the specified ClusterRoleBinding
+      description: read the specified ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind ClusterRoleBinding
+      description: list or watch objects of kind ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings
+      method: GET
+      severity: MAJOR
+    - name: create a ClusterRoleBinding
+      description: create a ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified ClusterRoleBinding
+      description: replace the specified ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified ClusterRoleBinding
+      description: partially update the specified ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a ClusterRoleBinding
+      description: delete a ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of ClusterRoleBinding
+      description: delete collection of ClusterRoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/clusterrolebindings
+      method: DELETE
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: Role
+    api:
+    - name: read the specified Role
+      description: read the specified Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind Role
+      description: list or watch objects of kind Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind Role
+      description: list or watch objects of kind Role
+      uri: /apis/rbac.authorization.k8s.io/v1/roles
+      method: GET
+      severity: MAJOR
+    - name: create a Role
+      description: create a Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified Role
+      description: replace the specified Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified Role
+      description: partially update the specified Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a Role
+      description: delete a Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of Role
+      description: delete collection of Role
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/roles
+      method: DELETE
+      severity: CRITICAL
+- name: Authorization
+  sub_category:
+    name: RoleBinding
+    api:
+    - name: read the specified RoleBinding
+      description: read the specified RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings/{name}
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind RoleBinding
+      description: list or watch objects of kind RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings
+      method: GET
+      severity: MAJOR
+    - name: list or watch objects of kind RoleBinding
+      description: list or watch objects of kind RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/rolebindings
+      method: GET
+      severity: MAJOR
+    - name: create a RoleBinding
+      description: create a RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings
+      method: POST
+      severity: CRITICAL
+    - name: replace the specified RoleBinding
+      description: replace the specified RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings/{name}
+      method: PUT
+      severity: CRITICAL
+    - name: partially update the specified RoleBinding
+      description: partially update the specified RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings/{name}
+      method: PATCH
+      severity: CRITICAL
+    - name: delete a RoleBinding
+      description: delete a RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings/{name}
+      method: DELETE
+      severity: CRITICAL
+    - name: delete collection of RoleBinding
+      description: delete collection of RoleBinding
+      uri: /apis/rbac.authorization.k8s.io/v1/namespaces/{namespace}/rolebindings
+      method: DELETE
+      severity: CRITICAL

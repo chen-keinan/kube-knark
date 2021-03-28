@@ -31,4 +31,6 @@ const (
 	ConfigFilesPermission = "config_files_permission.yml"
 	//Authentication spec
 	Authentication = "authentication.yml"
+	//Authorization spec
+	Authorization = "authorization.yml"
 )
