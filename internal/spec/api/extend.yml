@@ -1,0 +1,135 @@
+---
+spec: k8s api
+categories:
+- name: Extend
+  sub_category:
+    name: CustomResourceDefinition
+    api:
+    - name: read the specified CustomResourceDefinition
+      description: read the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified CustomResourceDefinition
+      description: read status of the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind CustomResourceDefinition
+      description: list or watch objects of kind CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions
+      method: GET
+      severity: INFO
+    - name: create a CustomResourceDefinition
+      description: create a CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions
+      method: POST
+      severity: MAJOR
+    - name: replace the specified CustomResourceDefinition
+      description: replace the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}
+      method: PUT
+      severity: MAJOR
+    - name: replace status of the specified CustomResourceDefinition
+      description: replace status of the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}/status
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified CustomResourceDefinition
+      description: partially update the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: partially update status of the specified CustomResourceDefinition
+      description: partially update status of the specified CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}/status
+      method: PATCH
+      severity: MAJOR
+    - name: delete a CustomResourceDefinition
+      description: delete a CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of CustomResourceDefinition
+      description: delete collection of CustomResourceDefinition
+      uri: /apis/apiextensions.k8s.io/v1/customresourcedefinitions
+      method: DELETE
+      severity: MAJOR
+- name: Extend
+  sub_category:
+    name: MutatingWebhookConfiguration
+    api:
+    - name: read the specified MutatingWebhookConfiguration
+      description: read the specified MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind MutatingWebhookConfiguration
+      description: list or watch objects of kind MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations
+      method: GET
+      severity: INFO
+    - name: create a MutatingWebhookConfiguration
+      description: create a MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations
+      method: POST
+      severity: MAJOR
+    - name: replace the specified MutatingWebhookConfiguration
+      description: replace the specified MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified MutatingWebhookConfiguration
+      description: partially update the specified MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a MutatingWebhookConfiguration
+      description: delete a MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of MutatingWebhookConfiguration
+      description: delete collection of MutatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations
+      method: DELETE
+      severity: MAJOR
+- name: Extend
+  sub_category:
+    name: ValidatingWebhookConfiguration
+    api:
+    - name: read the specified ValidatingWebhookConfiguration
+      description: read the specified ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind ValidatingWebhookConfiguration
+      description: list or watch objects of kind ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations
+      method: GET
+      severity: INFO
+    - name: create a ValidatingWebhookConfiguration
+      description: create a ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations
+      method: POST
+      severity: MAJOR
+    - name: replace the specified ValidatingWebhookConfiguration
+      description: replace the specified ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/{name}
+      method: PUT
+      severity: MAJOR
+    - name: partially update the specified ValidatingWebhookConfiguration
+      description: partially update the specified ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/{name}
+      method: PATCH
+      severity: MAJOR
+    - name: delete a ValidatingWebhookConfiguration
+      description: delete a ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/{name}
+      method: DELETE
+      severity: MAJOR
+    - name: delete collection of ValidatingWebhookConfiguration
+      description: delete collection of ValidatingWebhookConfiguration
+      uri: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations
+      method: DELETE
+      severity: MAJOR

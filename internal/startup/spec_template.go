@@ -43,6 +43,11 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return nil, err
 	}
 	filesInfo = append(filesInfo, policyFile...)
+	extendFile, err := createFileFromTemplate("./../spec/api", common.Extend)
+	if err != nil {
+		return nil, err
+	}
+	filesInfo = append(filesInfo, extendFile...)
 	return filesInfo, nil
 }
 

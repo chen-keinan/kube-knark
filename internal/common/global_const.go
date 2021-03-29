@@ -35,4 +35,6 @@ const (
 	Authorization = "authorization.yml"
 	//Policy spec
 	Policy = "policy.yml"
+	//Extend spec
+	Extend = "extend.yml"
 )
