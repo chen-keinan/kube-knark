@@ -2,6 +2,8 @@ package routes
 
 import (
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/utils"
+	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 )
 
@@ -25,11 +27,26 @@ type SubCategory struct {
 
 //API data model
 type API struct {
-	Name        string `yaml:"name"`
-	Description string `yaml:"description"`
-	URI         string `yaml:"uri"`
-	Method      string `yaml:"method"`
-	Severity    string `yaml:"severity"`
+	Name        string `mapstructure:"name" yaml:"name"`
+	Description string `mapstructure:"description" yaml:"description"`
+	URI         string `mapstructure:"uri" yaml:"uri"`
+	Method      string `mapstructure:"method" yaml:"method"`
+	Severity    string `mapstructure:"severity" yaml:"severity"`
+	SeverityInt int    `mapstructure:"severity_int" yaml:"severity_int"`
+}
+
+//UnmarshalYAML over unmarshall
+func (at *API) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var res map[string]interface{}
+	if err := unmarshal(&res); err != nil {
+		return err
+	}
+	err := mapstructure.Decode(res, &at)
+	if err != nil {
+		return err
+	}
+	at.SeverityInt = utils.FindSeverityInt(at.Severity)
+	return nil
 }
 
 //Routes build routes

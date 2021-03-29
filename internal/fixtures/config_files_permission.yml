@@ -12,11 +12,11 @@ categories:
       commands:
       - chmod
       - /etc/kubernetes/manifests/kube-apiserver.yaml
-      severity: Critical
+      severity: CRITICAL
     -
       name: change proxy-apiserver.yaml file permission
       description: trace proxy-apiserver.yaml file permission changes
       commands:
       - chmod
       - /etc/kubernetes/manifests/proxy-apiserver.yaml
-      severity: Critical
+      severity: CRITICAL

@@ -53,3 +53,15 @@ func TestCreateMapFromSpecFilesError(t *testing.T) {
 	_, err = CreateMapFromSpecFiles([]string{string(data)})
 	assert.Error(t, err)
 }
+
+func TestUnmarshallAPI(t *testing.T) {
+	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.Workload))
+	assert.NoError(t, err)
+	defer f.Close()
+	data, err := ioutil.ReadAll(f)
+	assert.NoError(t, err)
+	spec := SpecAPI{}
+	err = yaml.Unmarshal(data, &spec)
+	assert.NoError(t, err)
+	assert.Equal(t, spec.Categories[0].SubCategory.API[0].SeverityInt, 2)
+}

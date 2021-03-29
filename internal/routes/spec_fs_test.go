@@ -51,3 +51,14 @@ func TestCreateFSCacheFromSpecFiles(t *testing.T) {
 	assert.True(t, cache["chmod_/etc/kubernetes/manifests/kube-apiserver.yaml_"].Name == "change kube-apiserver.yaml file permission")
 	assert.True(t, cache["chmod_/etc/kubernetes/manifests/proxy-apiserver.yaml_"].Name == "change proxy-apiserver.yaml file permission")
 }
+func TestUnmarshallFS(t *testing.T) {
+	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.ConfigFilesPermission))
+	assert.NoError(t, err)
+	defer f.Close()
+	data, err := ioutil.ReadAll(f)
+	assert.NoError(t, err)
+	spec := SpecFS{}
+	err = yaml.Unmarshal(data, &spec)
+	assert.NoError(t, err)
+	assert.Equal(t, spec.Categories[0].SubCategory.FS[0].SeverityInt, 1)
+}

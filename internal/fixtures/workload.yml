@@ -9,13 +9,13 @@ categories:
       description: create new pos to namespace
       uri: /api/v1/namespaces/{namespace}/pods
       method: POST
-      severity: Major
+      severity: MAJOR
     - name: update replace the specified Pod
       description: update existing pod in namespace
       profile_applicability: Master
       uri: /api/v1/namespaces/{namespace}/pods
       method: PUT
-      severity: Major
+      severity: MAJOR
 - name: services
   sub_category:
     name: service

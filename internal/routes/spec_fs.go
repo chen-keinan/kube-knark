@@ -2,6 +2,8 @@ package routes
 
 import (
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/utils"
+	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 	"strings"
 )
@@ -26,10 +28,25 @@ type SubCategoryFS struct {
 
 //FS data model
 type FS struct {
-	Name        string   `yaml:"name"`
-	Description string   `yaml:"description"`
-	Commands    []string `yaml:"commands"`
-	Severity    string   `yaml:"severity"`
+	Name        string   `mapstructure:"name" yaml:"name"`
+	Description string   `mapstructure:"description" yaml:"description"`
+	Commands    []string `mapstructure:"commands" yaml:"commands"`
+	Severity    string   `mapstructure:"severity" yaml:"severity"`
+	SeverityInt int      `mapstructure:"severity_int" yaml:"severity_int"`
+}
+
+//UnmarshalYAML over unmarshall
+func (at *FS) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var res map[string]interface{}
+	if err := unmarshal(&res); err != nil {
+		return err
+	}
+	err := mapstructure.Decode(res, &at)
+	if err != nil {
+		return err
+	}
+	at.SeverityInt = utils.FindSeverityInt(at.Severity)
+	return nil
 }
 
 //BuildMatchMap build fs match map

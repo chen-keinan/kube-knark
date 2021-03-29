@@ -17,10 +17,12 @@ lint:
 tidy:
 	$(GOMOD) tidy -v
 test:
-	@go get github.com/golang/mock/mockgen@latest
-	@go install -v github.com/golang/mock/mockgen && export PATH=$GOPATH/bin:$PATH;
-	@go generate ./...
-	$(GOTEST) ./... -coverprofile cp.out
+	$(GOCMD) get github.com/golang/mock/mockgen@latest
+	$(GOCMD) install -v github.com/golang/mock/mockgen && export PATH=$GOPATH/bin:$PATH;
+	$(GOMOCKS)
+	$(GOTEST) ./... -coverprofile coverage.md fmt
+	$(GOCMD) tool cover -html=coverage.md -o coverage.html
+	$(GOCMD) tool cover  -func coverage.md
 build:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -v
