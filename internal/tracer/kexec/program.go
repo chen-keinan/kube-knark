@@ -8,6 +8,7 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/model/events"
 	"github.com/dropbox/goebpf"
 	"sync"
+	"time"
 )
 
 var (
@@ -68,7 +69,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.
 				ts := goebpf.KtimeToTime(ev.KtimeNs)
 				comm := goebpf.NullTerminatedStringToString(ev.Comm[:])
 				ke := &events.KprobeEvent{
-					StartTime: ts.Format("15:04:05.000"),
+					StartTime: ts.Format(time.RFC3339Nano),
 					Comm:      comm,
 					Pid:       ev.Pid,
 					UID:       ev.UID,

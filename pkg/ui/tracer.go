@@ -124,6 +124,8 @@ func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*FilesystemEvt, fsEvent *Filesystem
 
 func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) (*Table, []string) {
 	fsTable := NewTable(true)
+	longColumn := (termWidth - 45) / 2
+	fsTable.Table.ColumnWidths = []int{10, longColumn - 15, longColumn + 7, 40}
 	fsRows := make([][]string, 0)
 	headers := []string{"Severity", "Name", "Command args", "Created"}
 	fsRows = append(fsRows, headers)
@@ -140,6 +142,8 @@ func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) (*Ta
 
 func (kui *KubeKnarkUI) buildNetTable(termWidth int, termHeight int) (*Table, []string) {
 	netTable := NewTable(true)
+	longColumn := (termWidth - 45) / 2
+	netTable.Table.ColumnWidths = []int{10, longColumn - 15, 7, longColumn, 40}
 	netRows := make([][]string, 0)
 	headers := []string{"Severity", "Name", "Method", "API Call", "Created"}
 	netRows = append(netRows, headers)
