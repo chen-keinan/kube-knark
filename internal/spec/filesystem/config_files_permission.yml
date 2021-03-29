@@ -6,8 +6,110 @@ categories:
     name: fs config permission
     fs:
     - name: change kube-apiserver.yaml file permission
-      description: trace kube-apiserver.yaml file permission changes
+      description: change kube-apiserver.yaml file permission
       commands:
       - chmod
       - /etc/kubernetes/manifests/kube-apiserver.yaml
-      severity: Critical
+      severity: CRITICAL
+    - name: change kube-controller-manager.yaml file permission
+      description: change kube-controller-manager.yaml file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/kube-controller-manager.yaml
+      severity: CRITICAL
+    - name: change kube-scheduler.yaml file permission
+      description: change kube-scheduler.yaml file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/kube-scheduler.yaml
+      severity: CRITICAL
+    - name: change etcd.yaml file permission
+      description: change etcd.yaml file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/etcd.yaml
+      severity: CRITICAL
+    - name: change cni files permission
+      description: change cni files permission
+      commands:
+      - chmod
+      - '*/cni/*'
+      severity: CRITICAL
+    - name: change admin.conf file permission
+      description: change admin.conf file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/admin.conf
+      severity: CRITICAL
+    - name: change scheduler.conf file permission
+      description: change scheduler.conf file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/scheduler.conf
+      severity: CRITICAL
+    - name: change controller-manager.conf file permission
+      description: change controller-manager.conf file permission
+      commands:
+      - chmod
+      - /etc/kubernetes/controller-manager.conf
+      severity: CRITICAL
+    - name: change pki cert and key files permission
+      description: change pki cert and key files permission
+      commands:
+      - chmod
+      - '/etc/kubernetes/pki/*'
+      severity: CRITICAL
+    - name: change kube-apiserver.yaml file ownership
+      description: change kube-apiserver.yaml file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/kube-apiserver.yaml
+      severity: CRITICAL
+    - name: change kube-controller-manager.yaml file ownership
+      description: change kube-controller-manager.yaml file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/kube-controller-manager.yaml
+      severity: CRITICAL
+    - name: change kube-scheduler.yaml file ownership
+      description: change kube-scheduler.yaml file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/kube-scheduler.yaml
+      severity: CRITICAL
+    - name: change etcd.yaml file ownership
+      description: change etcd.yaml file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/etcd.yaml
+      severity: CRITICAL
+    - name: change cni files ownership
+      description: change cni files ownership
+      commands:
+      - chown
+      - '*/cni/*'
+      severity: CRITICAL
+    - name: change admin.conf file ownership
+      description: change admin.conf file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/admin.conf
+      severity: CRITICAL
+    - name: change scheduler.conf file ownership
+      description: change scheduler.conf file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/scheduler.conf
+      severity: CRITICAL
+    - name: change controller-manager.conf file ownership
+      description: change controller-manager.conf file ownership
+      commands:
+      - chown
+      - /etc/kubernetes/controller-manager.conf
+      severity: CRITICAL
+    - name: change pki cert and key files ownership
+      description: change pki cert and key files ownership
+      commands:
+      - chown
+      - '/etc/kubernetes/pki/*'
+      severity: CRITICAL
