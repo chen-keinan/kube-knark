@@ -48,6 +48,11 @@ func GenerateSpecFiles() ([]utils.FilesInfo, error) {
 		return nil, err
 	}
 	filesInfo = append(filesInfo, extendFile...)
+	clusterFile, err := createFileFromTemplate("./../spec/api", common.Cluster)
+	if err != nil {
+		return nil, err
+	}
+	filesInfo = append(filesInfo, clusterFile...)
 	return filesInfo, nil
 }
 

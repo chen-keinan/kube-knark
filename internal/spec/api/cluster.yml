@@ -1,0 +1,433 @@
+---
+spec: k8s api
+categories:
+- name: Cluster
+  sub_category:
+    name: Node
+    api:
+    - name: read the specified Node
+      description: read the specified Node
+      uri: /api/v1/nodes/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified Node
+      description: read status of the specified Node
+      uri: /api/v1/nodes/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Node
+      description: list or watch objects of kind Node
+      uri: /api/v1/nodes
+      method: GET
+      severity: INFO
+    - name: create a Node
+      description: create a Node
+      uri: /api/v1/nodes
+      method: POST
+      severity: MINOR
+    - name: replace the specified Node
+      description: replace the specified Node
+      uri: /api/v1/nodes/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified Node
+      description: replace status of the specified Node
+      uri: /api/v1/nodes/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Node
+      description: partially update the specified Node
+      uri: /api/v1/nodes/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified Node
+      description: partially update status of the specified Node
+      uri: /api/v1/nodes/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete a Node
+      description: delete a Node
+      uri: /api/v1/nodes/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of Node
+      description: delete collection of Node
+      uri: /api/v1/nodes
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: Namespace
+    api:
+    - name: read the specified Namespace
+      description: read the specified Namespace
+      uri: /api/v1/namespaces/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified Namespace
+      description: read status of the specified Namespace
+      uri: /api/v1/namespaces/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Namespace
+      description: list or watch objects of kind Namespace
+      uri: /api/v1/namespaces
+      method: GET
+      severity: INFO
+    - name: create a Namespace
+      description: create a Namespace
+      uri: /api/v1/namespaces
+      method: POST
+      severity: MINOR
+    - name: replace the specified Namespace
+      description: replace the specified Namespace
+      uri: /api/v1/namespaces/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace finalize of the specified Namespace
+      description: replace finalize of the specified Namespace
+      uri: /api/v1/namespaces/{name}/finalize
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified Namespace
+      description: replace status of the specified Namespace
+      uri: /api/v1/namespaces/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Namespace
+      description: partially update the specified Namespace
+      uri: /api/v1/namespaces/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified Namespace
+      description: partially update status of the specified Namespace
+      uri: /api/v1/namespaces/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete a Namespace
+      description: delete a Namespace
+      uri: /api/v1/namespaces/{name}
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: Event
+    api:
+    - name: read the specified Event
+      description: read the specified Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Event
+      description: list or watch objects of kind Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Event
+      description: list or watch objects of kind Event
+      uri: /apis/events.k8s.io/v1/events
+      method: GET
+      severity: INFO
+    - name: create an Event
+      description: create an Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events
+      method: POST
+      severity: MINOR
+    - name: replace the specified Event
+      description: replace the specified Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Event
+      description: partially update the specified Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete an Event
+      description: delete an Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of Event
+      description: delete collection of Event
+      uri: /apis/events.k8s.io/v1/namespaces/{namespace}/events
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: APIService
+    api:
+    - name: read the specified APIService
+      description: read the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified APIService
+      description: read status of the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind APIService
+      description: list or watch objects of kind APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices
+      method: GET
+      severity: INFO
+    - name: create an APIService
+      description: create an APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices
+      method: POST
+      severity: MINOR
+    - name: replace the specified APIService
+      description: replace the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified APIService
+      description: replace status of the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified APIService
+      description: partially update the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified APIService
+      description: partially update status of the specified APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete an APIService
+      description: delete an APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of APIService
+      description: delete collection of APIService
+      uri: /apis/apiregistration.k8s.io/v1/apiservices
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: Lease
+    api:
+    - name: read the specified Lease
+      description: read the specified Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Lease
+      description: list or watch objects of kind Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind Lease
+      description: list or watch objects of kind Lease
+      uri: /apis/coordination.k8s.io/v1/leases
+      method: GET
+      severity: INFO
+    - name: create a Lease
+      description: create a Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases
+      method: POST
+      severity: MINOR
+    - name: replace the specified Lease
+      description: replace the specified Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified Lease
+      description: partially update the specified Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete a Lease
+      description: delete a Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of Lease
+      description: delete collection of Lease
+      uri: /apis/coordination.k8s.io/v1/namespaces/{namespace}/leases
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: RuntimeClass
+    api:
+    - name: read the specified RuntimeClass
+      description: read the specified RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses/{name}
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind RuntimeClass
+      description: list or watch objects of kind RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses
+      method: GET
+      severity: INFO
+    - name: create a RuntimeClass
+      description: create a RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses
+      method: POST
+      severity: MINOR
+    - name: replace the specified RuntimeClass
+      description: replace the specified RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses/{name}
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified RuntimeClass
+      description: partially update the specified RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses/{name}
+      method: PATCH
+      severity: MINOR
+    - name: delete a RuntimeClass
+      description: delete a RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of RuntimeClass
+      description: delete collection of RuntimeClass
+      uri: /apis/node.k8s.io/v1/runtimeclasses
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: FlowSchema v1beta1
+    api:
+    - name: read the specified FlowSchema
+      description: read the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified FlowSchema
+      description: read status of the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind FlowSchema
+      description: list or watch objects of kind FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas
+      method: GET
+      severity: INFO
+    - name: create a FlowSchema
+      description: create a FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas
+      method: POST
+      severity: MINOR
+    - name: replace the specified FlowSchema
+      description: replace the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified FlowSchema
+      description: replace status of the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified FlowSchema
+      description: partially update the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified FlowSchema
+      description: partially update status of the specified FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete a FlowSchema
+      description: delete a FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of FlowSchema
+      description: delete collection of FlowSchema
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/flowschemas
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: PriorityLevelConfiguration v1beta1
+    api:
+    - name: read the specified PriorityLevelConfiguration
+      description: read the specified PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}
+      method: GET
+      severity: INFO
+    - name: read status of the specified PriorityLevelConfiguration
+      description: read status of the specified PriorityLevelConfiguration
+      uri:  /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}/status
+      method: GET
+      severity: INFO
+    - name: list or watch objects of kind PriorityLevelConfiguration
+      description: list or watch objects of kind PriorityLevelConfiguration
+      uri:  /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations
+      method: GET
+      severity: INFO
+    - name: create a PriorityLevelConfiguration
+      description: create a PriorityLevelConfiguration
+      uri:  /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations
+      method: POST
+      severity: MINOR
+    - name: replace the specified PriorityLevelConfiguration
+      description: replace the specified PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}
+      method: PUT
+      severity: MINOR
+    - name: replace status of the specified PriorityLevelConfiguration
+      description: replace status of the specified PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}/status
+      method: PUT
+      severity: MINOR
+    - name: partially update the specified PriorityLevelConfiguration
+      description: partially update the specified PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}
+      method: PATCH
+      severity: MINOR
+    - name: partially update status of the specified PriorityLevelConfiguration
+      description: partially update status of the specified PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}/status
+      method: PATCH
+      severity: MINOR
+    - name: delete a PriorityLevelConfiguration
+      description: delete a PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations/{name}
+      method: DELETE
+      severity: MINOR
+    - name: delete collection of PriorityLevelConfiguration
+      description: delete collection of PriorityLevelConfiguration
+      uri: /apis/flowcontrol.apiserver.k8s.io/v1beta1/prioritylevelconfigurations
+      method: DELETE
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: Binding
+    api:
+    - name: create a Binding
+      description: create a Binding
+      uri: /api/v1/namespaces/{namespace}/bindings
+      method: POST
+      severity: MINOR
+    - name: create binding of a Pod
+      description: create binding of a Pod
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/binding
+      method: POST
+      severity: MINOR
+    - name: create binding of a Pod
+      description: create binding of a Pod
+      uri: /api/v1/namespaces/{namespace}/pods/{name}/binding
+      method: POST
+      severity: MINOR
+- name: Cluster
+  sub_category:
+    name: ComponentStatus
+    api:
+    - name: read the specified ComponentStatus
+      description: read the specified ComponentStatus
+      uri: /api/v1/componentstatuses/{name}
+      method: GET
+      severity: INFO
+    - name: list objects of kind ComponentStatus
+      description: list objects of kind ComponentStatus
+      uri: /api/v1/componentstatuses
+      method: GET
+      severity: INFO

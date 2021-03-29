@@ -16,6 +16,7 @@ func TestGenerateSpecFiles(t *testing.T) {
 	assert.Equal(t, specFiles[4].Name, common.Authorization)
 	assert.Equal(t, specFiles[5].Name, common.Policy)
 	assert.Equal(t, specFiles[6].Name, common.Extend)
+	assert.Equal(t, specFiles[7].Name, common.Cluster)
 }
 func TestGenerateFileSystemSpec(t *testing.T) {
 	specFiles, err := GenerateFileSystemSpec()

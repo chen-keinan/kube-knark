@@ -37,4 +37,6 @@ const (
 	Policy = "policy.yml"
 	//Extend spec
 	Extend = "extend.yml"
+	//Cluster spec
+	Cluster = "cluster.yml"
 )
