@@ -82,12 +82,12 @@ func (kku *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, ne
 			}
 		case fsEvent := <-kku.FsEvtChan:
 			args := fmt.Sprintf("%s", fsEvent.Msg.Args)
-			fsEvents = append(fsEvents, []string{fsEvent.Spec.Severity, fsEvent.Spec.Name, args})
+			fsEvents = append(fsEvents, []string{fsEvent.Spec.Severity, fsEvent.Spec.Name, args, fsEvent.Msg.StartTime})
 			fsTable.Rows = fsEvents
 			ui.Render(fsTable)
 
 		case netEvent := <-kku.NetEvtChan:
-			netEvents = append(netEvents, []string{netEvent.Spec.Severity, netEvent.Spec.Name, netEvent.Msg.HTTPRequestData.RequestURI})
+			netEvents = append(netEvents, []string{netEvent.Spec.Severity, netEvent.Spec.Name, netEvent.Msg.HTTPRequestData.RequestURI, netEvent.Msg.HTTPRequestData.StartTime})
 			netTable.Rows = netEvents
 			ui.Render(netTable)
 		}
@@ -99,7 +99,7 @@ func (kku *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, ne
 func (kku *KubeKnarkUI) drawFileSystemTable(termWidth int, termHeight int) (*Table, [][]string) {
 	fsTable := NewTable(true)
 	fsEvents := make([][]string, 0)
-	fsEvents = append(fsEvents, []string{"Severity", "Name", "Command args"})
+	fsEvents = append(fsEvents, []string{"Severity", "Name", "Command args", "Created"})
 	fsTable.Rows = fsEvents
 	fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
 	fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
@@ -111,7 +111,7 @@ func (kku *KubeKnarkUI) drawFileSystemTable(termWidth int, termHeight int) (*Tab
 func (kku *KubeKnarkUI) drawNetTable(termWidth int, termHeight int) (*Table, [][]string) {
 	netTable := NewTable(true)
 	netEvents := make([][]string, 0)
-	netEvents = append(netEvents, []string{"Severity", "Name", "API Call"})
+	netEvents = append(netEvents, []string{"Severity", "Name", "API Call", "Created"})
 	netTable.Rows = netEvents
 	netTable.TextStyle = ui.NewStyle(ui.ColorWhite)
 	netTable.SetRect(1, termHeight/2, termWidth-1, termHeight-1)
