@@ -81,17 +81,15 @@ func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, ne
 			case "w":
 				netTable.ScrollUp()
 			case "s":
-				fsTable.ScrollDown()
+				netTable.ScrollDown()
 			}
 		case fsEvent := <-kui.FsEvtChan:
 			var fsRows = [][]string{fsHeaders}
 			fsTable.Rows = kui.sortFSRows(&fsEvts, &fsEvent, fsRows)
-			ui.Render(fsTable)
 
 		case netEvent := <-kui.NetEvtChan:
 			var netRow = [][]string{netHeaders}
 			netTable.Rows = kui.sortNetRows(&netEvts, &netEvent, netRow)
-			ui.Render(netTable)
 		}
 		ui.Render(fsTable)
 		ui.Render(netTable)
@@ -130,10 +128,13 @@ func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) (*Ta
 	headers := []string{"Severity", "Name", "Command args", "Created"}
 	fsRows = append(fsRows, headers)
 	fsTable.Rows = fsRows
+	fsTable.RowSeparator = false
+	fsTable.Colors.SelectedRowBg = ui.ColorGreen
+	fsTable.Colors.Text = ui.ColorWhite
+	fsTable.Colors.SelectedRowBg = ui.ColorBlue
 	fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
 	fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
 	fsTable.Title = "K8s configuration file change events"
-	ui.Render(fsTable)
 	return fsTable, headers
 }
 
@@ -143,10 +144,13 @@ func (kui *KubeKnarkUI) buildNetTable(termWidth int, termHeight int) (*Table, []
 	headers := []string{"Severity", "Name", "Method", "API Call", "Created"}
 	netRows = append(netRows, headers)
 	netTable.Rows = netRows
+	netTable.RowSeparator = false
+	netTable.Colors.SelectedRowBg = ui.ColorGreen
+	netTable.Colors.Text = ui.ColorWhite
+	netTable.Colors.SelectedRowBg = ui.ColorBlue
 	netTable.TextStyle = ui.NewStyle(ui.ColorWhite)
 	netTable.SetRect(1, termHeight/2, termWidth-1, termHeight-1)
 	netTable.Title = "K8s API change events"
-	ui.Render(netTable)
 	return netTable, headers
 }
 
