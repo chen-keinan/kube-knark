@@ -20,3 +20,10 @@ categories:
       - chmod
       - /etc/kubernetes/manifests/proxy-apiserver.yaml
       severity: CRITICAL
+    -
+      name: change proxy-apiserver.yaml file permission
+      description: trace proxy-apiserver.yaml file permission changes
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/proxy-apiserver.yaml
+      severity: CRITICAL

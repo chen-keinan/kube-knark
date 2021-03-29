@@ -27,6 +27,10 @@ func TestFSMatches_Full_Match(t *testing.T) {
 	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"}, sb)
 	assert.Equal(t, sb.String(), "chmod_/etc/kubernetes/manifests/kube-apiserver.yaml_")
 	assert.True(t, ok)
+	var sb2 = new(bytes.Buffer)
+	ok = NewFSMatches(fsMap, cache).Match([]string{"chown", "abc", "/etc/kubernetes/manifests/proxy-apiserver.yaml"}, sb2)
+	assert.Equal(t, sb2.String(), "chown_/etc/kubernetes/manifests/proxy-apiserver.yaml_")
+	assert.True(t, ok)
 }
 func TestFSMatches_Partial_Match(t *testing.T) {
 	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.ConfigFilesPermission))
