@@ -38,8 +38,8 @@ func (pm *PacketMatchesWorker) Invoke() {
 		go func() {
 			for k := range pm.pmd.pmc {
 				// display process execution event
-				if ok, _ := pm.pmd.rm.Match(k.HTTPRequestData.RequestURI, k.HTTPRequestData.Method); ok {
-					spec := pm.pmd.validationCache[fmt.Sprintf("%s_%s", k.HTTPRequestData.Method, k.HTTPRequestData.RequestURI)]
+				if ok, template := pm.pmd.rm.Match(k.HTTPRequestData.RequestURI, k.HTTPRequestData.Method); ok {
+					spec := pm.pmd.validationCache[fmt.Sprintf("%s_%s", k.HTTPRequestData.Method, template)]
 					pm.pmd.uiChan <- ui.NetEvt{Msg: k, Spec: spec}
 				}
 			}

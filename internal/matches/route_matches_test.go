@@ -17,8 +17,8 @@ func TestRouteMatches_MatchOK(t *testing.T) {
 	}
 	router := mux.NewRouter()
 	rm := NewRouteMatches([]routes.Routes{a}, router)
-	match, err := rm.Match("/a/b/first/c/last", common.GET)
-	assert.NoError(t, err)
+	match, template := rm.Match("/a/b/first/c/last", common.GET)
+	assert.Equal(t, template, "/a/b/{first}/c/{last}")
 	assert.True(t, match)
 }
 
@@ -31,7 +31,7 @@ func TestRouteMatches_MatchBAD(t *testing.T) {
 	}
 	router := mux.NewRouter()
 	rm := NewRouteMatches([]routes.Routes{a}, router)
-	match, err := rm.Match("/a/first/c/last", common.GET)
-	assert.NoError(t, err)
+	match, template := rm.Match("/a/first/c/last", common.GET)
+	assert.Equal(t, template, "")
 	assert.True(t, !match)
 }

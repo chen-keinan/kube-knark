@@ -22,10 +22,18 @@ func NewRouteMatches(ValidationRoutes []routes.Routes, router *mux.Router) *Rout
 }
 
 //Match match route to specified api pattern
-func (mr RouteMatches) Match(url, method string) (bool, error) {
+func (mr RouteMatches) Match(url, method string) (bool, string) {
 	request, err := http.NewRequest(method, url, nil)
 	if err != nil {
-		return false, err
+		return false, ""
 	}
-	return mr.router.Match(request, &mux.RouteMatch{}), nil
+	match := &mux.RouteMatch{}
+	if ok := mr.router.Match(request, match); ok {
+		template, err := match.Route.GetPathTemplate()
+		if err != nil {
+			return false, ""
+		}
+		return ok, template
+	}
+	return false, ""
 }
