@@ -12,7 +12,3 @@ Kube-Knark is an open source audit tracer (via ebpf technology) who perform runt
 - Clang < 10
 - LLVM
 - Kernel Headers
-
-
-
-# Under Construction !!! :)
