@@ -14,6 +14,11 @@ import (
 type KubeKnarkUI struct {
 	NetEvtChan chan NetEvt
 	FsEvtChan  chan FilesystemEvt
+	fsTable    *Table
+	netTable   *Table
+	fsHeaders  []string
+	netHeaders []string
+	paragraph  *widgets.Paragraph
 }
 
 // NetEvt net event msg
@@ -53,19 +58,18 @@ func (kui *KubeKnarkUI) Draw(errNetChan chan error) {
 		defer ui.Close()
 		// draw external paragraph
 		termWidth, termHeight := ui.TerminalDimensions()
-		p := kui.buildParagraph(termWidth, termHeight)
+		kui.buildParagraph(termWidth, termHeight)
 		// init event tables
-		fsTable, headers := kui.buildFileSystemTable(termWidth, termHeight)
-		netTable, netEvents := kui.buildNetTable(termWidth, termHeight)
+		kui.buildFileSystemTable(termWidth, termHeight)
+		kui.buildNetTable(termWidth, termHeight)
 		// render to ui
-		ui.Render(p, fsTable, netTable)
-		uiEvents := ui.PollEvents()
+		ui.Render(kui.paragraph, kui.fsTable, kui.netTable)
 		// watch for net , file system events
-		kui.watchEvents(uiEvents, fsTable, netTable, headers, netEvents)
+		kui.watchEvents(ui.PollEvents())
 	}()
 }
 
-func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, netTable *Table, fsHeaders []string, netHeaders []string) {
+func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event) {
 	fsEvts := make([]*FilesystemEvt, 0)
 	netEvts := make([]*NetEvt, 0)
 	for {
@@ -75,24 +79,24 @@ func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event, fsTable *Table, ne
 			case "q", "<C-c>":
 				return
 			case "j", "<Down>":
-				fsTable.ScrollDown()
+				kui.fsTable.ScrollDown()
 			case "k", "<Up>":
-				fsTable.ScrollUp()
+				kui.fsTable.ScrollUp()
 			case "w":
-				netTable.ScrollUp()
+				kui.netTable.ScrollUp()
 			case "s":
-				netTable.ScrollDown()
+				kui.netTable.ScrollDown()
 			}
 		case fsEvent := <-kui.FsEvtChan:
-			var fsRows = [][]string{fsHeaders}
-			fsTable.Rows = kui.sortFSRows(&fsEvts, &fsEvent, fsRows)
+			var fsRows = [][]string{kui.fsHeaders}
+			kui.fsTable.Rows = kui.sortFSRows(&fsEvts, &fsEvent, fsRows)
 
 		case netEvent := <-kui.NetEvtChan:
-			var netRow = [][]string{netHeaders}
-			netTable.Rows = kui.sortNetRows(&netEvts, &netEvent, netRow)
+			var netRow = [][]string{kui.netHeaders}
+			kui.netTable.Rows = kui.sortNetRows(&netEvts, &netEvent, netRow)
 		}
-		ui.Render(fsTable)
-		ui.Render(netTable)
+		ui.Render(kui.fsTable)
+		ui.Render(kui.netTable)
 	}
 }
 
@@ -122,48 +126,45 @@ func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*FilesystemEvt, fsEvent *Filesystem
 	return fsRows
 }
 
-func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) (*Table, []string) {
-	fsTable := NewTable(true)
+func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) {
+	kui.fsTable = NewTable(true)
 	longColumn := (termWidth - 45) / 2
-	fsTable.Table.ColumnWidths = []int{10, longColumn - 15, longColumn + 7, 40}
+	kui.fsTable.Table.ColumnWidths = []int{10, longColumn - 15, longColumn + 7, 40}
 	fsRows := make([][]string, 0)
-	headers := []string{"Severity", "Name", "Command args", "Created"}
-	fsRows = append(fsRows, headers)
-	fsTable.Rows = fsRows
-	fsTable.RowSeparator = false
-	fsTable.Colors.SelectedRowBg = ui.ColorGreen
-	fsTable.Colors.Text = ui.ColorWhite
-	fsTable.Colors.SelectedRowBg = ui.ColorBlue
-	fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
-	fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
-	fsTable.Title = "K8s configuration file change events"
-	return fsTable, headers
+	kui.fsHeaders = []string{"Severity", "Name", "Command args", "Created"}
+	fsRows = append(fsRows, kui.fsHeaders)
+	kui.fsTable.Rows = fsRows
+	kui.fsTable.RowSeparator = false
+	kui.fsTable.Colors.SelectedRowBg = ui.ColorGreen
+	kui.fsTable.Colors.Text = ui.ColorWhite
+	kui.fsTable.Colors.SelectedRowBg = ui.ColorBlue
+	kui.fsTable.TextStyle = ui.NewStyle(ui.ColorWhite)
+	kui.fsTable.SetRect(1, 1, termWidth-1, termHeight/2)
+	kui.fsTable.Title = "K8s configuration file change events"
 }
 
-func (kui *KubeKnarkUI) buildNetTable(termWidth int, termHeight int) (*Table, []string) {
-	netTable := NewTable(true)
+func (kui *KubeKnarkUI) buildNetTable(termWidth int, termHeight int) {
+	kui.netTable = NewTable(true)
 	longColumn := (termWidth - 45) / 2
-	netTable.Table.ColumnWidths = []int{10, longColumn - 15, 7, longColumn, 40}
+	kui.netTable.Table.ColumnWidths = []int{10, longColumn - 15, 7, longColumn, 40}
 	netRows := make([][]string, 0)
-	headers := []string{"Severity", "Name", "Method", "API Call", "Created"}
-	netRows = append(netRows, headers)
-	netTable.Rows = netRows
-	netTable.RowSeparator = false
-	netTable.Colors.SelectedRowBg = ui.ColorGreen
-	netTable.Colors.Text = ui.ColorWhite
-	netTable.Colors.SelectedRowBg = ui.ColorBlue
-	netTable.TextStyle = ui.NewStyle(ui.ColorWhite)
-	netTable.SetRect(1, termHeight/2, termWidth-1, termHeight-1)
-	netTable.Title = "K8s API change events"
-	return netTable, headers
+	kui.netHeaders = []string{"Severity", "Name", "Method", "API Call", "Created"}
+	netRows = append(netRows, kui.netHeaders)
+	kui.netTable.Rows = netRows
+	kui.netTable.RowSeparator = false
+	kui.netTable.Colors.SelectedRowBg = ui.ColorGreen
+	kui.netTable.Colors.Text = ui.ColorWhite
+	kui.netTable.Colors.SelectedRowBg = ui.ColorBlue
+	kui.netTable.TextStyle = ui.NewStyle(ui.ColorWhite)
+	kui.netTable.SetRect(1, termHeight/2, termWidth-1, termHeight-1)
+	kui.netTable.Title = "K8s API change events"
 }
 
 // draw paragraph section
-func (kui *KubeKnarkUI) buildParagraph(termWidth, termHeight int) *widgets.Paragraph {
-	p := widgets.NewParagraph()
-	p.Title = "Kube-Knark Tracer"
-	p.SetRect(0, 0, termWidth, termHeight)
-	p.TextStyle.Fg = ui.ColorWhite
-	p.BorderStyle.Fg = ui.ColorCyan
-	return p
+func (kui *KubeKnarkUI) buildParagraph(termWidth, termHeight int) {
+	kui.paragraph = widgets.NewParagraph()
+	kui.paragraph.Title = "Kube-Knark Tracer"
+	kui.paragraph.SetRect(0, 0, termWidth, termHeight)
+	kui.paragraph.TextStyle.Fg = ui.ColorWhite
+	kui.paragraph.BorderStyle.Fg = ui.ColorCyan
 }

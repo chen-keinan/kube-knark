@@ -57,64 +57,73 @@ func TestSortNetRows(t *testing.T) {
 
 func TestBuildParagraph(t *testing.T) {
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
-	p := nku.buildParagraph(100, 200)
-	assert.Equal(t, p.Block.Dy(), 200)
-	assert.Equal(t, p.Block.Dx(), 100)
-	assert.Equal(t, p.TextStyle.Fg, ui.ColorWhite)
-	assert.Equal(t, p.BorderStyle.Fg, ui.ColorCyan)
+	nku.buildParagraph(100, 200)
+	assert.Equal(t, nku.paragraph.Block.Dy(), 200)
+	assert.Equal(t, nku.paragraph.Block.Dx(), 100)
+	assert.Equal(t, nku.paragraph.TextStyle.Fg, ui.ColorWhite)
+	assert.Equal(t, nku.paragraph.BorderStyle.Fg, ui.ColorCyan)
 }
 
 func TestNetTable(t *testing.T) {
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
-	p, headers := nku.buildNetTable(100, 200)
-	assert.Equal(t, p.Block.Dy(), 99)
-	assert.Equal(t, p.Block.Dx(), 98)
-	assert.Equal(t, p.TextStyle.Fg, ui.ColorWhite)
-	assert.Equal(t, p.Title, "K8s API change events")
-	assert.Equal(t, headers[0], "Severity")
-	assert.Equal(t, headers[1], "Name")
-	assert.Equal(t, headers[2], "Method")
-	assert.Equal(t, headers[3], "API Call")
-	assert.Equal(t, headers[4], "Created")
+	nku.buildNetTable(100, 200)
+	assert.Equal(t, nku.netTable.Block.Dy(), 99)
+	assert.Equal(t, nku.netTable.Block.Dx(), 98)
+	assert.Equal(t, nku.netTable.TextStyle.Fg, ui.ColorWhite)
+	assert.Equal(t, nku.netTable.Title, "K8s API change events")
+	assert.Equal(t, nku.netHeaders[0], "Severity")
+	assert.Equal(t, nku.netHeaders[1], "Name")
+	assert.Equal(t, nku.netHeaders[2], "Method")
+	assert.Equal(t, nku.netHeaders[3], "API Call")
+	assert.Equal(t, nku.netHeaders[4], "Created")
 }
 func TestFsTable(t *testing.T) {
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
-	p, headers := nku.buildFileSystemTable(100, 200)
-	assert.Equal(t, p.Block.Dy(), 99)
-	assert.Equal(t, p.Block.Dx(), 98)
-	assert.Equal(t, p.TextStyle.Fg, ui.ColorWhite)
-	assert.Equal(t, p.Title, "K8s configuration file change events")
-	assert.Equal(t, headers[0], "Severity")
-	assert.Equal(t, headers[1], "Name")
-	assert.Equal(t, headers[2], "Command args")
-	assert.Equal(t, headers[3], "Created")
+	nku.buildFileSystemTable(100, 200)
+	assert.Equal(t, nku.fsTable.Block.Dy(), 99)
+	assert.Equal(t, nku.fsTable.Block.Dx(), 98)
+	assert.Equal(t, nku.fsTable.TextStyle.Fg, ui.ColorWhite)
+	assert.Equal(t, nku.fsTable.Title, "K8s configuration file change events")
+	assert.Equal(t, nku.fsHeaders[0], "Severity")
+	assert.Equal(t, nku.fsHeaders[1], "Name")
+	assert.Equal(t, nku.fsHeaders[2], "Command args")
+	assert.Equal(t, nku.fsHeaders[3], "Created")
 }
 
 func TestWatchEvents(t *testing.T) {
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
 	uiEvents := make(chan ui.Event)
-	fsTable := NewTable(true)
-	fsTable.Rows = [][]string{
+	err := ui.Init()
+	assert.NoError(t, err)
+	defer ui.Close()
+	// draw external paragraph
+	termWidth, termHeight := ui.TerminalDimensions()
+	nku.buildParagraph(termWidth, termHeight)
+	// init event tables
+	nku.buildFileSystemTable(termWidth, termHeight)
+	nku.buildNetTable(termWidth, termHeight)
+	// render to ui
+	ui.Render(nku.paragraph, nku.fsTable, nku.netTable)
+	nku.fsTable.Rows = [][]string{
 		{"header1", "header2", "header3"},
 		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
 		{"2016", "10", "11"},
 		{"2016", "10", "11"},
 		{"2016", "10", "11"}}
-	netTable := NewTable(true)
-	fsTable.Rows = [][]string{
+	nku.netTable.Rows = [][]string{
 		{"header1", "header2", "header3"},
 		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
 		{"2016", "10", "11"},
 		{"2016", "10", "11"},
 		{"2016", "10", "11"}}
-
-	go nku.watchEvents(uiEvents, fsTable, netTable, []string{}, []string{})
+	go nku.watchEvents(uiEvents)
 	uiEvents <- ui.Event{ID: "j"}
-	assert.Equal(t, fsTable.curr, fsTable.prev)
+	assert.Equal(t, nku.fsTable.curr, nku.fsTable.prev)
 	uiEvents <- ui.Event{ID: "k"}
-	assert.Equal(t, fsTable.curr, fsTable.prev)
+	assert.Equal(t, nku.fsTable.curr, nku.fsTable.prev)
 	uiEvents <- ui.Event{ID: "w"}
-	assert.Equal(t, netTable.curr, netTable.prev)
+	assert.Equal(t, nku.netTable.curr, nku.netTable.prev)
 	uiEvents <- ui.Event{ID: "s"}
-	assert.Equal(t, netTable.curr, netTable.prev)
+	assert.Equal(t, nku.netTable.curr-1, nku.netTable.prev)
+	uiEvents <- ui.Event{ID: "<C-c>"}
 }
