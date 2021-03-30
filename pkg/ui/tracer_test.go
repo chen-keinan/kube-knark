@@ -127,3 +127,19 @@ func TestWatchEvents(t *testing.T) {
 	assert.Equal(t, nku.netTable.curr-1, nku.netTable.prev)
 	uiEvents <- ui.Event{ID: "<C-c>"}
 }
+func TestNewNetEvtChan(t *testing.T) {
+	c := NewNetEvtChan()
+	go func() {
+		c <- NetEvt{Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}}
+	}()
+	msg := <-c
+	assert.Equal(t, msg.Msg.HTTPRequestData.Method, "GET")
+}
+func TestNewFilesystemEvtChan(t *testing.T) {
+	c := NewFilesystemEvtChan()
+	go func() {
+		c <- FilesystemEvt{Msg: &events.KprobeEvent{Args: []string{"a"}}}
+	}()
+	msg := <-c
+	assert.Equal(t, msg.Msg.Args[0], "a")
+}

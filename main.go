@@ -1,3 +1,5 @@
+// +build !unit
+
 package main
 
 import "github.com/chen-keinan/kube-knark/cmd"

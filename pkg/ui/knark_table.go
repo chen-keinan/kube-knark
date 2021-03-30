@@ -2,7 +2,6 @@ package ui
 
 import (
 	"bytes"
-	"errors"
 	"strings"
 
 	"github.com/gizak/termui/v3"
@@ -92,52 +91,6 @@ func (t *Table) paintActiveRow() {
 	t.RowStyles[t.curr] = termui.NewStyle(t.Colors.SelectedRowFg, t.Colors.SelectedRowBg, termui.ModifierBold)
 }
 
-// AppendToFilter updates the filter of the table.
-func (t *Table) AppendToFilter(filter string) {
-	t.filter.WriteString(filter)
-	t.resetPositions()
-}
-
-// ReduceFilter removes the last n bytes written.
-func (t *Table) ReduceFilter(n int) {
-	// avoid panic.
-	if n > t.filter.Len() || n < 0 {
-		return
-	}
-	t.filter.Truncate(t.filter.Len() - n)
-	t.resetPositions()
-}
-
-// Filter returns the filter of the table.
-func (t *Table) Filter() string {
-	return t.filter.String()
-}
-
-// ColumnWidths returns the column widths of the table.
-func (t *Table) ColumnWidths() ([]int, error) {
-	if t.Table.ColumnWidths != nil {
-		return t.Table.ColumnWidths, nil
-	}
-	if len(t.Rows) == 0 {
-		return nil, errors.New("table does not contain any rows")
-	}
-	// from termui/table.go draw method.
-	columnWidths := make([]int, 0)
-	columnCount := len(t.Rows[0])
-	columnWidth := t.Table.Inner.Dx() / columnCount
-	for i := 0; i < columnCount; i++ {
-		columnWidths = append(columnWidths, columnWidth)
-	}
-	return columnWidths, nil
-}
-
-// resetPositions resets the positions into the table.
-func (t *Table) resetPositions() {
-	t.offset = 0
-	t.prev = t.curr
-	t.curr = 0
-}
-
 // SetRect resize the table, and correctly sets the height of the table.
 // x,y : top left corner
 // x1,y2 : bottom right corner
@@ -203,12 +156,6 @@ func (t *Table) PageUp() {
 	for i := 0; i < skip; i++ {
 		t.ScrollUp()
 	}
-}
-
-// InitFilter initializes the table to support filtering for rows
-func (t *Table) InitFilter(column, rowsPerEntry int) {
-	t.filterColumn = column
-	t.rowsPerEntry = rowsPerEntry
 }
 
 // reCalcView recalculates the view into the table, handling any out of bounds errors.
