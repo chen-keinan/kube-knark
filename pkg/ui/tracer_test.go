@@ -89,3 +89,26 @@ func TestFsTable(t *testing.T) {
 	assert.Equal(t, headers[2], "Command args")
 	assert.Equal(t, headers[3], "Created")
 }
+
+func TestWatchEvents(t *testing.T) {
+	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
+	uiEvents := make(chan ui.Event)
+	fsTable := NewTable(true)
+	fsTable.Rows = [][]string{
+		{"header1", "header2", "header3"},
+		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
+		{"2016", "10", "11"},
+		{"2016", "10", "11"},
+		{"2016", "10", "11"}}
+	netTable := NewTable(true)
+	fsTable.Rows = [][]string{
+		{"header1", "header2", "header3"},
+		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
+		{"2016", "10", "11"},
+		{"2016", "10", "11"},
+		{"2016", "10", "11"}}
+
+	go nku.watchEvents(uiEvents, fsTable, netTable, []string{}, []string{})
+	uiEvents <- ui.Event{ID: "j"}
+	assert.Equal(t, fsTable.curr, fsTable.prev)
+}
