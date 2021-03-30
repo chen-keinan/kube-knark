@@ -6,11 +6,11 @@
 <br><img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><br>
 # Kube-Knark Project
 ###  Trace your kubernetes runtime !!
-Kube-Knark is an open source  tracer (via ebpf technology) who perform runtime tracing on a deployed kubernetes cluster tracing kubernetes API execution and main config files permission changes. trace result are leveraged via go plugin hooks to external system
+Kube-Knark is an open source  tracer (via ebpf technology) who perform runtime tracing on a deployed kubernetes cluster tracing kubernetes API execution and master node configuration files permission changes. trace result are leveraged via go plugin hooks to external system
 
 kube-knark trace the following :
 - The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) exection <br> 
-- kubernetes main config files permission changes as describe in [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
+- kubernetes master node configuration files permission changes as describe in [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
 
 kube-knark tracing results are repoted :
 - Console ui dashboard
