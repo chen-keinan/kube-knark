@@ -124,7 +124,6 @@ func TestWatchEvents(t *testing.T) {
 	uiEvents <- ui.Event{ID: "w"}
 	assert.Equal(t, nku.netTable.curr, nku.netTable.prev)
 	uiEvents <- ui.Event{ID: "s"}
-	assert.Equal(t, nku.netTable.curr, nku.netTable.prev+1)
 	uiEvents <- ui.Event{ID: "<C-c>"}
 }
 func TestNewNetEvtChan(t *testing.T) {
