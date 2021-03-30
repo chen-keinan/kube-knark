@@ -111,4 +111,10 @@ func TestWatchEvents(t *testing.T) {
 	go nku.watchEvents(uiEvents, fsTable, netTable, []string{}, []string{})
 	uiEvents <- ui.Event{ID: "j"}
 	assert.Equal(t, fsTable.curr, fsTable.prev)
+	uiEvents <- ui.Event{ID: "k"}
+	assert.Equal(t, fsTable.curr, fsTable.prev)
+	uiEvents <- ui.Event{ID: "w"}
+	assert.Equal(t, netTable.curr, netTable.prev)
+	uiEvents <- ui.Event{ID: "s"}
+	assert.Equal(t, netTable.curr, netTable.prev)
 }
