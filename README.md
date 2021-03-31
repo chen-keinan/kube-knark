@@ -27,7 +27,7 @@ kube-knark tracing results are repoted :
 ### User Plugin usage
 The Kube-knark expose 2 hooks for user plugins:
 - OnK8sAPICallHook - this hook accepts k8s api call event with all details (http request /response ,matching API spec) 
-- OnK8sFileConfigChangeHook - this hook accepts master file configuration change event with command details (which command(chown /chmod) args and matching spec
+- OnK8sFileConfigChangeHook - this hook accepts master file configuration change event with command details (chown or chmod ,args and matching file change spec
 
 ### Supported Specs 
 The Kube-knark support 2 specs and can be easily extended:
