@@ -9,7 +9,7 @@
 Kube-Knark is an open source  tracer uses ebpf technology to perform runtime tracing on a deployed kubernetes cluster. it tracing the kubernetes API execution and master node configuration files permission changes. the trace results are leveraged via go plugin hooks to external system
 
 kube-knark trace the following :
-- The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) exection <br> 
+- The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) execution <br> 
 - kubernetes master node configuration files permission changes [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
 
 kube-knark tracing results are repoted :
@@ -23,3 +23,15 @@ kube-knark tracing results are repoted :
 - Clang < 10
 - LLVM
 - Kernel Headers
+
+### User Plugin usage
+The Kube-knark expose 2 hooks for user plugins:
+- OnK8sAPICallHook - this hook accepts k8s api call event with all details (http request /response ,matching API spec) 
+- OnK8sFileConfigChangeHook - this hook accepts master file configuration change event with command details (which command(chown /chmod) args and matching spec
+
+### Supported Specs 
+The Kube-knark support 2 specs and can be easily extended:
+- The full k8s API spec [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/)
+- master config file change spec
+
+both specs can be easily extended by amended the spec files under ```~/.kube-knark/spec``` folder
