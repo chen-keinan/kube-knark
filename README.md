@@ -10,7 +10,7 @@ Kube-Knark is an open source  tracer uses ebpf technology to perform runtime tra
 
 kube-knark trace the following :
 - The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) exection <br> 
-- kubernetes master node configuration files permission changes as describe in [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
+- kubernetes master node configuration files permission changes [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
 
 kube-knark tracing results are repoted :
 - Console ui dashboard
