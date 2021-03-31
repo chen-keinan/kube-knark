@@ -39,4 +39,8 @@ const (
 	Extend = "extend.yml"
 	//Cluster spec
 	Cluster = "cluster.yml"
+	//OnK8sAPICallHook hook name
+	OnK8sAPICallHook = "OnK8sAPICallHook"
+	//OnK8sFileConfigChangeHook hook name
+	OnK8sFileConfigChangeHook = "OnK8sFileConfigChangeHook"
 )

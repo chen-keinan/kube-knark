@@ -1,0 +1,139 @@
+package kplugin
+
+import (
+	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/model"
+	"github.com/chen-keinan/kube-knark/pkg/utils"
+	"io/ioutil"
+	"math/rand"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"plugin"
+)
+
+// PluginLoader keeps the context needed to find where Plugins and
+// objects are stored.
+type PluginLoader struct {
+	pluginsDir string
+	objectsDir string
+}
+
+//NewPluginLoader return new plugin loader object with src and compiled folders
+func NewPluginLoader() (*PluginLoader, error) {
+	// The directory that will be watched for new Plugins.
+	srcFolder, err := utils.GetPluginSourceSubFolder()
+	if err != nil {
+		return nil, fmt.Errorf("could not find current directory: %v", err)
+	}
+	// The directory where all .so files will be stored.
+	compiledFolder, err := utils.GetCompilePluginSubFolder()
+	if err != nil {
+		return nil, fmt.Errorf("could not create objects dir: %v", err)
+	}
+	return &PluginLoader{pluginsDir: srcFolder, objectsDir: compiledFolder}, nil
+}
+
+//Compile the go plugin in a given path and hook name and return it symbol
+func (l *PluginLoader) Compile(name string, hookName string) (plugin.Symbol, error) {
+	obj, err := l.compile(name)
+	if err != nil {
+		return nil, fmt.Errorf("could not compile %s: %v", name, err)
+	}
+	defer func() {
+		err = os.Remove(obj)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	var sym plugin.Symbol
+	if sym, err = l.load(obj, hookName); err != nil {
+		return nil, fmt.Errorf("could not compile %s: %v", name, err)
+	}
+	return sym, nil
+}
+
+// compile compiles the code in the given path, builds a
+// plugin, and returns its path.
+//nolint:gosec
+func (l *PluginLoader) compile(name string) (string, error) {
+	// Copy the file to the objects directory with a different name
+	// each time, to avoid retrieving the cached version.
+	// Apparently the cache key is the path of the file compiled and
+	// there's no way to invalidate it.
+	f, err := ioutil.ReadFile(filepath.Join(l.pluginsDir, name))
+	if err != nil {
+		return "", fmt.Errorf("could not read %s: %v", name, err)
+	}
+
+	name = fmt.Sprintf("%d.go", rand.Int())
+	srcPath := filepath.Join(l.objectsDir, name)
+	if err := ioutil.WriteFile(srcPath, f, 600); err != nil {
+		return "", fmt.Errorf("could not write %s: %v", name, err)
+	}
+
+	objectPath := srcPath[:len(srcPath)-3] + ".so"
+	cmd := exec.Command("go", "build", "-buildmode=plugin", fmt.Sprintf("-o=%s", objectPath), srcPath)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("could not compile %s: %v", name, err)
+	}
+
+	return objectPath, nil
+}
+
+// load loads the plugin object in the given path and runs the Run
+// function.
+func (l *PluginLoader) load(object string, hookName string) (plugin.Symbol, error) {
+	p, err := plugin.Open(object)
+	if err != nil {
+		return nil, fmt.Errorf("could not open %s: %v", object, err)
+	}
+	return p.Lookup(hookName)
+}
+
+//ExecuteNetEvt execute on K8s api call hook
+func ExecuteNetEvt(sym plugin.Symbol, netEvt model.K8sAPICallEvent) error {
+	runFunc, ok := sym.(func(netEvent model.K8sAPICallEvent) error)
+	if !ok {
+		return fmt.Errorf("found Run but type is %T instead of func() error", sym)
+	}
+	return runFunc(netEvt)
+}
+
+//ExecuteK8sConfigChange execute on K8s config file change hook
+func ExecuteK8sConfigChange(sym plugin.Symbol, fsEvt model.K8sConfigFileChangeEvent) error {
+	runFunc, ok := sym.(func(netEvent model.K8sConfigFileChangeEvent) error)
+	if !ok {
+		return fmt.Errorf("found Run but type is %T instead of func() error", sym)
+	}
+	return runFunc(fsEvt)
+}
+
+//Plugins lists all the files in the Plugins
+func (l *PluginLoader) Plugins() ([]string, error) {
+	dir, err := os.Open(l.pluginsDir)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		err = dir.Close()
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}()
+	names, err := dir.Readdirnames(-1)
+	if err != nil {
+		return nil, err
+	}
+
+	var res []string
+	for _, name := range names {
+		if filepath.Ext(name) == ".go" {
+			res = append(res, name)
+		}
+	}
+	return res, nil
+}

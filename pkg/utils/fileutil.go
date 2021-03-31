@@ -18,8 +18,14 @@ const SpecFileSystemSubFolder = "spec/filesystem"
 //SourceSubFolder ebpf file source folder
 const SourceSubFolder = "ebpf/source"
 
+//PluginSourceSubFolder plugin source folder
+const PluginSourceSubFolder = "plugins/source"
+
 //CompileSubFolder ebpf complied folder
 const CompileSubFolder = "ebpf/compile"
+
+//CompilePluginSubFolder plugins complied folder
+const CompilePluginSubFolder = "plugins/compile"
 
 //FolderMgr defines the interface for kube-knark folder
 //fileutil.go
@@ -65,6 +71,24 @@ func GetSpecFilesystemFolder() (string, error) {
 		return "", err
 	}
 	return path.Join(folder, SpecFileSystemSubFolder), nil
+}
+
+//GetPluginSourceSubFolder return plugins source folder path
+func GetPluginSourceSubFolder() (string, error) {
+	folder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(folder, PluginSourceSubFolder), nil
+}
+
+//GetCompilePluginSubFolder return plugin compiled folder path
+func GetCompilePluginSubFolder() (string, error) {
+	folder, err := GetHomeFolder()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(folder, CompilePluginSubFolder), nil
 }
 
 //GetEbpfSourceFolder return ebpf source folder path
@@ -181,6 +205,24 @@ func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
 	return fm.CreateFolder(ebpfFolder)
 }
 
+//CreatePluginsCompiledFolderIfNotExist create plugins compiled folder if not exist
+func CreatePluginsCompiledFolderIfNotExist(fm FolderMgr) error {
+	ebpfFolder, err := GetCompilePluginSubFolder()
+	if err != nil {
+		return err
+	}
+	return fm.CreateFolder(ebpfFolder)
+}
+
+//CreatePluginsSourceFolderIfNotExist plugins source folder if not exist
+func CreatePluginsSourceFolderIfNotExist(fm FolderMgr) error {
+	ebpfFolder, err := GetPluginSourceSubFolder()
+	if err != nil {
+		return err
+	}
+	return fm.CreateFolder(ebpfFolder)
+}
+
 //CreateKubeKnarkFolders create kube knark compiled and spec folders
 func CreateKubeKnarkFolders() error {
 	fm := NewKFolder()
@@ -201,6 +243,14 @@ func CreateKubeKnarkFolders() error {
 		return err
 	}
 	err = CreateSpecFSFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	err = CreatePluginsCompiledFolderIfNotExist(fm)
+	if err != nil {
+		return err
+	}
+	err = CreatePluginsSourceFolderIfNotExist(fm)
 	if err != nil {
 		return err
 	}

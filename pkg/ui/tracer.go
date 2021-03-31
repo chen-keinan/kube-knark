@@ -10,8 +10,8 @@ import (
 
 //KubeKnarkUI return UI object
 type KubeKnarkUI struct {
-	NetEvtChan chan model.NetEvt
-	FsEvtChan  chan model.FilesystemEvt
+	NetEvtChan chan model.K8sAPICallEvent
+	FsEvtChan  chan model.K8sConfigFileChangeEvent
 	fsTable    *Table
 	netTable   *Table
 	fsHeaders  []string
@@ -20,17 +20,17 @@ type KubeKnarkUI struct {
 }
 
 //NewNetEvtChan return net event channel
-func NewNetEvtChan() chan model.NetEvt {
-	return make(chan model.NetEvt)
+func NewNetEvtChan() chan model.K8sAPICallEvent {
+	return make(chan model.K8sAPICallEvent)
 }
 
 //NewFilesystemEvtChan return file system event channel
-func NewFilesystemEvtChan() chan model.FilesystemEvt {
-	return make(chan model.FilesystemEvt)
+func NewFilesystemEvtChan() chan model.K8sConfigFileChangeEvent {
+	return make(chan model.K8sConfigFileChangeEvent)
 }
 
 //NewKubeKnarkUI return new KubeKnarkUI object
-func NewKubeKnarkUI(netData chan model.NetEvt, fsData chan model.FilesystemEvt) *KubeKnarkUI {
+func NewKubeKnarkUI(netData chan model.K8sAPICallEvent, fsData chan model.K8sConfigFileChangeEvent) *KubeKnarkUI {
 	return &KubeKnarkUI{NetEvtChan: netData, FsEvtChan: fsData}
 }
 
@@ -56,8 +56,8 @@ func (kui *KubeKnarkUI) Draw(errNetChan chan error) {
 }
 
 func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event) {
-	fsEvts := make([]*model.FilesystemEvt, 0)
-	netEvts := make([]*model.NetEvt, 0)
+	fsEvts := make([]*model.K8sConfigFileChangeEvent, 0)
+	netEvts := make([]*model.K8sAPICallEvent, 0)
 	for {
 		select {
 		case e := <-uiEvents:
@@ -86,7 +86,7 @@ func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event) {
 	}
 }
 
-func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*model.NetEvt, netEvent *model.NetEvt, netRows [][]string) [][]string {
+func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*model.K8sAPICallEvent, netEvent *model.K8sAPICallEvent, netRows [][]string) [][]string {
 	*netEvts = append(*netEvts, netEvent)
 	// sort event by severity
 	sort.Slice(*netEvts, func(i, j int) bool {
@@ -99,7 +99,7 @@ func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*model.NetEvt, netEvent *model.Ne
 }
 
 // sort table by severity
-func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*model.FilesystemEvt, fsEvent *model.FilesystemEvt, fsRows [][]string) [][]string {
+func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*model.K8sConfigFileChangeEvent, fsEvent *model.K8sConfigFileChangeEvent, fsRows [][]string) [][]string {
 	*fsEvts = append(*fsEvts, fsEvent)
 	// sort event by severity
 	sort.Slice(*fsEvts, func(i, j int) bool {

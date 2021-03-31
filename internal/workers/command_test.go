@@ -3,14 +3,17 @@ package workers
 import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
+	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+	"plugin"
 	"testing"
 	"time"
 )
@@ -22,9 +25,11 @@ func TestCommandMatchesWorker_Invoke(t *testing.T) {
 	smap, err := getSpecMap()
 	assert.NoError(t, err)
 	fsMatches := matches.NewFSMatches(mmap, smap)
-	uichan := make(chan model.FilesystemEvt)
-	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan)
-	cmw := NewCommandMatchesWorker(cmd)
+	uichan := make(chan model.K8sConfigFileChangeEvent)
+	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan, kplugin.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0)})
+	log, err := zap.NewProduction()
+	assert.NoError(t, err)
+	cmw := NewCommandMatchesWorker(cmd, log)
 	cmw.Invoke()
 	cmc <- &execevent.KprobeEvent{StartTime: time.Now().String(), UID: uint32(1), Pid: uint32(1), Gid: uint32(1), Comm: "cmd", Args: []string{"chmod", "/etc/kubernetes/manifests/kube-apiserver.yaml"}}
 	res := <-uichan

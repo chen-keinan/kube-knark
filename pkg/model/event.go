@@ -6,14 +6,14 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 )
 
-// FilesystemEvt fs event msg
-type FilesystemEvt struct {
+// K8sConfigFileChangeEvent fs event msg
+type K8sConfigFileChangeEvent struct {
 	Msg  *execevent.KprobeEvent
 	Spec *specs.FS
 }
 
-// NetEvt net event msg
-type NetEvt struct {
+// K8sAPICallEvent net event msg
+type K8sAPICallEvent struct {
 	Msg  *netevent.HTTPNetData
 	Spec *specs.API
 }

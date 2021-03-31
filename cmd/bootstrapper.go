@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"fmt"
+	"github.com/chen-keinan/kube-knark/internal/common"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
-	"github.com/chen-keinan/kube-knark/internal/logger"
+	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
@@ -17,15 +19,17 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/gorilla/mux"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 	"os"
 	"os/signal"
+	"plugin"
 )
 
 // StartKnark start kube-knark event tracer
 func StartKnark() {
 	app := fx.New(
 		// dependency injection
-		fx.Provide(logger.NewZapLogger),
+		fx.Provide(NewZapLogger),
 		// validation spec files
 		fx.Provide(provideSpecFiles),
 		fx.Provide(provideSpecRoutes),
@@ -38,6 +42,8 @@ func StartKnark() {
 		fx.Provide(shell.NewClangCompiler),
 		fx.Provide(provideCompiledFiles),
 		// init cmd workers
+		fx.Provide(LoadAPICallPluginSymbols),
+		fx.Provide(LoadFileChangePluginSymbols),
 		fx.Provide(ui.NewNetEvtChan),
 		fx.Provide(ui.NewKubeKnarkUI),
 		fx.Provide(numOfWorkers),
@@ -59,8 +65,8 @@ func StartKnark() {
 
 // load ebpf program and trace events
 func runKnarkService(lifecycle fx.Lifecycle,
-	netUIChan chan model.NetEvt,
-	fsUIChan chan model.FilesystemEvt,
+	netUIChan chan model.K8sAPICallEvent,
+	fsUIChan chan model.K8sConfigFileChangeEvent,
 	files []utils.FilesInfo,
 	NetEventChan chan *netevent.HTTPNetData,
 	cmdEventChan chan *execevent.KprobeEvent,
@@ -97,6 +103,15 @@ func runKnarkService(lifecycle fx.Lifecycle,
 		}
 	},
 	})
+}
+
+//NewZapLogger zap logger object
+func NewZapLogger() *zap.Logger {
+	logger, err := zap.NewProduction()
+	if err != nil {
+		panic("failed to create zap logger instance")
+	}
+	return logger
 }
 
 //matchNetChan return channel for net packet match
@@ -234,4 +249,46 @@ func getDataFileContent() ([]string, error) {
 		dataFiles = append(dataFiles, f.Data)
 	}
 	return dataFiles, err
+}
+
+//LoadAPICallPluginSymbols load API call plugin symbols
+func LoadAPICallPluginSymbols(log *zap.Logger) kplugin.K8sAPICallHook {
+	pl, err := kplugin.NewPluginLoader()
+	if err != nil {
+		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+	}
+	plugins, err := pl.Plugins()
+	if err != nil {
+		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+	}
+	apiPlugin := kplugin.K8sAPICallHook{Plugins: make([]plugin.Symbol, 0)}
+	for _, name := range plugins {
+		sym, err := pl.Compile(name, common.OnK8sAPICallHook)
+		if err != nil {
+			continue
+		}
+		apiPlugin.Plugins = append(apiPlugin.Plugins, sym)
+	}
+	return apiPlugin
+}
+
+//LoadFileChangePluginSymbols load config file change plugin symbols
+func LoadFileChangePluginSymbols(log *zap.Logger) kplugin.K8sFileConfigChangeHook {
+	pl, err := kplugin.NewPluginLoader()
+	if err != nil {
+		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+	}
+	plugins, err := pl.Plugins()
+	if err != nil {
+		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+	}
+	filePlugin := kplugin.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0)}
+	for _, name := range plugins {
+		sym, err := pl.Compile(name, common.OnK8sFileConfigChangeHook)
+		if err != nil {
+			continue
+		}
+		filePlugin.Plugins = append(filePlugin.Plugins, sym)
+	}
+	return filePlugin
 }
