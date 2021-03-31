@@ -12,7 +12,7 @@ kube-knark trace the following :
 - The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) execution <br> 
 - kubernetes master node configuration files permission changes [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
 
-kube-knark tracing results are repoted :
+kube-knark tracing results are reported :
 - Console dashboard
 - Go Plugin hooks
 
@@ -28,7 +28,7 @@ kubernetes cluster Knark console:
 - Kernel Headers
 
 ### User Plugin usage
-The Kube-knark expose 2 hooks for user plugins:
+The Kube-knark expose 2 hooks for user plugins [Example](https://github.com/chen-keinan/kube-knark/tree/master/examples/plugins) :
 - OnK8sAPICallHook - this hook accepts k8s api call event with all details (http request /response ,matching API spec) 
 - OnK8sFileConfigChangeHook - this hook accepts master file configuration change event with command details (chown or chmod ,args and matching file change spec
 
