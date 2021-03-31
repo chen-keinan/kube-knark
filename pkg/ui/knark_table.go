@@ -142,22 +142,6 @@ func (t *Table) ScrollDown() {
 	t.paintActiveRow()
 }
 
-// PageDown skips to the next page
-func (t *Table) PageDown() {
-	skip := t.visibleRows - 1
-	for i := 0; i < skip; i++ {
-		t.ScrollDown()
-	}
-}
-
-// PageUp skips to the previous page
-func (t *Table) PageUp() {
-	skip := t.visibleRows - 1
-	for i := 0; i < skip; i++ {
-		t.ScrollUp()
-	}
-}
-
 // reCalcView recalculates the view into the table, handling any out of bounds errors.
 func (t *Table) reCalcView() {
 	if len(t.out) == 0 {

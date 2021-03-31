@@ -139,3 +139,24 @@ func TestGetEbpfSourceFolder(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, folder, path.Join(homeFolder, SourceSubFolder))
 }
+
+func TestGetFiles(t *testing.T) {
+	folder, err := GetEbpfSourceFolder()
+	assert.NoError(t, err)
+	err = os.RemoveAll(folder)
+	assert.NoError(t, err)
+	fm := NewKFolder()
+	err = CreateHomeFolderIfNotExist(fm)
+	assert.NoError(t, err)
+	err = CreateEbpfSourceFolderIfNotExist(fm)
+	assert.NoError(t, err)
+	destination, err := os.Create(path.Join(folder, "test.c"))
+	assert.NoError(t, err)
+	defer destination.Close()
+	destination.WriteString("c code")
+	files, err := GetFiles(folder)
+	assert.NoError(t, err)
+	assert.Equal(t, files[0].Name, "test.c")
+	assert.Equal(t, files[0].Data, "c code")
+
+}
