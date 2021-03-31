@@ -17,6 +17,7 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/magiconair/properties v1.8.1
 	github.com/mailru/easyjson v0.7.7
+	github.com/mattn/goveralls v0.0.8 // indirect
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/nsf/termbox-go v0.0.0-20190121233118-02980233997d
 	github.com/pkg/errors v0.9.1 // indirect
@@ -33,5 +34,6 @@ require (
 	golang.org/x/sys v0.0.0-20210330210617-4fbd30eecc44 // indirect
 	golang.org/x/term v0.0.0-20210317153231-de623e64d2a6 // indirect
 	golang.org/x/text v0.3.3
+	golang.org/x/tools v0.1.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
