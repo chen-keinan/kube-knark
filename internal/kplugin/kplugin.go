@@ -5,6 +5,7 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -65,11 +66,20 @@ func (l *PluginLoader) compile(name string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("could not read %s: %v", name, err)
 	}
+
+	name = fmt.Sprintf("%d.go", rand.Int())
 	srcPath := filepath.Join(l.objectsDir, name)
-	if err := ioutil.WriteFile(srcPath, f, 600); err != nil {
+	fileCreated, err := os.Create(srcPath)
+	if err != nil {
 		return "", fmt.Errorf("could not write %s: %v", name, err)
 	}
-
+	defer func() {
+		err = fileCreated.Close()
+		if err != nil {
+			fmt.Print(err.Error())
+		}
+	}()
+	fileCreated.WriteString(string(f))
 	objectPath := srcPath[:len(srcPath)-3] + ".so"
 	cmd := exec.Command("go", "build", "-buildmode=plugin", fmt.Sprintf("-o=%s", objectPath), srcPath)
 	cmd.Stderr = os.Stderr
