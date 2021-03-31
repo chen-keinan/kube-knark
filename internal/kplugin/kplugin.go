@@ -79,7 +79,10 @@ func (l *PluginLoader) compile(name string) (string, error) {
 			fmt.Print(err.Error())
 		}
 	}()
-	fileCreated.WriteString(string(f))
+	_, err = fileCreated.WriteString(string(f))
+	if err != nil {
+		return "", fmt.Errorf("could not write %s: %v", name, err)
+	}
 	objectPath := srcPath[:len(srcPath)-3] + ".so"
 	cmd := exec.Command("go", "build", "-buildmode=plugin", fmt.Sprintf("-o=%s", objectPath), srcPath)
 	cmd.Stderr = os.Stderr

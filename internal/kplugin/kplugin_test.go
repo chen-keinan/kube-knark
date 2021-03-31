@@ -75,6 +75,9 @@ func pluginSetUp(fileName string) (*PluginLoader, error) {
 		return nil, err
 	}
 	err = os.RemoveAll(folder)
+	if err != nil {
+		return nil, err
+	}
 	cfolder, err := utils.GetCompilePluginSubFolder()
 	if err != nil {
 		return nil, err
