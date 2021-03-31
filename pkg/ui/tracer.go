@@ -2,9 +2,7 @@ package ui
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
-	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
-	"github.com/chen-keinan/kube-knark/pkg/model/specs"
+	"github.com/chen-keinan/kube-knark/pkg/model"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 	"sort"
@@ -12,8 +10,8 @@ import (
 
 //KubeKnarkUI return UI object
 type KubeKnarkUI struct {
-	NetEvtChan chan NetEvt
-	FsEvtChan  chan FilesystemEvt
+	NetEvtChan chan model.NetEvt
+	FsEvtChan  chan model.FilesystemEvt
 	fsTable    *Table
 	netTable   *Table
 	fsHeaders  []string
@@ -21,30 +19,18 @@ type KubeKnarkUI struct {
 	paragraph  *widgets.Paragraph
 }
 
-// NetEvt net event msg
-type NetEvt struct {
-	Msg  *netevent.HTTPNetData
-	Spec *specs.API
-}
-
-// FilesystemEvt fs event msg
-type FilesystemEvt struct {
-	Msg  *execevent.KprobeEvent
-	Spec *specs.FS
-}
-
 //NewNetEvtChan return net event channel
-func NewNetEvtChan() chan NetEvt {
-	return make(chan NetEvt)
+func NewNetEvtChan() chan model.NetEvt {
+	return make(chan model.NetEvt)
 }
 
 //NewFilesystemEvtChan return file system event channel
-func NewFilesystemEvtChan() chan FilesystemEvt {
-	return make(chan FilesystemEvt)
+func NewFilesystemEvtChan() chan model.FilesystemEvt {
+	return make(chan model.FilesystemEvt)
 }
 
 //NewKubeKnarkUI return new KubeKnarkUI object
-func NewKubeKnarkUI(netData chan NetEvt, fsData chan FilesystemEvt) *KubeKnarkUI {
+func NewKubeKnarkUI(netData chan model.NetEvt, fsData chan model.FilesystemEvt) *KubeKnarkUI {
 	return &KubeKnarkUI{NetEvtChan: netData, FsEvtChan: fsData}
 }
 
@@ -70,8 +56,8 @@ func (kui *KubeKnarkUI) Draw(errNetChan chan error) {
 }
 
 func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event) {
-	fsEvts := make([]*FilesystemEvt, 0)
-	netEvts := make([]*NetEvt, 0)
+	fsEvts := make([]*model.FilesystemEvt, 0)
+	netEvts := make([]*model.NetEvt, 0)
 	for {
 		select {
 		case e := <-uiEvents:
@@ -100,7 +86,7 @@ func (kui *KubeKnarkUI) watchEvents(uiEvents <-chan ui.Event) {
 	}
 }
 
-func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*NetEvt, netEvent *NetEvt, netRows [][]string) [][]string {
+func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*model.NetEvt, netEvent *model.NetEvt, netRows [][]string) [][]string {
 	*netEvts = append(*netEvts, netEvent)
 	// sort event by severity
 	sort.Slice(*netEvts, func(i, j int) bool {
@@ -113,7 +99,7 @@ func (kui *KubeKnarkUI) sortNetRows(netEvts *[]*NetEvt, netEvent *NetEvt, netRow
 }
 
 // sort table by severity
-func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*FilesystemEvt, fsEvent *FilesystemEvt, fsRows [][]string) [][]string {
+func (kui *KubeKnarkUI) sortFSRows(fsEvts *[]*model.FilesystemEvt, fsEvent *model.FilesystemEvt, fsRows [][]string) [][]string {
 	*fsEvts = append(*fsEvts, fsEvent)
 	// sort event by severity
 	sort.Slice(*fsEvts, func(i, j int) bool {

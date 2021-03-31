@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	"github.com/chen-keinan/kube-knark/internal/matches"
+	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
-	"github.com/chen-keinan/kube-knark/pkg/ui"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -22,7 +22,7 @@ func TestCommandMatchesWorker_Invoke(t *testing.T) {
 	smap, err := getSpecMap()
 	assert.NoError(t, err)
 	fsMatches := matches.NewFSMatches(mmap, smap)
-	uichan := make(chan ui.FilesystemEvt)
+	uichan := make(chan model.FilesystemEvt)
 	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan)
 	cmw := NewCommandMatchesWorker(cmd)
 	cmw.Invoke()

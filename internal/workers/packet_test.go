@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	"github.com/chen-keinan/kube-knark/internal/matches"
+	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
-	"github.com/chen-keinan/kube-knark/pkg/ui"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -22,7 +22,7 @@ func TestPacketMatchesWorker_Invoke(t *testing.T) {
 	rm := matches.NewRouteMatches(sr, mux.NewRouter())
 	vc, err := buildValidationCache()
 	assert.NoError(t, err)
-	netChan := make(chan ui.NetEvt)
+	netChan := make(chan model.NetEvt)
 	pmd := NewPacketMatchData(rm, pmc, vc, 1, netChan)
 	pmw := NewPacketMatchesWorker(pmd)
 	pmw.Invoke()

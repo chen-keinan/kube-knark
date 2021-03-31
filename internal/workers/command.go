@@ -3,8 +3,8 @@ package workers
 import (
 	"bytes"
 	"github.com/chen-keinan/kube-knark/internal/matches"
+	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
-	"github.com/chen-keinan/kube-knark/pkg/ui"
 )
 
 //CommandMatchesWorker instance which match command data to specific pattern
@@ -18,7 +18,7 @@ func NewCommandMatchesWorker(commandMatchData *CommandMatchData) *CommandMatches
 }
 
 //NewCommandMatchesData return new command instance
-func NewCommandMatchesData(cmc chan *execevent.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches, uiChan chan ui.FilesystemEvt) *CommandMatchData {
+func NewCommandMatchesData(cmc chan *execevent.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches, uiChan chan model.FilesystemEvt) *CommandMatchData {
 	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMatches: fsMatches, uiChan: uiChan}
 }
 
@@ -27,7 +27,7 @@ type CommandMatchData struct {
 	cmc          chan *execevent.KprobeEvent
 	numOfWorkers int
 	fsMatches    *matches.FSMatches
-	uiChan       chan ui.FilesystemEvt
+	uiChan       chan model.FilesystemEvt
 }
 
 //Invoke invoke packet matches workers
@@ -39,7 +39,7 @@ func (pm *CommandMatchesWorker) Invoke() {
 				var sb = new(bytes.Buffer)
 				if ok := pm.cmd.fsMatches.Match(ke.Args, sb); ok {
 					fSpec := pm.cmd.fsMatches.Cache[sb.String()]
-					pm.cmd.uiChan <- ui.FilesystemEvt{Msg: ke, Spec: fSpec}
+					pm.cmd.uiChan <- model.FilesystemEvt{Msg: ke, Spec: fSpec}
 				}
 			}
 		}()

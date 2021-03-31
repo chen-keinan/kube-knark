@@ -9,6 +9,7 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 	"github.com/chen-keinan/kube-knark/internal/workers"
+	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
@@ -58,8 +59,8 @@ func StartKnark() {
 
 // load ebpf program and trace events
 func runKnarkService(lifecycle fx.Lifecycle,
-	netUIChan chan ui.NetEvt,
-	fsUIChan chan ui.FilesystemEvt,
+	netUIChan chan model.NetEvt,
+	fsUIChan chan model.FilesystemEvt,
 	files []utils.FilesInfo,
 	NetEventChan chan *netevent.HTTPNetData,
 	cmdEventChan chan *execevent.KprobeEvent,
