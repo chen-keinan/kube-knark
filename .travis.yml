@@ -17,8 +17,8 @@ script:
   - go get github.com/golang/mock/mockgen@latest
   - go install -v github.com/golang/mock/mockgen && export PATH=$GOPATH/bin:$PATH;
   - go generate ./...
-  #- goveralls -service=travis-pro
-  - go test ./cmd... ./internal... ./pkg... -v -covermode=count -coverprofile=coverage.out $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
- # - make test
- # - make build
+  - go test ./cmd... ./internal... ./pkg...  -coverprofile=coverage.out
+  - goveralls -coverprofile=coverage.out -service=travis-ci
+  - make test
+  - make build
 
