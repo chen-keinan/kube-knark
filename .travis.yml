@@ -19,6 +19,5 @@ script:
   - go generate ./...
   - go test ./cmd... ./internal... ./pkg...  -coverprofile=coverage.out
   - goveralls -coverprofile=coverage.out -service=travis-ci
-  - make test
   - make build
 
