@@ -3,6 +3,7 @@ package khttp
 import (
 	"errors"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/external"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -11,12 +12,8 @@ import (
 	"os"
 	"runtime"
 	"strconv"
-	"sync"
 	"time"
 )
-
-var waitGroup sync.WaitGroup
-var printerWaitGroup sync.WaitGroup
 
 func listenOneSource(handle *pcap.Handle) chan gopacket.Packet {
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
@@ -78,7 +75,7 @@ func openSingleDevice(device string, filterIP string, filterPort uint16) (localP
 //StartNetListener invoke net listener for kernel http events
 func StartNetListener(errChan chan error, netEventChan chan *netevent.HTTPNetData) {
 	go func() {
-		var option = &Option{}
+		var option = &external.Option{}
 		cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
 			return run(option, errChan, netEventChan)
 		})
@@ -91,13 +88,13 @@ func StartNetListener(errChan chan error, netEventChan chan *netevent.HTTPNetDat
 }
 
 //nolint:gocyclo
-func run(option *Option, errChan chan error, netEventChan chan *netevent.HTTPNetData) error {
+func run(option *external.Option, errChan chan error, netEventChan chan *netevent.HTTPNetData) error {
 	if option.Port > 65536 {
 		return fmt.Errorf("ignored invalid port %v", option.Port)
 	}
 
 	if option.Status != "" {
-		statusSet, err := ParseIntSet(option.Status)
+		statusSet, err := external.ParseIntSet(option.Status)
 		if err != nil {
 			errChan <- fmt.Errorf("status range not valid %v", option.Status)
 		}
@@ -141,14 +138,14 @@ func run(option *Option, errChan chan error, netEventChan chan *netevent.HTTPNet
 		errChan <- errors.New("no device or pcap file specified")
 	}
 
-	var handler = &HTTPConnectionHandler{
-		option: option,
+	var handler = &external.HTTPConnectionHandler{
+		Option: option,
 		// TODO: stdout
-		printer: newPrinter(netEventChan),
+		Printer: external.NewPrinter(netEventChan),
 	}
-	var assembler = newTCPAssembler(handler)
-	assembler.filterIP = option.Ip
-	assembler.filterPort = uint16(option.Port)
+	var assembler = external.NewTCPAssembler(handler)
+	assembler.FilterIP = option.Ip
+	assembler.FilterPort = uint16(option.Port)
 	var ticker = time.NewTicker(time.Second * 10).C
 
 outer:
@@ -166,15 +163,15 @@ outer:
 			}
 			var tcp = packet.TransportLayer().(*layers.TCP)
 
-			assembler.assemble(packet.NetworkLayer().NetworkFlow(), tcp, packet.Metadata().Timestamp)
+			assembler.Assemble(packet.NetworkLayer().NetworkFlow(), tcp, packet.Metadata().Timestamp)
 		case <-ticker:
 			// flush connections that haven't been activity in the idle time
-			assembler.flushOlderThan(time.Now().Add(-option.Idle))
+			assembler.FlushOlderThan(time.Now().Add(-option.Idle))
 		}
 	}
-	assembler.finishAll()
-	waitGroup.Wait()
-	handler.printer.finish()
-	printerWaitGroup.Wait()
+	assembler.FinishAll()
+	external.WaitGroup.Wait()
+	handler.Printer.Finish()
+	external.PrinterWaitGroup.Wait()
 	return nil
 }

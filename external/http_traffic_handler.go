@@ -1,5 +1,5 @@
 //nolint
-package khttp
+package external
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp/httpport"
+	"github.com/chen-keinan/kube-knark/external/httpport"
 	"github.com/hsiafan/glow/iox/filex"
 
 	"bufio"
@@ -45,8 +45,8 @@ func (ck *ConnectionKey) dstString() string {
 
 // HTTPConnectionHandler impl ConnectionHandler
 type HTTPConnectionHandler struct {
-	option  *Option
-	printer *Printer
+	Option  *Option
+	Printer *Printer
 }
 
 func (handler *HTTPConnectionHandler) handle(src Endpoint, dst Endpoint, connection *TCPConnection) {
@@ -54,19 +54,19 @@ func (handler *HTTPConnectionHandler) handle(src Endpoint, dst Endpoint, connect
 	trafficHandler := &HTTPTrafficHandler{
 		key:       ck,
 		buffer:    new(bytes.Buffer),
-		option:    handler.option,
-		printer:   handler.printer,
+		option:    handler.Option,
+		printer:   handler.Printer,
 		startTime: connection.lastTimestamp,
 	}
-	waitGroup.Add(1)
+	WaitGroup.Add(1)
 	go trafficHandler.handle(connection)
 }
 
 func (handler *HTTPConnectionHandler) finish() {
-	//handler.printer.finish()
+	//handler.Printer.Finish()
 }
 
-// HTTPTrafficHandler parse a http connection traffic and send to printer
+// HTTPTrafficHandler parse a http connection traffic and send to Printer
 type HTTPTrafficHandler struct {
 	startTime time.Time
 	endTime   time.Time
@@ -78,7 +78,7 @@ type HTTPTrafficHandler struct {
 
 // read http request/response stream, and do output
 func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
-	defer waitGroup.Done()
+	defer WaitGroup.Done()
 	defer connection.upStream.Close()
 	defer connection.downStream.Close()
 	// filter by args setting
@@ -124,7 +124,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 			if !filtered {
 				h.printRequest(req, hReqdata)
 				h.writeLine("")
-				h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
+				h.printer.Send(netevent.NewHTTPNetData(hReqdata, hResdata))
 			} else {
 				discardAll(req.Body)
 			}
@@ -140,7 +140,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 			h.writeLine("")
 			h.endTime = connection.lastTimestamp
 			h.printResponse(resp, hResdata)
-			h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
+			h.printer.Send(netevent.NewHTTPNetData(hReqdata, hResdata))
 		} else {
 			discardAll(req.Body)
 			discardAll(resp.Body)
@@ -166,7 +166,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 				}
 				if !filtered {
 					h.printResponse(resp, hResdata)
-					h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
+					h.printer.Send(netevent.NewHTTPNetData(hReqdata, hResdata))
 				} else {
 					discardAll(resp.Body)
 				}
@@ -176,7 +176,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 		}
 	}
 
-	h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
+	h.printer.Send(netevent.NewHTTPNetData(hReqdata, hResdata))
 }
 
 func (h *HTTPTrafficHandler) handleWebsocket(requestReader *bufio.Reader, responseReader *bufio.Reader) {

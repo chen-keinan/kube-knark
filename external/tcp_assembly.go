@@ -1,5 +1,5 @@
 //nolint
-package khttp
+package external
 import (
 	"bytes"
 	"io"
@@ -17,30 +17,30 @@ import (
 const maxTCPSeq uint32 = 0xFFFFFFFF
 const tcpSeqWindow = 0x0000FFFF
 
-// TCPAssembler do tcp package assemble
+// TCPAssembler do tcp package Assemble
 type TCPAssembler struct {
 	connectionDict    map[string]*TCPConnection
 	lock              sync.Mutex
 	connectionHandler ConnectionHandler
-	filterIP          string
-	filterPort        uint16
+	FilterIP          string
+	FilterPort        uint16
 }
 
-func newTCPAssembler(connectionHandler ConnectionHandler) *TCPAssembler {
+func NewTCPAssembler(connectionHandler ConnectionHandler) *TCPAssembler {
 	return &TCPAssembler{connectionDict: map[string]*TCPConnection{}, connectionHandler: connectionHandler}
 }
 
-func (assembler *TCPAssembler) assemble(flow gopacket.Flow, tcp *layers.TCP, timestamp time.Time) {
+func (assembler *TCPAssembler) Assemble(flow gopacket.Flow, tcp *layers.TCP, timestamp time.Time) {
 	src := Endpoint{ip: flow.Src().String(), port: uint16(tcp.SrcPort)}
 	dst := Endpoint{ip: flow.Dst().String(), port: uint16(tcp.DstPort)}
 	dropped := false
-	if assembler.filterIP != "" {
-		if src.ip != assembler.filterIP && dst.ip != assembler.filterIP {
+	if assembler.FilterIP != "" {
+		if src.ip != assembler.FilterIP && dst.ip != assembler.FilterIP {
 			dropped = true
 		}
 	}
-	if assembler.filterPort != 0 {
-		if src.port != assembler.filterPort && dst.port != assembler.filterPort {
+	if assembler.FilterPort != 0 {
+		if src.port != assembler.FilterPort && dst.port != assembler.FilterPort {
 			dropped = true
 		}
 	}
@@ -94,7 +94,7 @@ func (assembler *TCPAssembler) deleteConnection(key string) {
 }
 
 // flush timeout connections
-func (assembler *TCPAssembler) flushOlderThan(time time.Time) {
+func (assembler *TCPAssembler) FlushOlderThan(time time.Time) {
 	var connections []*TCPConnection
 	assembler.lock.Lock()
 	for _, connection := range assembler.connectionDict {
@@ -112,7 +112,7 @@ func (assembler *TCPAssembler) flushOlderThan(time time.Time) {
 	}
 }
 
-func (assembler *TCPAssembler) finishAll() {
+func (assembler *TCPAssembler) FinishAll() {
 	assembler.lock.Lock()
 	defer assembler.lock.Unlock()
 	for _, connection := range assembler.connectionDict {

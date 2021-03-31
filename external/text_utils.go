@@ -1,5 +1,5 @@
 //nolint
-package khttp
+package external
 import (
 	"bytes"
 	"io"

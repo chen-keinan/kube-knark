@@ -1,4 +1,4 @@
-package khttp
+package external
 
 import (
 	"github.com/google/gopacket/layers"
