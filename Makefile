@@ -26,7 +26,8 @@ test:
 build:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -v
-
+install:build
+	cp $(BINARY_NAME) $(GOPATH)/bin/$(BINARY_NAME)
 build_debug:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 go build -v -gcflags='-N -l'
