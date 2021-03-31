@@ -1,11 +1,13 @@
 //nolint
 package khttp
+
 import (
 	"bytes"
 	"compress/gzip"
 	"compress/zlib"
 	"encoding/json"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"io"
 	"io/ioutil"
 	"os"
@@ -85,12 +87,12 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 	defer discardAll(requestReader)
 	responseReader := bufio.NewReader(connection.downStream)
 	defer discardAll(responseReader)
-	var hReqdata *HTTPRequestData
-	var hResdata *HTTPResponseData
+	var hReqdata *netevent.HTTPRequestData
+	var hResdata *netevent.HTTPResponseData
 	for {
 		h.buffer = new(bytes.Buffer)
-		hReqdata = &HTTPRequestData{}
-		hResdata = &HTTPResponseData{}
+		hReqdata = &netevent.HTTPRequestData{}
+		hResdata = &netevent.HTTPResponseData{}
 		filtered := false
 		req, err := httpport.ReadRequest(requestReader)
 		h.startTime = connection.lastTimestamp
@@ -122,7 +124,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 			if !filtered {
 				h.printRequest(req, hReqdata)
 				h.writeLine("")
-				h.printer.send(NewHTTPNetData(hReqdata, hResdata))
+				h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
 			} else {
 				discardAll(req.Body)
 			}
@@ -138,7 +140,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 			h.writeLine("")
 			h.endTime = connection.lastTimestamp
 			h.printResponse(resp, hResdata)
-			h.printer.send(NewHTTPNetData(hReqdata, hResdata))
+			h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
 		} else {
 			discardAll(req.Body)
 			discardAll(resp.Body)
@@ -164,7 +166,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 				}
 				if !filtered {
 					h.printResponse(resp, hResdata)
-					h.printer.send(NewHTTPNetData(hReqdata, hResdata))
+					h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
 				} else {
 					discardAll(resp.Body)
 				}
@@ -174,7 +176,7 @@ func (h *HTTPTrafficHandler) handle(connection *TCPConnection) {
 		}
 	}
 
-	h.printer.send(NewHTTPNetData(hReqdata, hResdata))
+	h.printer.send(netevent.NewHTTPNetData(hReqdata, hResdata))
 }
 
 func (h *HTTPTrafficHandler) handleWebsocket(requestReader *bufio.Reader, responseReader *bufio.Reader) {
@@ -198,7 +200,7 @@ func (h *HTTPTrafficHandler) printRequestMark() {
 	h.writeLine()
 }
 
-func (h *HTTPTrafficHandler) printHeader(header httpport.Header, hrd *HTTPRequestData) {
+func (h *HTTPTrafficHandler) printHeader(header httpport.Header, hrd *netevent.HTTPRequestData) {
 	hrd.Headers = make(map[string]string)
 	for name, values := range header {
 		for _, value := range values {
@@ -208,7 +210,7 @@ func (h *HTTPTrafficHandler) printHeader(header httpport.Header, hrd *HTTPReques
 }
 
 // print http request
-func (h *HTTPTrafficHandler) printRequest(req *httpport.Request, hrd *HTTPRequestData) {
+func (h *HTTPTrafficHandler) printRequest(req *httpport.Request, hrd *netevent.HTTPRequestData) {
 	defer discardAll(req.Body)
 	h.printNormalRequest(req, hrd)
 }
@@ -302,7 +304,7 @@ func (h *HTTPTrafficHandler) printCurlRequest(req *httpport.Request) {
 }
 
 // print http request
-func (h *HTTPTrafficHandler) printNormalRequest(req *httpport.Request, hrd *HTTPRequestData) {
+func (h *HTTPTrafficHandler) printNormalRequest(req *httpport.Request, hrd *netevent.HTTPRequestData) {
 	if h.option.Level == "url" {
 		hrd.Method = req.Method
 		hrd.Host = req.Host
@@ -328,7 +330,7 @@ func (h *HTTPTrafficHandler) printNormalRequest(req *httpport.Request, hrd *HTTP
 }
 
 // print http response
-func (h *HTTPTrafficHandler) printResponse(resp *httpport.Response, hrd *HTTPResponseData) {
+func (h *HTTPTrafficHandler) printResponse(resp *httpport.Response, hrd *netevent.HTTPResponseData) {
 	defer discardAll(resp.Body)
 	if h.option.Level == "url" {
 		return

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
-	"github.com/chen-keinan/kube-knark/internal/routes"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -17,11 +17,11 @@ func TestFSMatches_Full_Match(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := routes.SpecFS{}
+	spec := specs.SpecFS{}
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
-	routes.BuildMatchMap(fsMap, spec)
-	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	specs.BuildMatchMap(fsMap, spec)
+	cache, err := specs.CreateFSCacheFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
 	var sb = new(bytes.Buffer)
 	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"}, sb)
@@ -37,11 +37,11 @@ func TestFSMatches_Partial_Match(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := routes.SpecFS{}
+	spec := specs.SpecFS{}
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
-	routes.BuildMatchMap(fsMap, spec)
-	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	specs.BuildMatchMap(fsMap, spec)
+	cache, err := specs.CreateFSCacheFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
 	var sb = new(bytes.Buffer)
 	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod", "abc", "ddd"}, sb)
@@ -54,11 +54,11 @@ func TestFSMatches_No_Match(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := routes.SpecFS{}
+	spec := specs.SpecFS{}
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
-	routes.BuildMatchMap(fsMap, spec)
-	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	specs.BuildMatchMap(fsMap, spec)
+	cache, err := specs.CreateFSCacheFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
 	var sb = new(bytes.Buffer)
 	ok := NewFSMatches(fsMap, cache).Match([]string{"kkk", "abc", "ddd"}, sb)
@@ -69,11 +69,11 @@ func TestFSMatches_Diff_Order(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := routes.SpecFS{}
+	spec := specs.SpecFS{}
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
-	routes.BuildMatchMap(fsMap, spec)
-	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	specs.BuildMatchMap(fsMap, spec)
+	cache, err := specs.CreateFSCacheFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
 	var sb = new(bytes.Buffer)
 	ok := NewFSMatches(fsMap, cache).Match([]string{"chmod-rrr", "chmod", "abc", "/etc/kubernetes/manifests/kube-apiserver.yaml"}, sb)
@@ -86,11 +86,11 @@ func TestFSMatches_EmptyCmd(t *testing.T) {
 	assert.NoError(t, err)
 	data, err := ioutil.ReadAll(f)
 	assert.NoError(t, err)
-	spec := routes.SpecFS{}
+	spec := specs.SpecFS{}
 	yaml.Unmarshal(data, &spec)
 	fsMap := make(map[string]interface{})
-	routes.BuildMatchMap(fsMap, spec)
-	cache, err := routes.CreateFSCacheFromSpecFiles([]string{string(data)})
+	specs.BuildMatchMap(fsMap, spec)
+	cache, err := specs.CreateFSCacheFromSpecFiles([]string{string(data)})
 	assert.NoError(t, err)
 	var sb = new(bytes.Buffer)
 	ok := NewFSMatches(fsMap, cache).Match([]string{}, sb)

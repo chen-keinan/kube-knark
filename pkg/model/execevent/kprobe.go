@@ -1,4 +1,4 @@
-package events
+package execevent
 
 //KprobeEvent define external kprobe event
 type KprobeEvent struct {

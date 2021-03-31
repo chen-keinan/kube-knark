@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/routes"
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 	"sort"
@@ -23,14 +23,14 @@ type KubeKnarkUI struct {
 
 // NetEvt net event msg
 type NetEvt struct {
-	Msg  *khttp.HTTPNetData
-	Spec *routes.API
+	Msg  *netevent.HTTPNetData
+	Spec *specs.API
 }
 
 // FilesystemEvt fs event msg
 type FilesystemEvt struct {
-	Msg  *events.KprobeEvent
-	Spec *routes.FS
+	Msg  *execevent.KprobeEvent
+	Spec *specs.FS
 }
 
 //NewNetEvtChan return net event channel

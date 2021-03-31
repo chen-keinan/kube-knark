@@ -3,6 +3,7 @@ package khttp
 import (
 	"errors"
 	"fmt"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
@@ -75,7 +76,7 @@ func openSingleDevice(device string, filterIP string, filterPort uint16) (localP
 }
 
 //StartNetListener invoke net listener for kernel http events
-func StartNetListener(errChan chan error, netEventChan chan *HTTPNetData) {
+func StartNetListener(errChan chan error, netEventChan chan *netevent.HTTPNetData) {
 	go func() {
 		var option = &Option{}
 		cmd, err := flagx.NewCommand("httpdump", "capture and dump http contents", option, func() error {
@@ -90,7 +91,7 @@ func StartNetListener(errChan chan error, netEventChan chan *HTTPNetData) {
 }
 
 //nolint:gocyclo
-func run(option *Option, errChan chan error, netEventChan chan *HTTPNetData) error {
+func run(option *Option, errChan chan error, netEventChan chan *netevent.HTTPNetData) error {
 	if option.Port > 65536 {
 		return fmt.Errorf("ignored invalid port %v", option.Port)
 	}

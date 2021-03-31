@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/routes"
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	ui "github.com/gizak/termui/v3"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -12,11 +12,11 @@ import (
 
 func TestSortFsRows(t *testing.T) {
 	prevents := []*FilesystemEvt{
-		{Spec: &routes.FS{Severity: "MAJOR", SeverityInt: 2}, Msg: &events.KprobeEvent{Args: []string{"a"}}},
-		{Spec: &routes.FS{Severity: "CRITICAL", SeverityInt: 1}, Msg: &events.KprobeEvent{Args: []string{"b"}}},
-		{Spec: &routes.FS{Severity: "MINOR", SeverityInt: 3}, Msg: &events.KprobeEvent{Args: []string{"c"}}},
+		{Spec: &specs.FS{Severity: "MAJOR", SeverityInt: 2}, Msg: &execevent.KprobeEvent{Args: []string{"a"}}},
+		{Spec: &specs.FS{Severity: "CRITICAL", SeverityInt: 1}, Msg: &execevent.KprobeEvent{Args: []string{"b"}}},
+		{Spec: &specs.FS{Severity: "MINOR", SeverityInt: 3}, Msg: &execevent.KprobeEvent{Args: []string{"c"}}},
 	}
-	fse := &FilesystemEvt{Spec: &routes.FS{Severity: "INFO", SeverityInt: 4}, Msg: &events.KprobeEvent{Args: []string{"d"}}}
+	fse := &FilesystemEvt{Spec: &specs.FS{Severity: "INFO", SeverityInt: 4}, Msg: &execevent.KprobeEvent{Args: []string{"d"}}}
 	//prevents = append(prevents,&fse)
 	rows := [][]string{{"Severity", "Name", "Command args", "Created"}}
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
@@ -34,11 +34,11 @@ func TestSortFsRows(t *testing.T) {
 }
 func TestSortNetRows(t *testing.T) {
 	prevents := []*NetEvt{
-		{Spec: &routes.API{Severity: "MAJOR", SeverityInt: 2}, Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}},
-		{Spec: &routes.API{Severity: "CRITICAL", SeverityInt: 1}, Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}},
-		{Spec: &routes.API{Severity: "MINOR", SeverityInt: 3}, Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}},
+		{Spec: &specs.API{Severity: "MAJOR", SeverityInt: 2}, Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}},
+		{Spec: &specs.API{Severity: "CRITICAL", SeverityInt: 1}, Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}},
+		{Spec: &specs.API{Severity: "MINOR", SeverityInt: 3}, Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}},
 	}
-	fse := &NetEvt{Spec: &routes.API{Severity: "INFO", SeverityInt: 4}, Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}}
+	fse := &NetEvt{Spec: &specs.API{Severity: "INFO", SeverityInt: 4}, Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}}
 	//prevents = append(prevents,&fse)
 	rows := [][]string{{"Severity", "Name", "Command args", "Created"}}
 	nku := NewKubeKnarkUI(make(chan NetEvt), make(chan FilesystemEvt))
@@ -129,7 +129,7 @@ func TestWatchEvents(t *testing.T) {
 func TestNewNetEvtChan(t *testing.T) {
 	c := NewNetEvtChan()
 	go func() {
-		c <- NetEvt{Msg: &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "GET"}}}
+		c <- NetEvt{Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}}
 	}()
 	msg := <-c
 	assert.Equal(t, msg.Msg.HTTPRequestData.Method, "GET")
@@ -137,7 +137,7 @@ func TestNewNetEvtChan(t *testing.T) {
 func TestNewFilesystemEvtChan(t *testing.T) {
 	c := NewFilesystemEvtChan()
 	go func() {
-		c <- FilesystemEvt{Msg: &events.KprobeEvent{Args: []string{"a"}}}
+		c <- FilesystemEvt{Msg: &execevent.KprobeEvent{Args: []string{"a"}}}
 	}()
 	msg := <-c
 	assert.Equal(t, msg.Msg.Args[0], "a")

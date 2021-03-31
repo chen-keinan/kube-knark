@@ -7,8 +7,8 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/compiler/mocks"
 	mock2 "github.com/chen-keinan/kube-knark/internal/mocks"
 	"github.com/chen-keinan/kube-knark/internal/startup"
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -62,7 +62,7 @@ func TestProvideSpecRoutes(t *testing.T) {
 func TestMatchCmdChan(t *testing.T) {
 	kpc := matchCmdChan()
 	go func() {
-		kpc <- &events.KprobeEvent{Pid: uint32(1)}
+		kpc <- &execevent.KprobeEvent{Pid: uint32(1)}
 	}()
 	dt := <-kpc
 	assert.Equal(t, dt.Pid, uint32(1))
@@ -71,7 +71,7 @@ func TestMatchCmdChan(t *testing.T) {
 func TestMatchNetChan(t *testing.T) {
 	kpc := matchNetChan()
 	go func() {
-		kpc <- &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: common.GET}}
+		kpc <- &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: common.GET}}
 	}()
 	dt := <-kpc
 	assert.Equal(t, dt.HTTPRequestData.Method, common.GET)

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/dropbox/goebpf"
 	"sync"
 	"time"
@@ -43,7 +43,7 @@ func LoadProgram(filename string) (*Program, error) {
 }
 
 //startPerfEvents pull ebpf events
-func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.KprobeEvent) {
+func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *execevent.KprobeEvent) {
 	p.wg.Add(1)
 	go func(kevents <-chan []byte) {
 		defer p.wg.Done()
@@ -68,7 +68,7 @@ func (p *Program) startPerfEvents(kevents <-chan []byte, matchChan chan *events.
 				// build display strings
 				ts := goebpf.KtimeToTime(ev.KtimeNs)
 				comm := goebpf.NullTerminatedStringToString(ev.Comm[:])
-				ke := &events.KprobeEvent{
+				ke := &execevent.KprobeEvent{
 					StartTime: ts.Format(time.RFC3339Nano),
 					Comm:      comm,
 					Pid:       ev.Pid,
@@ -90,7 +90,7 @@ func (p *Program) stopPerfEvents() {
 }
 
 //AttachProbes attach ebpf program to kernel
-func (p *Program) AttachProbes(matchChan chan *events.KprobeEvent) error {
+func (p *Program) AttachProbes(matchChan chan *execevent.KprobeEvent) error {
 	// attach all probe programs
 	for _, prog := range p.bpf.GetPrograms() {
 		if err := prog.Attach(nil); err != nil {

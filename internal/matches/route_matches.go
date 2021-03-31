@@ -1,7 +1,7 @@
 package matches
 
 import (
-	"github.com/chen-keinan/kube-knark/internal/routes"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -12,7 +12,7 @@ type RouteMatches struct {
 }
 
 //NewRouteMatches create new routes matches instance
-func NewRouteMatches(ValidationRoutes []routes.Routes, router *mux.Router) *RouteMatches {
+func NewRouteMatches(ValidationRoutes []specs.Routes, router *mux.Router) *RouteMatches {
 	for _, mo := range ValidationRoutes {
 		for _, rt := range mo {
 			router.Methods(rt.Method).Path(rt.Pattern)

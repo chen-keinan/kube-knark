@@ -1,4 +1,4 @@
-package khttp
+package netevent
 
 //HTTPRequestData http request data for validation
 type HTTPRequestData struct {

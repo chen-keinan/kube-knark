@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	"github.com/chen-keinan/kube-knark/internal/matches"
-	"github.com/chen-keinan/kube-knark/internal/routes"
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/chen-keinan/kube-knark/pkg/ui"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestPacketMatchesWorker_Invoke(t *testing.T) {
-	pmc := make(chan *khttp.HTTPNetData)
+	pmc := make(chan *netevent.HTTPNetData)
 	sr, err := buildSpecRoutes()
 	assert.NoError(t, err)
 	rm := matches.NewRouteMatches(sr, mux.NewRouter())
@@ -26,12 +26,12 @@ func TestPacketMatchesWorker_Invoke(t *testing.T) {
 	pmd := NewPacketMatchData(rm, pmc, vc, 1, netChan)
 	pmw := NewPacketMatchesWorker(pmd)
 	pmw.Invoke()
-	pmc <- &khttp.HTTPNetData{HTTPRequestData: &khttp.HTTPRequestData{Method: "POST", RequestURI: "/api/v1/namespaces/{namespace}/pods", StartTime: time.Now().String()}}
+	pmc <- &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "POST", RequestURI: "/api/v1/namespaces/{namespace}/pods", StartTime: time.Now().String()}}
 	msg := <-netChan
 	assert.Equal(t, msg.Spec.Severity, "MAJOR")
 }
 
-func buildSpecRoutes() ([]routes.Routes, error) {
+func buildSpecRoutes() ([]specs.Routes, error) {
 	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.Workload))
 	if err != nil {
 		return nil, err
@@ -41,10 +41,10 @@ func buildSpecRoutes() ([]routes.Routes, error) {
 	if err != nil {
 		return nil, err
 	}
-	return routes.BuildSpecRoutes([]string{string(data)})
+	return specs.BuildSpecRoutes([]string{string(data)})
 }
 
-func buildValidationCache() (map[string]*routes.API, error) {
+func buildValidationCache() (map[string]*specs.API, error) {
 	f, err := os.Open(fmt.Sprintf("../fixtures/%s", common.Workload))
 	if err != nil {
 		return nil, err
@@ -54,5 +54,5 @@ func buildValidationCache() (map[string]*routes.API, error) {
 	if err != nil {
 		return nil, err
 	}
-	return routes.CreateMapFromSpecFiles([]string{string(data)})
+	return specs.CreateMapFromSpecFiles([]string{string(data)})
 }

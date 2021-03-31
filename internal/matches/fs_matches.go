@@ -2,17 +2,17 @@ package matches
 
 import (
 	"bytes"
-	"github.com/chen-keinan/kube-knark/internal/routes"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 )
 
 //FSMatches Object
 type FSMatches struct {
 	fsCommandMap map[string]interface{}
-	Cache        map[string]*routes.FS
+	Cache        map[string]*specs.FS
 }
 
 //NewFSMatches create new file system matches instance
-func NewFSMatches(fsCommandMap map[string]interface{}, cache map[string]*routes.FS) *FSMatches {
+func NewFSMatches(fsCommandMap map[string]interface{}, cache map[string]*specs.FS) *FSMatches {
 	return &FSMatches{fsCommandMap: fsCommandMap, Cache: cache}
 }
 

@@ -1,0 +1,29 @@
+---
+spec: k8s commands
+categories:
+-
+  name: file system
+  sub_category:
+    name: fs config permission
+    fs:
+    -
+      name: change kube-apiserver.yaml file permission
+      description: trace kube-apiserver.yaml file permission changes
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/kube-apiserver.yaml
+      severity: CRITICAL
+    -
+      name: change proxy-apiserver.yaml file permission
+      description: trace proxy-apiserver.yaml file permission changes
+      commands:
+      - chmod
+      - /etc/kubernetes/manifests/proxy-apiserver.yaml
+      severity: CRITICAL
+    -
+      name: change proxy-apiserver.yaml file permission
+      description: trace proxy-apiserver.yaml file permission changes
+      commands:
+      - chown
+      - /etc/kubernetes/manifests/proxy-apiserver.yaml
+      severity: CRITICAL

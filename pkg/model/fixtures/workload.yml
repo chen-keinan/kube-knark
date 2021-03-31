@@ -1,0 +1,27 @@
+---
+spec: k8s api
+categories:
+- name: workload
+  sub_category:
+    name: pod
+    api:
+    - name: create new pod
+      description: create new pos to namespace
+      uri: /api/v1/namespaces/{namespace}/pods
+      method: POST
+      severity: MAJOR
+    - name: update replace the specified Pod
+      description: update existing pod in namespace
+      profile_applicability: Master
+      uri: /api/v1/namespaces/{namespace}/pods
+      method: PUT
+      severity: MAJOR
+- name: services
+  sub_category:
+    name: service
+    api:
+    - name: list or watch objects of kind Service
+      description: list objects of kind Service namespace
+      uri: /api/v1/services
+      method: GET
+      severity: INFO

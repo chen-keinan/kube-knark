@@ -5,12 +5,13 @@ import (
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
 	"github.com/chen-keinan/kube-knark/internal/logger"
 	"github.com/chen-keinan/kube-knark/internal/matches"
-	"github.com/chen-keinan/kube-knark/internal/routes"
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
 	"github.com/chen-keinan/kube-knark/internal/workers"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/chen-keinan/kube-knark/pkg/ui"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/gorilla/mux"
@@ -60,8 +61,8 @@ func runKnarkService(lifecycle fx.Lifecycle,
 	netUIChan chan ui.NetEvt,
 	fsUIChan chan ui.FilesystemEvt,
 	files []utils.FilesInfo,
-	NetEventChan chan *khttp.HTTPNetData,
-	cmdEventChan chan *events.KprobeEvent,
+	NetEventChan chan *netevent.HTTPNetData,
+	cmdEventChan chan *execevent.KprobeEvent,
 	cm *workers.CommandMatchesWorker,
 	pm *workers.PacketMatchesWorker) {
 
@@ -98,13 +99,13 @@ func runKnarkService(lifecycle fx.Lifecycle,
 }
 
 //matchNetChan return channel for net packet match
-func matchNetChan() chan *khttp.HTTPNetData {
-	return make(chan *khttp.HTTPNetData, 1000)
+func matchNetChan() chan *netevent.HTTPNetData {
+	return make(chan *netevent.HTTPNetData, 1000)
 }
 
 //matchCmdChan return channel for cmd packet match
-func matchCmdChan() chan *events.KprobeEvent {
-	return make(chan *events.KprobeEvent, 1000)
+func matchCmdChan() chan *execevent.KprobeEvent {
+	return make(chan *execevent.KprobeEvent, 1000)
 }
 
 //numOfWorkers return num of cmd workers
@@ -167,8 +168,8 @@ func provideSpecFiles() []string {
 }
 
 //provideSpecRoutes provide spec api route for endpoint validation
-func provideSpecRoutes(files []string) []routes.Routes {
-	routesFile, err := routes.BuildSpecRoutes(files)
+func provideSpecRoutes(files []string) []specs.Routes {
+	routesFile, err := specs.BuildSpecRoutes(files)
 	if err != nil {
 		panic(err)
 	}
@@ -176,8 +177,8 @@ func provideSpecRoutes(files []string) []routes.Routes {
 }
 
 //provideAPISpecMap provide spec api cache for endpoint validation
-func provideAPISpecMap(files []string) map[string]*routes.API {
-	specMap, err := routes.CreateMapFromSpecFiles(files)
+func provideAPISpecMap(files []string) map[string]*specs.API {
+	specMap, err := specs.CreateMapFromSpecFiles(files)
 	if err != nil {
 		panic(err)
 	}
@@ -190,7 +191,7 @@ func provideFSSpecMap() map[string]interface{} {
 	if err != nil {
 		panic(err)
 	}
-	specMap, err := routes.CreateFSMapFromSpecFiles(dataFiles)
+	specMap, err := specs.CreateFSMapFromSpecFiles(dataFiles)
 	if err != nil {
 		panic(err)
 	}
@@ -198,12 +199,12 @@ func provideFSSpecMap() map[string]interface{} {
 }
 
 //provideFSSpecCache provide spec fs cache
-func provideFSSpecCache() map[string]*routes.FS {
+func provideFSSpecCache() map[string]*specs.FS {
 	dataFiles, err := getDataFileContent()
 	if err != nil {
 		panic(err)
 	}
-	specMap, err := routes.CreateFSCacheFromSpecFiles(dataFiles)
+	specMap, err := specs.CreateFSCacheFromSpecFiles(dataFiles)
 	if err != nil {
 		panic(err)
 	}

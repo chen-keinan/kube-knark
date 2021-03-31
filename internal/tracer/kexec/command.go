@@ -2,14 +2,14 @@ package kexec
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/pkg/model/events"
+	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/dropbox/goebpf"
 	"path"
 )
 
 //StartCmdListener start exec listener for exec program events
-func StartCmdListener(files []utils.FilesInfo, errChan chan error, quitChan chan bool, cmdEventChan chan *events.KprobeEvent) {
+func StartCmdListener(files []utils.FilesInfo, errChan chan error, quitChan chan bool, cmdEventChan chan *execevent.KprobeEvent) {
 	go func(quitChan chan bool, errChan chan error) {
 		// cleanup old probes
 		if err := goebpf.CleanupProbes(); err != nil {

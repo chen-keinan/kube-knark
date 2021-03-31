@@ -3,8 +3,8 @@ package workers
 import (
 	"fmt"
 	"github.com/chen-keinan/kube-knark/internal/matches"
-	"github.com/chen-keinan/kube-knark/internal/routes"
-	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
+	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
+	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"github.com/chen-keinan/kube-knark/pkg/ui"
 )
 
@@ -16,8 +16,8 @@ type PacketMatchesWorker struct {
 //PacketMatchData encapsulate packet worker properties
 type PacketMatchData struct {
 	rm              *matches.RouteMatches
-	pmc             chan *khttp.HTTPNetData
-	validationCache map[string]*routes.API
+	pmc             chan *netevent.HTTPNetData
+	validationCache map[string]*specs.API
 	uiChan          chan ui.NetEvt
 	numOfWorkers    int
 }
@@ -28,7 +28,7 @@ func NewPacketMatchesWorker(pmd *PacketMatchData) *PacketMatchesWorker {
 }
 
 //NewPacketMatchData return new packet data
-func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *khttp.HTTPNetData, validationCache map[string]*routes.API, numOfWorkers int, uichan chan ui.NetEvt) *PacketMatchData {
+func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *netevent.HTTPNetData, validationCache map[string]*specs.API, numOfWorkers int, uichan chan ui.NetEvt) *PacketMatchData {
 	return &PacketMatchData{rm: rm, pmc: pmc, validationCache: validationCache, numOfWorkers: numOfWorkers, uiChan: uichan}
 }
 

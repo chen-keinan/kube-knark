@@ -1,4 +1,4 @@
-package routes
+package specs
 
 import (
 	"gopkg.in/yaml.v2"
