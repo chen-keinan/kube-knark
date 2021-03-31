@@ -13,12 +13,13 @@ before_install:
   - go get github.com/mattn/goveralls
 
 script:
-  - sudo apt-get -y install libpcap-dev
+  - sudo su -
+  - apt-get -y install libpcap-dev
   - go get github.com/golang/mock/mockgen@latest
   - go install -v github.com/golang/mock/mockgen && export PATH=$GOPATH/bin:$PATH;
   - go generate ./...
   - go test ./cmd... ./internal... ./pkg...  -coverprofile=coverage.out
   - goveralls -coverprofile=coverage.out -service=travis-ci
-  - sudo make test
-  - sudo make build
+  - make test
+  - make build
 
