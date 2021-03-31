@@ -17,7 +17,8 @@ kube-knark tracing results are repoted :
 - Go Plugin hooks
 
 kubernetes cluster Knark console:
-<br><img src="./pkg/images/knark-console.png" width="500" alt="kube-krank-console logo"><br>
+
+<br><img src="./pkg/images/knark-console.png" width="600" alt="kube-krank-console logo"><br>
 
 
 ### Requirements
