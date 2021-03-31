@@ -13,8 +13,11 @@ kube-knark trace the following :
 - kubernetes master node configuration files permission changes [CIS Kubernetes Benchmark specification](https://www.cisecurity.org/benchmark/kubernetes/)
 
 kube-knark tracing results are repoted :
-- Console ui dashboard
+- Console dashboard
 - Go Plugin hooks
+
+kubernetes cluster Knark console:
+<br><img src="./pkg/images/knark-console.png" width="500" alt="kube-krank-console logo"><br>
 
 
 ### Requirements
