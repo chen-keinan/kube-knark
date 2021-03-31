@@ -6,6 +6,7 @@ $ make install
 
 ### export dlv bin path
 export PATH=$PATH:/home/vagrant/go/bin
+
 export PATH=$PATH:/root/go/bin
 
 ### compile binary with debug params
