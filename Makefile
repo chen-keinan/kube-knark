@@ -24,6 +24,8 @@ install:build
 build_debug:
 	$(GOPACKR)
 	GOOS=linux GOARCH=amd64 go build -v -gcflags='-N -l'
+build_docker:
+	docker build -t kbeacon.jfrog.io/docker-local/kube-knark .
 dlv:
 	dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./kube-knark
 
