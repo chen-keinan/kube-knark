@@ -16,7 +16,7 @@ kube-knark tracing data are reported :
 - Console dashboard
 - Go Plugin hooks
 
-kubernetes cluster Knark console:
+kube-Knark console:
 <br><img src="./pkg/images/knark-console.png" width="800" alt="kube-krank-console logo"><br>
 
 * [Requirements](#requirements)
