@@ -52,9 +52,13 @@ The Kube-knark expose 2 hooks for user plugins [Example](https://github.com/chen
 ```
 cp <plugin>.go ~/.kube-knark/plugins/source/<plugin>.go
 ```
-### Supported Specs 
+## Supported Specs 
 The Kube-knark support 2 specs and can be easily extended:
 - The full k8s API spec [Kubernetes API specification](https://github.com/chen-keinan/kube-knark/tree/master/internal/spec/api)
 - master config file change spec [Master Node Config](https://github.com/chen-keinan/kube-knark/tree/master/internal/spec/filesystem)
 
 both specs can be easily extended by amended the spec files under ```~/.kube-knark/spec``` folder
+
+## Contribution
+- contribution are welcome !!
+- contribution with tests and passing linter are more then welcome :) 
