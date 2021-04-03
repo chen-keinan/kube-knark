@@ -4,15 +4,18 @@ go 1.14
 
 require (
 	github.com/dropbox/goebpf v0.0.0-20210223223402-d54e462ac389
+	github.com/fogleman/gg v1.3.0 // indirect
 	github.com/gizak/termui/v3 v3.1.0
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/gobuffalo/packd v1.0.0 // indirect
 	github.com/gobuffalo/packr v1.30.1
 	github.com/gobuffalo/packr/v2 v2.8.1 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/mock v1.5.0
 	github.com/google/gopacket v1.1.19
 	github.com/gorilla/mux v1.8.0
 	github.com/hsiafan/glow v1.7.0
+	github.com/jpoles1/gopherbadger v2.4.0+incompatible // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/magiconair/properties v1.8.1
