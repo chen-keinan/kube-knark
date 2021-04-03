@@ -60,5 +60,5 @@ The Kube-knark support 2 specs and can be easily extended:
 both specs can be easily extended by amended the spec files under ```~/.kube-knark/spec``` folder
 
 ## Contribution
-- contribution are welcome !!
-- contribution with tests and passing linter are more then welcome :) 
+- code contribution is welcome !!
+- code contribution with tests and passing linter is more than welcome :) 
