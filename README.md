@@ -26,9 +26,9 @@ kube-Knark console:
 * [Supported Specs](#supported-specs)
 
 ## Requirements
-- Go 1.10+
+- Go 1.13+
 - Linux Kernel 4.15+
-- Clang < 10
+- Clang 10+
 - LLVM
 - Kernel Headers
 
