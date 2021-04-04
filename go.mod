@@ -25,6 +25,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/stretchr/testify v1.6.1
+	github.com/xyproto/png2svg v0.0.0-20210305194656-78299c45f84e // indirect
 	go.uber.org/fx v1.13.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
