@@ -364,3 +364,64 @@ func TestCreateHomeFolderIfNotExistError(t *testing.T) {
 	err = CreateHomeFolderIfNotExist(fm)
 	assert.Error(t, err)
 }
+func TestCreatePluginsSourceFolderIfNotExistError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreatePluginsSourceFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
+func TestCreatePluginsCompiledFolderIfNotExistError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreatePluginsCompiledFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
+func TestCreateEbpfCompiledFolderIfNotExistError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreateEbpfCompiledFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
+func TestCreateSpecFSFolderIfNotExistHFError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreateSpecFSFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
+func TestCreateSpecAPIFolderIfNotExistHFError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreateSpecAPIFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
+
+func TestCreateEbpfSourceFolderIfNotExistHFError(t *testing.T) {
+	fmReal := NewKFolder()
+	ctl := gomock.NewController(t)
+	fm := mocks.NewMockFolderMgr(ctl)
+	homePath, err := fmReal.GetHomeFolder()
+	assert.NoError(t, err)
+	fm.EXPECT().GetHomeFolder().Return(homePath, fmt.Errorf("err")).Times(1)
+	err = CreateEbpfSourceFolderIfNotExist(fm)
+	assert.Error(t, err)
+}
