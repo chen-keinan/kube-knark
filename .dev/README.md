@@ -15,3 +15,5 @@ GOOS=linux GOARCH=amd64 go build -v -gcflags='-N -l'
 ### run on remote machine
 dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./kube-knark
 
+### run docker 
+docker run -it --rm --privileged -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -t kbeacon.jfrog.io/docker-local/kube-knark
