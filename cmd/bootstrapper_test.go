@@ -117,6 +117,13 @@ func TestLoadAPICallPluginSymbols(t *testing.T) {
 	sym := LoadAPICallPluginSymbols(NewZapLogger())
 	assert.True(t, len(sym.Plugins) > 0)
 }
+func TestLoadFileChangePluginSymbols(t *testing.T) {
+	_, err := PluginSetUp("on_k8s_file_config_change_hook.go")
+	assert.NoError(t, err)
+	utils.CreateKubeKnarkFolders(utils.NewKFolder())
+	sym := LoadFileChangePluginSymbols(NewZapLogger())
+	assert.True(t, len(sym.Plugins) > 0)
+}
 
 func PluginSetUp(fileName string) (*kplugin.PluginLoader, error) {
 	fm := utils.NewKFolder()
