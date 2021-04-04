@@ -31,6 +31,7 @@ func StartKnark() {
 		// dependency injection
 		fx.Provide(NewZapLogger),
 		// validation spec files
+		fx.Provide(utils.NewKFolder),
 		fx.Provide(provideSpecFiles),
 		fx.Provide(provideSpecRoutes),
 		fx.Provide(provideAPISpecMap),
@@ -170,7 +171,7 @@ func provideSpecFiles() []string {
 	if err != nil {
 		panic(err)
 	}
-	folder, err := utils.GetSpecAPIFolder()
+	folder, err := utils.GetSpecAPIFolder(fm)
 	if err != nil {
 		panic(err)
 	}
@@ -238,7 +239,7 @@ func getDataFileContent() ([]string, error) {
 	if err != nil {
 		panic(err)
 	}
-	folder, err := utils.GetSpecFilesystemFolder()
+	folder, err := utils.GetSpecFilesystemFolder(utils.NewKFolder())
 	if err != nil {
 		panic(err)
 	}

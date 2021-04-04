@@ -70,7 +70,8 @@ func TestPluginLoader_CompileWrongHook(t *testing.T) {
 }
 
 func pluginSetUp(fileName string) (*PluginLoader, error) {
-	folder, err := utils.GetPluginSourceSubFolder()
+	fm := utils.NewKFolder()
+	folder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func pluginSetUp(fileName string) (*PluginLoader, error) {
 	if err != nil {
 		return nil, err
 	}
-	cfolder, err := utils.GetCompilePluginSubFolder()
+	cfolder, err := utils.GetCompilePluginSubFolder(fm)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,6 @@ func pluginSetUp(fileName string) (*PluginLoader, error) {
 	if err != nil {
 		return nil, err
 	}
-	fm := utils.NewKFolder()
 	err = utils.CreateHomeFolderIfNotExist(fm)
 	if err != nil {
 		return nil, err

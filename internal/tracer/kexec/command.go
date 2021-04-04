@@ -15,7 +15,7 @@ func StartCmdListener(files []utils.FilesInfo, errChan chan error, quitChan chan
 		if err := goebpf.CleanupProbes(); err != nil {
 			errChan <- fmt.Errorf("cleanup Probes failed: %s", err.Error())
 		}
-		ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+		ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder(utils.NewKFolder())
 		if err != nil {
 			errChan <- fmt.Errorf("get Ebpf program failed: %s", err.Error())
 		}

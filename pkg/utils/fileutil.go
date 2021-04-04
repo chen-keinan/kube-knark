@@ -32,6 +32,7 @@ const CompilePluginSubFolder = "plugins/compile"
 //go:generate mockgen -destination=./mocks/mock_FolderMgr.go -package=mocks . FolderMgr
 type FolderMgr interface {
 	CreateFolder(folderName string) error
+	GetHomeFolder() (string, error)
 }
 
 //KFolder kube-knark folder object
@@ -56,8 +57,8 @@ func (kf KFolder) CreateFolder(folderName string) error {
 }
 
 //GetSpecAPIFolder return spec api folder path
-func GetSpecAPIFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetSpecAPIFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -65,8 +66,8 @@ func GetSpecAPIFolder() (string, error) {
 }
 
 //GetSpecFilesystemFolder return spec file system folder path
-func GetSpecFilesystemFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetSpecFilesystemFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -74,8 +75,8 @@ func GetSpecFilesystemFolder() (string, error) {
 }
 
 //GetPluginSourceSubFolder return plugins source folder path
-func GetPluginSourceSubFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetPluginSourceSubFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -83,8 +84,8 @@ func GetPluginSourceSubFolder() (string, error) {
 }
 
 //GetCompilePluginSubFolder return plugin compiled folder path
-func GetCompilePluginSubFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetCompilePluginSubFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -92,8 +93,8 @@ func GetCompilePluginSubFolder() (string, error) {
 }
 
 //GetEbpfSourceFolder return ebpf source folder path
-func GetEbpfSourceFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetEbpfSourceFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -101,8 +102,8 @@ func GetEbpfSourceFolder() (string, error) {
 }
 
 //GetEbpfCompiledFolder return ebpf compiled folder path
-func GetEbpfCompiledFolder() (string, error) {
-	folder, err := GetHomeFolder()
+func GetEbpfCompiledFolder(fm FolderMgr) (string, error) {
+	folder, err := fm.GetHomeFolder()
 	if err != nil {
 		return "", err
 	}
@@ -110,7 +111,7 @@ func GetEbpfCompiledFolder() (string, error) {
 }
 
 //GetHomeFolder return kube-knark home folder
-func GetHomeFolder() (string, error) {
+func (kf KFolder) GetHomeFolder() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
 		return "", err
@@ -162,7 +163,7 @@ func GetFiles(folder string) ([]FilesInfo, error) {
 
 //CreateHomeFolderIfNotExist create ebpf home folder if not exist
 func CreateHomeFolderIfNotExist(fm FolderMgr) error {
-	knarkFolder, err := GetHomeFolder()
+	knarkFolder, err := fm.GetHomeFolder()
 	if err != nil {
 		return err
 	}
@@ -171,7 +172,7 @@ func CreateHomeFolderIfNotExist(fm FolderMgr) error {
 
 //CreateEbpfSourceFolderIfNotExist create ebpf source folder if not exist
 func CreateEbpfSourceFolderIfNotExist(fm FolderMgr) error {
-	ebpfFolder, err := GetEbpfSourceFolder()
+	ebpfFolder, err := GetEbpfSourceFolder(fm)
 	if err != nil {
 		return err
 	}
@@ -180,7 +181,7 @@ func CreateEbpfSourceFolderIfNotExist(fm FolderMgr) error {
 
 //CreateSpecAPIFolderIfNotExist create spec api folder if not exist
 func CreateSpecAPIFolderIfNotExist(fm FolderMgr) error {
-	specFolder, err := GetSpecAPIFolder()
+	specFolder, err := GetSpecAPIFolder(fm)
 	if err != nil {
 		return err
 	}
@@ -189,7 +190,7 @@ func CreateSpecAPIFolderIfNotExist(fm FolderMgr) error {
 
 //CreateSpecFSFolderIfNotExist create spec file system folder if not exist
 func CreateSpecFSFolderIfNotExist(fm FolderMgr) error {
-	specFolder, err := GetSpecFilesystemFolder()
+	specFolder, err := GetSpecFilesystemFolder(fm)
 	if err != nil {
 		return err
 	}
@@ -198,7 +199,7 @@ func CreateSpecFSFolderIfNotExist(fm FolderMgr) error {
 
 //CreateEbpfCompiledFolderIfNotExist create ebpf compiled folder if not exist
 func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
-	ebpfFolder, err := GetEbpfCompiledFolder()
+	ebpfFolder, err := GetEbpfCompiledFolder(fm)
 	if err != nil {
 		return err
 	}
@@ -207,7 +208,7 @@ func CreateEbpfCompiledFolderIfNotExist(fm FolderMgr) error {
 
 //CreatePluginsCompiledFolderIfNotExist create plugins compiled folder if not exist
 func CreatePluginsCompiledFolderIfNotExist(fm FolderMgr) error {
-	ebpfFolder, err := GetCompilePluginSubFolder()
+	ebpfFolder, err := GetCompilePluginSubFolder(fm)
 	if err != nil {
 		return err
 	}
@@ -216,7 +217,7 @@ func CreatePluginsCompiledFolderIfNotExist(fm FolderMgr) error {
 
 //CreatePluginsSourceFolderIfNotExist plugins source folder if not exist
 func CreatePluginsSourceFolderIfNotExist(fm FolderMgr) error {
-	ebpfFolder, err := GetPluginSourceSubFolder()
+	ebpfFolder, err := GetPluginSourceSubFolder(fm)
 	if err != nil {
 		return err
 	}

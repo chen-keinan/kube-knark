@@ -10,8 +10,8 @@ import (
 )
 
 //SaveFilesIfNotExist save files if not exist
-func SaveFilesIfNotExist(filesData []utils.FilesInfo, f func() (string, error)) error {
-	folder, err := f()
+func SaveFilesIfNotExist(filesData []utils.FilesInfo, f func(fm utils.FolderMgr) (string, error)) error {
+	folder, err := f(utils.NewKFolder())
 	if err != nil {
 		return err
 	}
@@ -37,11 +37,12 @@ func SaveFilesIfNotExist(filesData []utils.FilesInfo, f func() (string, error)) 
 
 //CompileEbpfSources compile ebpf program to elf file
 func CompileEbpfSources(filesData []utils.FilesInfo, cc shell.ClangExecutor) error {
-	ebpfSourceFolder, err := utils.GetEbpfSourceFolder()
+	fm := utils.NewKFolder()
+	ebpfSourceFolder, err := utils.GetEbpfSourceFolder(fm)
 	if err != nil {
 		return err
 	}
-	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder(fm)
 	if err != nil {
 		return err
 	}

@@ -21,13 +21,14 @@ type PluginLoader struct {
 
 //NewPluginLoader return new plugin loader object with src and compiled folders
 func NewPluginLoader() (*PluginLoader, error) {
+	fm := utils.NewKFolder()
 	// The directory that will be watched for new Plugins.
-	srcFolder, err := utils.GetPluginSourceSubFolder()
+	srcFolder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
 		return nil, fmt.Errorf("could not find current directory: %v", err)
 	}
 	// The directory where all .so files will be stored.
-	compiledFolder, err := utils.GetCompilePluginSubFolder()
+	compiledFolder, err := utils.GetCompilePluginSubFolder(fm)
 	if err != nil {
 		return nil, fmt.Errorf("could not create objects dir: %v", err)
 	}

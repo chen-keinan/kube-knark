@@ -28,11 +28,11 @@ func TestProvideCompiledFiles(t *testing.T) {
 	ctl := gomock.NewController(t)
 	exec := mocks.NewMockExecutor(ctl)
 	clang := mock2.NewMockClangExecutor(ctl)
-	folder, err := utils.GetEbpfSourceFolder()
+	folder, err := utils.GetEbpfSourceFolder(fm)
 	assert.NoError(t, err)
-	ebpfSourceFolder, err := utils.GetEbpfSourceFolder()
+	ebpfSourceFolder, err := utils.GetEbpfSourceFolder(fm)
 	assert.NoError(t, err)
-	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder()
+	ebpfCompiledFolder, err := utils.GetEbpfCompiledFolder(fm)
 	assert.NoError(t, err)
 	for _, f := range fileData {
 		if !strings.HasSuffix(f.Name, ".c") {
