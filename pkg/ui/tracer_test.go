@@ -106,17 +106,17 @@ func TestWatchEvents(t *testing.T) {
 	// render to ui
 	ui.Render(nku.paragraph, nku.fsTable, nku.netTable)
 	nku.fsTable.Rows = [][]string{
-		{"header1", "header2", "header3"},
-		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
-		{"2016", "10", "11"},
-		{"2016", "10", "11"},
-		{"2016", "10", "11"}}
+		{"Severity", "Name", "Command args", "Created"},
+		{"你好吗", "Go-lang is so cool", "Im working on Ruby", "a"},
+		{"2016", "10", "11", "a"},
+		{"2016", "10", "11", "a"},
+		{"2016", "10", "11", "a"}}
 	nku.netTable.Rows = [][]string{
-		{"header1", "header2", "header3"},
-		{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
-		{"2016", "10", "11"},
-		{"2016", "10", "11"},
-		{"2016", "10", "11"}}
+		{"Severity", "Name", "Method", "API Call", "Created"},
+		{"你好吗", "Go-lang is so cool", "Im working on Ruby", "a", "b"},
+		{"2016", "10", "11", "a", "b"},
+		{"2016", "10", "11", "a", "b"},
+		{"2016", "10", "11", "a", "b"}}
 	go nku.watchEvents(uiEvents)
 	uiEvents <- ui.Event{ID: "j"}
 	assert.Equal(t, nku.fsTable.curr, nku.fsTable.prev)
@@ -125,6 +125,8 @@ func TestWatchEvents(t *testing.T) {
 	uiEvents <- ui.Event{ID: "w"}
 	assert.Equal(t, nku.netTable.curr, nku.netTable.prev)
 	uiEvents <- ui.Event{ID: "s"}
+	nku.NetEvtChan <- model.K8sAPICallEvent{Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{RequestURI: "/api/v1", StartTime: "a"}}, Spec: &specs.API{Name: "fd", Severity: "Critical", Method: "GET"}}
+	nku.FsEvtChan <- model.K8sConfigFileChangeEvent{Msg: &execevent.KprobeEvent{StartTime: "start", Args: []string{"a", "b"}}, Spec: &specs.FS{Name: "fd", Severity: "Critical"}}
 	uiEvents <- ui.Event{ID: "<C-c>"}
 }
 func TestNewNetEvtChan(t *testing.T) {
