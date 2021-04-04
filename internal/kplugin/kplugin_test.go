@@ -13,14 +13,14 @@ import (
 )
 
 func TestPluginLoader_Plugins(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_api_call_hook.go")
+	pl, err := PluginSetUp("on_k8s_api_call_hook.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
 	assert.Equal(t, plFiles[0], "test_plugin.go")
 }
 func TestPluginLoader_Compile(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_api_call_hook.go")
+	pl, err := PluginSetUp("on_k8s_api_call_hook.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
@@ -29,7 +29,7 @@ func TestPluginLoader_Compile(t *testing.T) {
 }
 
 func TestExecuteK8sConfigChange(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_file_config_change_hook.go")
+	pl, err := PluginSetUp("on_k8s_file_config_change_hook.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
@@ -40,7 +40,7 @@ func TestExecuteK8sConfigChange(t *testing.T) {
 }
 
 func TestExecuteNetEvt(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_api_call_hook.go")
+	pl, err := PluginSetUp("on_k8s_api_call_hook.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
@@ -51,7 +51,7 @@ func TestExecuteNetEvt(t *testing.T) {
 }
 
 func TestPluginLoader_CompileBad(t *testing.T) {
-	pl, err := pluginSetUp("empty.go")
+	pl, err := PluginSetUp("empty.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
@@ -61,7 +61,7 @@ func TestPluginLoader_CompileBad(t *testing.T) {
 	assert.Error(t, err)
 }
 func TestPluginLoader_CompileWrongHook(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_api_call_hook.go")
+	pl, err := PluginSetUp("on_k8s_api_call_hook.go")
 	assert.NoError(t, err)
 	plFiles, err := pl.Plugins()
 	assert.NoError(t, err)
@@ -69,7 +69,7 @@ func TestPluginLoader_CompileWrongHook(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func pluginSetUp(fileName string) (*PluginLoader, error) {
+func PluginSetUp(fileName string) (*PluginLoader, error) {
 	fm := utils.NewKFolder()
 	folder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
