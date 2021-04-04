@@ -131,7 +131,8 @@ func numOfWorkers() int {
 
 //provideCompiledFiles return ebpf compiled files
 func provideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesInfo {
-	err := utils.CreateKubeKnarkFolders()
+	fm := utils.NewKFolder()
+	err := utils.CreateKubeKnarkFolders(fm)
 	if err != nil {
 		panic(err)
 	}
@@ -156,7 +157,8 @@ func provideCompiledFiles(sc shell.ClangExecutor, folder string) []utils.FilesIn
 
 //provideSpecFiles return spec files
 func provideSpecFiles() []string {
-	err := utils.CreateKubeKnarkFolders()
+	fm := utils.NewKFolder()
+	err := utils.CreateKubeKnarkFolders(fm)
 	if err != nil {
 		panic(err)
 	}

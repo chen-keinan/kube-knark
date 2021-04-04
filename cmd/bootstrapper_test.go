@@ -18,7 +18,8 @@ import (
 )
 
 func TestProvideCompiledFiles(t *testing.T) {
-	err := utils.CreateKubeKnarkFolders()
+	fm := utils.NewKFolder()
+	err := utils.CreateKubeKnarkFolders(fm)
 	assert.NoError(t, err)
 	fileData, err := startup.GenerateEbpfFiles()
 	assert.NoError(t, err)

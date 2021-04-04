@@ -57,7 +57,8 @@ func TestGenerateEbpfFiles(t *testing.T) {
 func TestSaveFilesIfNotExist(t *testing.T) {
 	files, err := GenerateEbpfFiles()
 	assert.NoError(t, err)
-	err = utils.CreateKubeKnarkFolders()
+	fm := utils.NewKFolder()
+	err = utils.CreateKubeKnarkFolders(fm)
 	assert.NoError(t, err)
 	err = SaveFilesIfNotExist(files, utils.GetEbpfSourceFolder)
 	assert.NoError(t, err)

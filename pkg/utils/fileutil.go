@@ -109,7 +109,7 @@ func GetEbpfCompiledFolder() (string, error) {
 	return path.Join(folder, CompileSubFolder), nil
 }
 
-//GetHomeFolder return beacon home folder
+//GetHomeFolder return kube-knark home folder
 func GetHomeFolder() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
@@ -224,8 +224,7 @@ func CreatePluginsSourceFolderIfNotExist(fm FolderMgr) error {
 }
 
 //CreateKubeKnarkFolders create kube knark compiled and spec folders
-func CreateKubeKnarkFolders() error {
-	fm := NewKFolder()
+func CreateKubeKnarkFolders(fm FolderMgr) error {
 	err := CreateHomeFolderIfNotExist(fm)
 	if err != nil {
 		return err
