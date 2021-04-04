@@ -13,7 +13,6 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
-	"plugin"
 	"testing"
 	"time"
 )
@@ -26,7 +25,9 @@ func TestCommandMatchesWorker_Invoke(t *testing.T) {
 	assert.NoError(t, err)
 	fsMatches := matches.NewFSMatches(mmap, smap)
 	uichan := make(chan model.K8sConfigFileChangeEvent)
-	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan, kplugin.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0)})
+	symbols, err := getPluginSymbols("on_k8s_file_config_change_hook.go", common.OnK8sFileConfigChangeHook)
+	assert.NoError(t, err)
+	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan, kplugin.K8sFileConfigChangeHook{Plugins: symbols})
 	log, err := zap.NewProduction()
 	assert.NoError(t, err)
 	cmw := NewCommandMatchesWorker(cmd, log)
