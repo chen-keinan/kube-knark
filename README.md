@@ -31,6 +31,7 @@ kube-Knark console:
 - Clang 10+
 - LLVM
 - Kernel Headers
+- Pcap
 
 ## Installation
 ```
