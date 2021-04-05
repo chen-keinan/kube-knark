@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/chen-keinan/kube-knark.svg?branch=master)](https://travis-ci.com/chen-keinan/kube-knark)
 <img src="./pkg/images/coverage_badge.png" alt="test coverage badge">
 [![Gitter](https://badges.gitter.im/kube-knark/community.svg)](https://gitter.im/kube-knark/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-<br><img src="./pkg/images/knark-console.png" width="800" alt="kube-krank-console logo"><img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><br>
+<br><img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><img src="./pkg/images/knark-console.png" width="800" alt="kube-krank-console logo"><br>
 
 # Kube-Knark Project
 ###  Trace your kubernetes runtime !!
