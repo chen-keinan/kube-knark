@@ -6,7 +6,7 @@
 <br><img src="./pkg/images/kube_krank.png" width="300" alt="kube-krank logo"><br>
 # Kube-Knark Project
 ###  Trace your kubernetes runtime !!
-Kube-Knark is an open source  tracer uses pcap & ebpf technology to perform runtime tracing on a deployed kubernetes cluster. it tracing the kubernetes API execution and master node configuration files permission changes. the trace results are leveraged via go plugin webhooks
+Kube-Knark is an open source  tracer uses pcap & ebpf technology to perform runtime tracing on a deployed kubernetes cluster. It tracing the kubernetes API execution and master node configuration files permission changes. The trace matching events are leveraged via go plugin webhooks
 
 ###kube-knark trace the following :
 - The full [Kubernetes API specification](https://kubernetes.io/docs/reference/kubernetes-api/) execution calls especially mutation <br> 
