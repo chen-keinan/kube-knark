@@ -17,3 +17,8 @@ dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./k
 
 ### run docker 
 docker run -it --rm --privileged -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -t kbeacon.jfrog.io/docker-local/kube-knark
+
+### start vagrant file
+```# vagrant up```
+
+```# vagrant ssh```
