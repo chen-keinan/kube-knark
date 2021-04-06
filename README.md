@@ -61,5 +61,5 @@ The Kube-knark support 2 specs and can be easily extended:
 both specs can be easily extended by amended the spec files under ```~/.kube-knark/spec``` folder
 
 ## Contribution
-- code contribution is welcome !!
-- code contribution with tests and passing linter is more than welcome :) 
+- code contribution is welcome !! , contribution with tests and passing linter is more than welcome :) 
+- /.dev folder include vagrantfile to be used for development : [Dev Instruction](https://github.com/chen-keinan/kube-knark/tree/master/.dev)
