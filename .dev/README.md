@@ -1,24 +1,25 @@
-##Remote Debug
-###Install dlv
-$ git clone https://github.com/go-delve/delve.git $GOPATH/src/github.com/go-delve/delve
-$ cd $GOPATH/src/github.com/go-delve/delve
-$ make install
+## Development Instruction
+- copy Vagrantfile and setup.sh to custom folder
+```
+cp ./.dev/Vagrantfile ~/<custom folder>/Vagrantfile
 
-### export dlv bin path
-export PATH=$PATH:/home/vagrant/go/bin
-
-export PATH=$PATH:/root/go/bin
-
-### compile binary with debug params
-GOOS=linux GOARCH=amd64 go build -v -gcflags='-N -l' 
-
-### run on remote machine
-dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./kube-knark
-
-### run docker 
-docker run -it --rm --privileged -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -t kbeacon.jfrog.io/docker-local/kube-knark
-
-### start vagrant file
+cp ./.dev/setuo.sh ~/<custom folder>/setup.sh
+```
+### start vagrant box
 ```# vagrant up```
 
 ```# vagrant ssh```
+
+### remote debug
+
+Configure remove debug  on intellij on port : 2345
+- make sure project is cloned to vagrant shared folder
+- build executable for debug on vagrant box
+```
+make build_debug
+```
+- start dlv
+```
+make dlv
+```
+- start remote debug from intellij
