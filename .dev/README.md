@@ -1,9 +1,10 @@
 ## Development Instruction
 - copy Vagrantfile and setup.sh to custom folder
 ```
-cp ./.dev/Vagrantfile ~/<custom folder>/Vagrantfile
+cd .dev
+cp Vagrantfile ~/<custom folder>/Vagrantfile
 
-cp ./.dev/setuo.sh ~/<custom folder>/setup.sh
+cp setuo.sh ~/<custom folder>/setup.sh
 ```
 ### start vagrant box
 ```# vagrant up```
