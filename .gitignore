@@ -17,3 +17,4 @@ coverage.md
 coverage.out
 kube-knark
 mock*
+*.iml

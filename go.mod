@@ -32,7 +32,7 @@ require (
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
-	golang.org/x/term v0.0.0-20210317153231-de623e64d2a6 // indirect
+	golang.org/x/term v0.0.0-20210406210042-72f3dc4e9b72 // indirect
 	golang.org/x/text v0.3.3
 	golang.org/x/tools v0.1.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
