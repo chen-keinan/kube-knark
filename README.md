@@ -55,7 +55,7 @@ go build -buildmode=plugin -o=~/<plugin folder>/<plugin>.so ~/<plugin folder>/<p
 ```
 ##### Copy plugin to folder (.kube-knark folder is created on the 1st startup)
 ```
-cp ~/<plugin folder>/bench_plugin.so ~/.kube-knark/plugins/compile/<plugin>.so
+cp ~/<plugin folder>/<plugin>.so ~/.kube-knark/plugins/compile/<plugin>.so
 ```
 ## Supported Specs 
 The Kube-knark support 2 specs and can be easily extended:
