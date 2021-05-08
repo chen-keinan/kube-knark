@@ -49,9 +49,13 @@ The Kube-knark expose 2 hooks for user plugins [Example](https://github.com/chen
 - **OnK8sAPICallHook** - this hook accepts k8s api call event with all details (http request /response ,matching API spec) 
 - **OnK8sFileConfigChangeHook** - this hook accepts master file configuration change event with command details (chown or chmod ,args and matching file change spec)
 
+##### Compile user plugin
+```
+go build -buildmode=plugin -o=~/<plugin folder>/<plugin>.so ~/<plugin folder>/<plugin>.go
+```
 ##### Copy plugin to folder (.kube-knark folder is created on the 1st startup)
 ```
-cp <plugin>.go ~/.kube-knark/plugins/source/<plugin>.go
+cp ~/<plugin folder>/bench_plugin.so ~/.kube-knark/plugins/compile/<plugin>.so
 ```
 ## Supported Specs 
 The Kube-knark support 2 specs and can be easily extended:
