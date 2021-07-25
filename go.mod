@@ -4,36 +4,29 @@ go 1.14
 
 require (
 	github.com/dropbox/goebpf v0.0.0-20210223223402-d54e462ac389
+	github.com/fatih/color v1.12.0 // indirect
 	github.com/fogleman/gg v1.3.0 // indirect
 	github.com/gizak/termui/v3 v3.1.0
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/gobuffalo/packd v1.0.0 // indirect
 	github.com/gobuffalo/packr v1.30.1
-	github.com/gobuffalo/packr/v2 v2.8.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
-	github.com/golang/mock v1.5.0
+	github.com/golang/mock v1.6.0
 	github.com/google/gopacket v1.1.19
 	github.com/gorilla/mux v1.8.0
 	github.com/hsiafan/glow v1.7.0
 	github.com/jpoles1/gopherbadger v2.4.0+incompatible // indirect
-	github.com/karrick/godirwalk v1.16.1 // indirect
-	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
-	github.com/magiconair/properties v1.8.1
-	github.com/mitchellh/mapstructure v1.1.2
+	github.com/magiconair/properties v1.8.5
+	github.com/mitchellh/mapstructure v1.4.1
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/spf13/cobra v1.1.3 // indirect
-	github.com/stretchr/testify v1.6.1
-	github.com/xyproto/png2svg v0.0.0-20210305194656-78299c45f84e // indirect
+	github.com/stretchr/testify v1.7.0
 	go.uber.org/fx v1.13.1
-	go.uber.org/zap v1.16.0
-	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
-	golang.org/x/term v0.0.0-20210406210042-72f3dc4e9b72 // indirect
-	golang.org/x/text v0.3.3
-	golang.org/x/tools v0.1.0 // indirect
+	go.uber.org/zap v1.17.0
+	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/text v0.3.6
+	golang.org/x/tools v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )

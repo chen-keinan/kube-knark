@@ -19,7 +19,7 @@ func TestSortFsRows(t *testing.T) {
 	}
 	fse := &model.K8sConfigFileChangeEvent{Spec: &specs.FS{Severity: "INFO", SeverityInt: 4}, Msg: &execevent.KprobeEvent{Args: []string{"d"}}}
 	//prevents = append(prevents,&fse)
-	rows := [][]string{{"Severity", "Name", "Command args", "Created"}}
+	rows := [][]string{{"Severity", "Name", "command args", "Created"}}
 	nku := NewKubeKnarkUI(make(chan model.K8sAPICallEvent), make(chan model.K8sConfigFileChangeEvent))
 	sortedRows := nku.sortFSRows(&prevents, fse, rows)
 	fmt.Println(len(prevents))
@@ -41,7 +41,7 @@ func TestSortNetRows(t *testing.T) {
 	}
 	fse := &model.K8sAPICallEvent{Spec: &specs.API{Severity: "INFO", SeverityInt: 4}, Msg: &netevent.HTTPNetData{HTTPRequestData: &netevent.HTTPRequestData{Method: "GET"}}}
 	//prevents = append(prevents,&fse)
-	rows := [][]string{{"Severity", "Name", "Command args", "Created"}}
+	rows := [][]string{{"Severity", "Name", "command args", "Created"}}
 	nku := NewKubeKnarkUI(make(chan model.K8sAPICallEvent), make(chan model.K8sConfigFileChangeEvent))
 	sortedRows := nku.sortNetRows(&prevents, fse, rows)
 	fmt.Println(len(prevents))
@@ -87,7 +87,7 @@ func TestFsTable(t *testing.T) {
 	assert.Equal(t, nku.fsTable.Title, "K8s configuration file change events")
 	assert.Equal(t, nku.fsHeaders[0], "Severity")
 	assert.Equal(t, nku.fsHeaders[1], "Name")
-	assert.Equal(t, nku.fsHeaders[2], "Command args")
+	assert.Equal(t, nku.fsHeaders[2], "command args")
 	assert.Equal(t, nku.fsHeaders[3], "Created")
 }
 
@@ -106,7 +106,7 @@ func TestWatchEvents(t *testing.T) {
 	// render to ui
 	ui.Render(nku.paragraph, nku.fsTable, nku.netTable)
 	nku.fsTable.Rows = [][]string{
-		{"Severity", "Name", "Command args", "Created"},
+		{"Severity", "Name", "command args", "Created"},
 		{"你好吗", "Go-lang is so cool", "Im working on Ruby", "a"},
 		{"2016", "10", "11", "a"},
 		{"2016", "10", "11", "a"},

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Command line options
+// command line options
 type Option struct {
 	Level     string        `default:"header" description:"Output level, options are: url(only url) | header(http headers) | all(headers, and textuary http body)"`
 	File      string        `description:"Read from pcap file. If not set, will capture data from network device by default"`

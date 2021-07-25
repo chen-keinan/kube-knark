@@ -117,7 +117,7 @@ func (kui *KubeKnarkUI) buildFileSystemTable(termWidth int, termHeight int) {
 	longColumn := (termWidth - 45) / 2
 	kui.fsTable.Table.ColumnWidths = []int{10, longColumn - 15, longColumn + 7, 40}
 	fsRows := make([][]string, 0)
-	kui.fsHeaders = []string{"Severity", "Name", "Command args", "Created"}
+	kui.fsHeaders = []string{"Severity", "Name", "command args", "Created"}
 	fsRows = append(fsRows, kui.fsHeaders)
 	kui.fsTable.Rows = fsRows
 	kui.fsTable.RowSeparator = false
