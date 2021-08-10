@@ -1,5 +1,6 @@
 //nolint
 package external
+
 import (
 	"bytes"
 	"io"
