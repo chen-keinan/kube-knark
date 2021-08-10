@@ -19,15 +19,6 @@ func TestPluginLoader_Plugins(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, plFiles[0], "test_plugin.go")
 }
-func TestPluginLoader_Compile(t *testing.T) {
-	pl, err := pluginSetUp("on_k8s_api_call_hook.go")
-	assert.NoError(t, err)
-	plFiles, err := pl.Plugins()
-	assert.NoError(t, err)
-	_, err = pl.Compile(plFiles[0], common.OnK8sAPICallHook)
-	assert.NoError(t, err)
-}
-
 func TestExecuteK8sConfigChange(t *testing.T) {
 	pl, err := pluginSetUp("on_k8s_file_config_change_hook.go")
 	assert.NoError(t, err)
