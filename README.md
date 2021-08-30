@@ -35,14 +35,14 @@ kube-Knark console:
 - Pcap
 
 ## Installation
-```
+```shell
 git clone https://github.com/chen-keinan/kube-knark
 cd kube-knark
 make build
 ```
 ## Quick Start
 Execute kube-knark without plugins 
-```
+```shell
  ./kube-knark 
 ```
 ## User Plugin Usage (via go plugins)
@@ -51,11 +51,11 @@ The Kube-knark expose 2 hooks for user plugins [Example](https://github.com/chen
 - **OnK8sFileConfigChangeHook** - this hook accepts master file configuration change event with command details (chown or chmod ,args and matching file change spec)
 
 ##### Compile user plugin
-```
+```shell
 go build -buildmode=plugin -o=~/<plugin folder>/<plugin>.so ~/<plugin folder>/<plugin>.go
 ```
 ##### Copy plugin to folder (.kube-knark folder is created on the 1st startup)
-```
+```shell
 cp ~/<plugin folder>/<plugin>.so ~/.kube-knark/plugins/compile/<plugin>.so
 ```
 ## Supported Specs 
