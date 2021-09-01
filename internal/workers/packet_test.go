@@ -16,6 +16,7 @@ import (
 	"os"
 	"path"
 	"plugin"
+	"strings"
 	"testing"
 	"time"
 )
@@ -56,7 +57,8 @@ func getPluginSymbols(name, method string) ([]plugin.Symbol, error) {
 		if err != nil {
 			return nil, err
 		}
-		sym, err := pl.Load(cname, method)
+		newName := strings.Split(cname, "/")
+		sym, err := pl.Load(newName[len(newName)-1], method)
 		if err != nil {
 			return nil, err
 		}
