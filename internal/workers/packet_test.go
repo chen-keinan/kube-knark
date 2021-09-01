@@ -2,8 +2,8 @@ package workers
 
 import (
 	"fmt"
+	"github.com/chen-keinan/go-user-plugins/uplugin"
 	"github.com/chen-keinan/kube-knark/internal/common"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
@@ -16,6 +16,7 @@ import (
 	"os"
 	"path"
 	"plugin"
+	"strings"
 	"testing"
 	"time"
 )
@@ -30,7 +31,7 @@ func TestPacketMatchesWorker_Invoke(t *testing.T) {
 	netChan := make(chan model.K8sAPICallEvent)
 	symbols, err := getPluginSymbols("on_k8s_api_call_hook.go", common.OnK8sAPICallHook)
 	assert.NoError(t, err)
-	pmd := NewPacketMatchData(rm, pmc, vc, 1, netChan, kplugin.K8sAPICallHook{Plugins: symbols})
+	pmd := NewPacketMatchData(rm, pmc, vc, 1, netChan, K8sAPICallHook{Plugins: symbols, Plug: uplugin.NewPluginLoader("aaa", "bbb")})
 	log, err := zap.NewProduction()
 	assert.NoError(t, err)
 	pmw := NewPacketMatchesWorker(pmd, log)
@@ -46,13 +47,18 @@ func getPluginSymbols(name, method string) ([]plugin.Symbol, error) {
 	if err != nil {
 		return nil, err
 	}
-	plugins, err := pl.Plugins()
+	plugins, err := pl.Plugins(uplugin.SourceExt)
 	if err != nil {
 		return nil, err
 	}
 	symbols := make([]plugin.Symbol, 0)
 	for _, name := range plugins {
-		sym, err := pl.Compile(name, method)
+		cname, err := pl.Compile(name)
+		if err != nil {
+			return nil, err
+		}
+		newName := strings.Split(cname, "/")
+		sym, err := pl.Load(newName[len(newName)-1], method)
 		if err != nil {
 			return nil, err
 		}
@@ -87,7 +93,7 @@ func buildValidationCache() (map[string]*specs.API, error) {
 	return specs.CreateMapFromSpecFiles([]string{string(data)})
 }
 
-func pluginSetUp(fileName string) (*kplugin.PluginLoader, error) {
+func pluginSetUp(fileName string) (*uplugin.PluginLoader, error) {
 	fm := utils.NewKFolder()
 	folder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
@@ -134,9 +140,7 @@ func pluginSetUp(fileName string) (*kplugin.PluginLoader, error) {
 	if err != nil {
 		return nil, err
 	}
-	pl, err := kplugin.NewPluginLoader()
-	if err != nil {
-		return nil, err
-	}
+	pl := uplugin.NewPluginLoader(folder, cfolder)
+
 	return pl, err
 }

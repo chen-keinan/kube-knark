@@ -3,12 +3,19 @@ package workers
 import (
 	"bytes"
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
+	"github.com/chen-keinan/go-user-plugins/uplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"go.uber.org/zap"
+	"plugin"
 )
+
+//K8sFileConfigChangeHook hold the plugin symbol for K8s File Config Change Hook
+type K8sFileConfigChangeHook struct {
+	Plugins []plugin.Symbol
+	Plug    *uplugin.PluginLoader
+}
 
 //CommandMatchesWorker instance which match command data to specific pattern
 type CommandMatchesWorker struct {
@@ -22,7 +29,7 @@ func NewCommandMatchesWorker(commandMatchData *CommandMatchData, log *zap.Logger
 }
 
 //NewCommandMatchesData return new command instance
-func NewCommandMatchesData(cmc chan *execevent.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches, uiChan chan model.K8sConfigFileChangeEvent, hook kplugin.K8sFileConfigChangeHook) *CommandMatchData {
+func NewCommandMatchesData(cmc chan *execevent.KprobeEvent, NumOfWorkers int, fsMatches *matches.FSMatches, uiChan chan model.K8sConfigFileChangeEvent, hook K8sFileConfigChangeHook) *CommandMatchData {
 	return &CommandMatchData{cmc: cmc, numOfWorkers: NumOfWorkers, fsMatches: fsMatches, uiChan: uiChan, plugins: hook}
 }
 
@@ -32,7 +39,7 @@ type CommandMatchData struct {
 	numOfWorkers int
 	fsMatches    *matches.FSMatches
 	uiChan       chan model.K8sConfigFileChangeEvent
-	plugins      kplugin.K8sFileConfigChangeHook
+	plugins      K8sFileConfigChangeHook
 }
 
 //Invoke invoke packet matches workers
@@ -48,7 +55,7 @@ func (pm *CommandMatchesWorker) Invoke() {
 					pm.cmd.uiChan <- evt
 					if len(pm.cmd.plugins.Plugins) > 0 {
 						for _, pl := range pm.cmd.plugins.Plugins {
-							err := kplugin.ExecuteK8sConfigChange(pl, evt)
+							_, err := pm.cmd.plugins.Plug.Invoke(pl, evt)
 							if err != nil {
 								pm.log.Error(fmt.Sprintf("failed to execute plugins %s", err.Error()))
 							}

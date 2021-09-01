@@ -3,9 +3,9 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/chen-keinan/go-user-plugins/uplugin"
 	"github.com/chen-keinan/kube-knark/internal/common"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
@@ -255,19 +255,27 @@ func getDataFileContent() ([]string, error) {
 }
 
 //LoadAPICallPluginSymbols load API call plugin symbols
-func LoadAPICallPluginSymbols(log *zap.Logger) kplugin.K8sAPICallHook {
-	pl, err := kplugin.NewPluginLoader()
+func LoadAPICallPluginSymbols(log *zap.Logger) workers.K8sAPICallHook {
+	fm := utils.NewKFolder()
+	sourceFolder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+		panic(fmt.Sprintf("failed tpo get plugin source sourceFolder %s", err.Error()))
 	}
-	plugins, err := pl.Plugins()
+	compliledFolder, err := utils.GetCompilePluginSubFolder(fm)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+		panic(fmt.Sprintf("failed to get plugin compiled sourceFolder %s", err.Error()))
 	}
-	apiPlugin := kplugin.K8sAPICallHook{Plugins: make([]plugin.Symbol, 0)}
-	for _, name := range plugins {
-		sym, err := pl.Compile(name, common.OnK8sAPICallHook)
+
+	pl := uplugin.NewPluginLoader(sourceFolder, compliledFolder)
+	names, err := pl.Plugins(uplugin.CompiledExt)
+	if err != nil {
+		panic(fmt.Sprintf("failed to get plugin compiled plugins %s", err.Error()))
+	}
+	apiPlugin := workers.K8sAPICallHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
+	for _, name := range names {
+		sym, err := pl.Load(name, common.OnK8sAPICallHook)
 		if err != nil {
+			log.Error(fmt.Sprintf("failed to load sym %s error %s", name, err.Error()))
 			continue
 		}
 		apiPlugin.Plugins = append(apiPlugin.Plugins, sym)
@@ -276,19 +284,27 @@ func LoadAPICallPluginSymbols(log *zap.Logger) kplugin.K8sAPICallHook {
 }
 
 //LoadFileChangePluginSymbols load config file change plugin symbols
-func LoadFileChangePluginSymbols(log *zap.Logger) kplugin.K8sFileConfigChangeHook {
-	pl, err := kplugin.NewPluginLoader()
+func LoadFileChangePluginSymbols(log *zap.Logger) workers.K8sFileConfigChangeHook {
+	fm := utils.NewKFolder()
+	sourceFolder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+		panic(fmt.Sprintf("failed tpo get plugin source sourceFolder %s", err.Error()))
 	}
-	plugins, err := pl.Plugins()
+	compliledFolder, err := utils.GetCompilePluginSubFolder(fm)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to load plugin symbol %s", err.Error()))
+		panic(fmt.Sprintf("failed to get plugin compiled sourceFolder %s", err.Error()))
 	}
-	filePlugin := kplugin.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0)}
-	for _, name := range plugins {
-		sym, err := pl.Compile(name, common.OnK8sFileConfigChangeHook)
+
+	pl := uplugin.NewPluginLoader(sourceFolder, compliledFolder)
+	names, err := pl.Plugins(uplugin.CompiledExt)
+	if err != nil {
+		panic(fmt.Sprintf("failed to get plugin compiled plugins %s", err.Error()))
+	}
+	filePlugin := workers.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
+	for _, name := range names {
+		sym, err := pl.Load(name, common.OnK8sFileConfigChangeHook)
 		if err != nil {
+			log.Error(fmt.Sprintf("failed to load sym %s error %s", name, err.Error()))
 			continue
 		}
 		filePlugin.Plugins = append(filePlugin.Plugins, sym)

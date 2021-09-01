@@ -2,13 +2,20 @@ package workers
 
 import (
 	"fmt"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
+	"github.com/chen-keinan/go-user-plugins/uplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/specs"
 	"go.uber.org/zap"
+	"plugin"
 )
+
+//K8sAPICallHook hold the plugin symbol for K8s API Call Hook
+type K8sAPICallHook struct {
+	Plugins []plugin.Symbol
+	Plug    *uplugin.PluginLoader
+}
 
 //PacketMatchesWorker instance which match packet data to specific pattern
 type PacketMatchesWorker struct {
@@ -23,7 +30,7 @@ type PacketMatchData struct {
 	validationCache map[string]*specs.API
 	uiChan          chan model.K8sAPICallEvent
 	numOfWorkers    int
-	plugins         kplugin.K8sAPICallHook
+	plugins         K8sAPICallHook
 }
 
 //NewPacketMatchesWorker return new packet instance
@@ -32,7 +39,7 @@ func NewPacketMatchesWorker(pmd *PacketMatchData, log *zap.Logger) *PacketMatche
 }
 
 //NewPacketMatchData return new packet data
-func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *netevent.HTTPNetData, validationCache map[string]*specs.API, numOfWorkers int, uichan chan model.K8sAPICallEvent, plugin kplugin.K8sAPICallHook) *PacketMatchData {
+func NewPacketMatchData(rm *matches.RouteMatches, pmc chan *netevent.HTTPNetData, validationCache map[string]*specs.API, numOfWorkers int, uichan chan model.K8sAPICallEvent, plugin K8sAPICallHook) *PacketMatchData {
 	return &PacketMatchData{rm: rm, pmc: pmc, validationCache: validationCache, numOfWorkers: numOfWorkers, uiChan: uichan, plugins: plugin}
 }
 
@@ -48,7 +55,7 @@ func (pm *PacketMatchesWorker) Invoke() {
 					pm.pmd.uiChan <- evt
 					if len(pm.pmd.plugins.Plugins) > 0 {
 						for _, pl := range pm.pmd.plugins.Plugins {
-							err := kplugin.ExecuteNetEvt(pl, evt)
+							_, err := pm.pmd.plugins.Plug.Invoke(pl, evt)
 							if err != nil {
 								pm.log.Error(fmt.Sprintf("failed to execute plugins %s", err.Error()))
 							}
