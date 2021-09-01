@@ -5,7 +5,6 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/common"
 	shell "github.com/chen-keinan/kube-knark/internal/compiler"
 	"github.com/chen-keinan/kube-knark/internal/compiler/mocks"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	mock2 "github.com/chen-keinan/kube-knark/internal/mocks"
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
@@ -13,9 +12,6 @@ import (
 	"github.com/chen-keinan/kube-knark/pkg/utils"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"os"
-	"path"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -108,73 +104,4 @@ func TestProvideFSSpecCache(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, val.Commands[0], "chmod")
 	assert.Equal(t, val.Commands[1], "*/cni/*")
-}
-
-func TestLoadAPICallPluginSymbols(t *testing.T) {
-	_, err := PluginSetUp("on_k8s_api_call_hook.go")
-	assert.NoError(t, err)
-	utils.CreateKubeKnarkFolders(utils.NewKFolder())
-	sym := LoadAPICallPluginSymbols(NewZapLogger())
-	assert.True(t, len(sym.Plugins) > 0)
-}
-func TestLoadFileChangePluginSymbols(t *testing.T) {
-	_, err := PluginSetUp("on_k8s_file_config_change_hook.go")
-	assert.NoError(t, err)
-	utils.CreateKubeKnarkFolders(utils.NewKFolder())
-	sym := LoadFileChangePluginSymbols(NewZapLogger())
-	assert.True(t, len(sym.Plugins) > 0)
-}
-
-func PluginSetUp(fileName string) (*kplugin.PluginLoader, error) {
-	fm := utils.NewKFolder()
-	folder, err := utils.GetPluginSourceSubFolder(fm)
-	if err != nil {
-		return nil, err
-	}
-	err = os.RemoveAll(folder)
-	if err != nil {
-		return nil, err
-	}
-	cfolder, err := utils.GetCompilePluginSubFolder(fm)
-	if err != nil {
-		return nil, err
-	}
-	err = os.RemoveAll(cfolder)
-	if err != nil {
-		return nil, err
-	}
-	err = utils.CreateHomeFolderIfNotExist(fm)
-	if err != nil {
-		return nil, err
-	}
-	err = utils.CreatePluginsSourceFolderIfNotExist(fm)
-	if err != nil {
-		return nil, err
-	}
-	err = utils.CreatePluginsCompiledFolderIfNotExist(fm)
-	if err != nil {
-		return nil, err
-	}
-	f, err := os.Open(fmt.Sprintf("./../internal/kplugin/fixtures/%s", fileName))
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	data, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-	nf, err := os.Create(path.Join(folder, "test_plugin.go"))
-	if err != nil {
-		return nil, err
-	}
-	_, err = nf.WriteString(string(data))
-	if err != nil {
-		return nil, err
-	}
-	pl, err := kplugin.NewPluginLoader()
-	if err != nil {
-		return nil, err
-	}
-	return pl, err
 }
