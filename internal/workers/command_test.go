@@ -2,8 +2,8 @@ package workers
 
 import (
 	"fmt"
+	"github.com/chen-keinan/go-user-plugins/uplugin"
 	"github.com/chen-keinan/kube-knark/internal/common"
-	"github.com/chen-keinan/kube-knark/internal/kplugin"
 	"github.com/chen-keinan/kube-knark/internal/matches"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
@@ -27,7 +27,7 @@ func TestCommandMatchesWorker_Invoke(t *testing.T) {
 	uichan := make(chan model.K8sConfigFileChangeEvent)
 	symbols, err := getPluginSymbols("on_k8s_file_config_change_hook.go", common.OnK8sFileConfigChangeHook)
 	assert.NoError(t, err)
-	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan, kplugin.K8sFileConfigChangeHook{Plugins: symbols})
+	cmd := NewCommandMatchesData(cmc, 1, fsMatches, uichan, K8sFileConfigChangeHook{Plugins: symbols, Plug: uplugin.NewPluginLoader("aaa", "bbb")})
 	log, err := zap.NewProduction()
 	assert.NoError(t, err)
 	cmw := NewCommandMatchesWorker(cmd, log)
