@@ -1,4 +1,4 @@
-package workers
+package hooks
 
 import (
 	"fmt"
@@ -123,7 +123,7 @@ func pluginSetUp(fileName string) (*uplugin.PluginLoader, error) {
 	if err != nil {
 		return nil, err
 	}
-	f, err := os.Open(fmt.Sprintf("./../kplugin/fixtures/%s", fileName))
+	f, err := os.Open(fmt.Sprintf("./fixtures/%s", fileName))
 	if err != nil {
 		return nil, err
 	}

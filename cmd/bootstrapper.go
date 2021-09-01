@@ -10,7 +10,7 @@ import (
 	"github.com/chen-keinan/kube-knark/internal/startup"
 	"github.com/chen-keinan/kube-knark/internal/tracer/kexec"
 	"github.com/chen-keinan/kube-knark/internal/tracer/khttp"
-	"github.com/chen-keinan/kube-knark/internal/workers"
+	"github.com/chen-keinan/kube-knark/internal/hooks"
 	"github.com/chen-keinan/kube-knark/pkg/model"
 	"github.com/chen-keinan/kube-knark/pkg/model/execevent"
 	"github.com/chen-keinan/kube-knark/pkg/model/netevent"
@@ -49,13 +49,13 @@ func StartKnark() {
 		fx.Provide(ui.NewKubeKnarkUI),
 		fx.Provide(numOfWorkers),
 		fx.Provide(matchCmdChan),
-		fx.Provide(workers.NewCommandMatchesWorker),
+		fx.Provide(hooks.NewCommandMatchesWorker),
 		// init packet workers
 		fx.Provide(matchNetChan),
-		fx.Provide(workers.NewPacketMatchesWorker),
-		fx.Provide(workers.NewPacketMatchData),
+		fx.Provide(hooks.NewPacketMatchesWorker),
+		fx.Provide(hooks.NewPacketMatchData),
 		fx.Provide(matches.NewFSMatches),
-		fx.Provide(workers.NewCommandMatchesData),
+		fx.Provide(hooks.NewCommandMatchesData),
 		fx.Provide(ui.NewFilesystemEvtChan),
 		fx.Invoke(runKnarkService),
 	)
@@ -71,8 +71,8 @@ func runKnarkService(lifecycle fx.Lifecycle,
 	files []utils.FilesInfo,
 	NetEventChan chan *netevent.HTTPNetData,
 	cmdEventChan chan *execevent.KprobeEvent,
-	cm *workers.CommandMatchesWorker,
-	pm *workers.PacketMatchesWorker) {
+	cm *hooks.CommandMatchesWorker,
+	pm *hooks.PacketMatchesWorker) {
 
 	lifecycle.Append(fx.Hook{OnStart: func(context.Context) error {
 		quitChan := make(chan bool)
@@ -255,7 +255,7 @@ func getDataFileContent() ([]string, error) {
 }
 
 //LoadAPICallPluginSymbols load API call plugin symbols
-func LoadAPICallPluginSymbols(log *zap.Logger) workers.K8sAPICallHook {
+func LoadAPICallPluginSymbols(log *zap.Logger) hooks.K8sAPICallHook {
 	fm := utils.NewKFolder()
 	sourceFolder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
@@ -271,7 +271,7 @@ func LoadAPICallPluginSymbols(log *zap.Logger) workers.K8sAPICallHook {
 	if err != nil {
 		panic(fmt.Sprintf("failed to get plugin compiled plugins %s", err.Error()))
 	}
-	apiPlugin := workers.K8sAPICallHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
+	apiPlugin := hooks.K8sAPICallHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
 	for _, name := range names {
 		sym, err := pl.Load(name, common.OnK8sAPICallHook)
 		if err != nil {
@@ -284,7 +284,7 @@ func LoadAPICallPluginSymbols(log *zap.Logger) workers.K8sAPICallHook {
 }
 
 //LoadFileChangePluginSymbols load config file change plugin symbols
-func LoadFileChangePluginSymbols(log *zap.Logger) workers.K8sFileConfigChangeHook {
+func LoadFileChangePluginSymbols(log *zap.Logger) hooks.K8sFileConfigChangeHook {
 	fm := utils.NewKFolder()
 	sourceFolder, err := utils.GetPluginSourceSubFolder(fm)
 	if err != nil {
@@ -300,7 +300,7 @@ func LoadFileChangePluginSymbols(log *zap.Logger) workers.K8sFileConfigChangeHoo
 	if err != nil {
 		panic(fmt.Sprintf("failed to get plugin compiled plugins %s", err.Error()))
 	}
-	filePlugin := workers.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
+	filePlugin := hooks.K8sFileConfigChangeHook{Plugins: make([]plugin.Symbol, 0), Plug: pl}
 	for _, name := range names {
 		sym, err := pl.Load(name, common.OnK8sFileConfigChangeHook)
 		if err != nil {
